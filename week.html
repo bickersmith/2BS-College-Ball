@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Weekly</title>
+<!-- GLOBAL FOUNDATION -->
+<link rel="stylesheet" href="./styles/main.css">
+
+<!-- GLOBAL MODULES -->
+<link rel="stylesheet" href="./styles/layout.css">
+<link rel="stylesheet" href="./styles/cards.css">
+<link rel="stylesheet" href="./styles/header.css">
+<link rel="stylesheet" href="./styles/footer.css">
+
+<!-- PAGE-SPECIFIC -->
+<link rel="stylesheet" href="./styles/week.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <div class="page-container">
+    <h1 class="page-title">Weekly Matchups & Results</h1>
+
+    <div class="card">
+      <p>Weekly scoreboard and matchup data will appear here.</p>
+    </div>
+  </div>
+
+  <!-- LOADERS -->
+  <script type="module">
+    import { loadHeader } from "./scripts/header.js";
+    loadHeader();
+  </script>
+
+  <script type="module">
+    import { loadNavbar } from "./scripts/navbar.js";
+    loadNavbar();
+  </script>
+
+  <script type="module">
+    import { loadFooter } from "./scripts/footer.js";
+    loadFooter();
+  </script>
+
+</body>
+</html>

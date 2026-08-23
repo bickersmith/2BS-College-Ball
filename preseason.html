@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+<!-- GLOBAL FOUNDATION -->
+<link rel="stylesheet" href="./styles/main.css">
+
+<!-- GLOBAL MODULES -->
+<link rel="stylesheet" href="./styles/layout.css">
+<link rel="stylesheet" href="./styles/cards.css">
+<link rel="stylesheet" href="./styles/header.css">
+<link rel="stylesheet" href="./styles/footer.css">
+
+<!-- PAGE-SPECIFIC -->
+<link rel="stylesheet" href="./styles/preseason.css">
+  <script type="module" src="./scripts/preseason.js"></script>
+
+  <title>Preseason Top 25 — 2BS College Ball</title>
+</head>
+
+<body>
+
+  <div id="header"></div>
+  <div id="navbar"></div>
+
+  <div class="page-container">
+    <section>
+      <h1 class="page-title">Preseason Top 25</h1>
+      <div id="preseason-list" class="grid-3"></div>
+    </section>
+  </div>
+
+  <div id="footer"></div>
+
+  <!-- LOADERS -->
+  <script type="module">
+    import { loadHeader } from "./scripts/header.js";
+    loadHeader();
+  </script>
+
+  <script type="module">
+    import { loadNavbar } from "./scripts/navbar.js";
+    loadNavbar();
+  </script>
+
+  <script type="module">
+    import { loadFooter } from "./scripts/footer.js";
+    loadFooter();
+  </script>
+
+
+</body>
+</html>
