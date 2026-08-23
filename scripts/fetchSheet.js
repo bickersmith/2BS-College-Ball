@@ -5,7 +5,7 @@
 
 // Your keys
 const SPREADSHEET_ID = "1FkyD_4ymAcNG8L7srOn46S4FkTb4FyDnV-AymJMml-Q";
-const API_KEY = "AIzaSyBx7EVWbd6lw4E-Ht7pZ2K9vymZ3HF0HD8";
+const API_KEY = "AIzaSyCMjMKQpocsyoQjoXX9MpyOCmIcTLHXqVA";
 
 // ===============================
 // Fetch any sheet by name

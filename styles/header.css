@@ -71,3 +71,17 @@
 .nav-dropdown:hover .nav-dropdown-content {
   display: block;
 }
+
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .header-logo-link {
+    font-size: 1.4rem;
+  }
+}

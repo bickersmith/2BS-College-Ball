@@ -176,3 +176,42 @@
   color: #666;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .draft-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .draft-controls button {
+    flex: 1 1 45%;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .draft-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .team-name {
+    font-size: 0.95rem;
+  }
+
+  .pool-label {
+    font-size: 0.8rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .log-entry {
+    font-size: 0.9rem;
+    padding: 6px 0;
+  }
+}
