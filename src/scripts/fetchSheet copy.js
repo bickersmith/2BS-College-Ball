@@ -7,10 +7,7 @@
 const SPREADSHEET_ID = "1FkyD_4ymAcNG8L7srOn46S4FkTb4FyDnV-AymJMml-Q";
 const API_KEY = "AIzaSyBx7EVWbd6lw4E-Ht7pZ2K9vymZ3HF0HD8";
 
-// ===============================
 // Fetch any sheet by name
-// ===============================
-
 export async function fetchSheet(sheetName) {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${sheetName}?key=${API_KEY}`;
 
@@ -35,114 +32,23 @@ export async function fetchSheet(sheetName) {
     return obj;
   });
 
-  // Route sheets to correct normalizer
+  // ⭐ Route sheets to correct normalizer
   if (sheetName === "Teams") return objects.map(normalizeTeamRow);
   if (sheetName === "Scores") return objects.map(normalizeScoreRow);
 
-  // Everything else uses full master schema
+  // ⭐ Everything else keeps your full schema
   return objects.map(normalizeRow);
 }
 
 // ===============================
-// SCORE NORMALIZER (schedule-friendly)
-// ===============================
-
-function normalizeScoreRow(row) {
-  return {
-    // Teams
-    teamId: row["Team ID"] || "",
-    teamSchool: row["Team School"] || "",
-    teamNickname: row["Team Nickname"] || "",
-    logoUrl: row["Team Logo URL"] || "",
-    helmetUrl: row["Team Helmet URL"] || "",
-
-    // Opponent
-    opponent: row["Opponent"] || "",
-    opponentId: row["Opponent ID"] || "",
-    opponentRank: row["Opponent Rank"] || "",
-    opponentLogoUrl: row["Opponent Logo URL"] || "",
-    rivalry: row["Rivalry?"] || "",
-
-    // Game info
-    week: row["Week"] || "",
-    weekDescription: row["Week Description"] || "",
-    gameDate: row["Game Date"] || "",
-    gameVenue: row["Game Venue"] || "",
-    gameLocation: row["Game Location"] || "",
-    gameType: row["Game Type"] || "",
-    neutralSite: row["Neutral Site?"] || "",
-
-    // IDs
-    gameId: row["Game ID"] || "",
-    gameUuid: row["Game UUID"] || "",
-    espnGameId: row["ESPN Game ID"] || "",
-    cfbdGameId: row["CFBD Game ID"] || "",
-
-    // Raw access
-    raw: row
-  };
-}
-
-// ===============================
-// TEAM NORMALIZER
-// ===============================
-
-function normalizeTeamRow(row) {
-  return {
-    // Core identity
-    id: row["Team ID"] || "",
-    name: row["Team Name"] || "",
-    conference: row["Team Conference"] || "",
-    location: row["Team Location"] || "",
-    teamSchool: row["Team School"] || "",
-    teamNickname: row["Team Nickname"] || "",
-    teamFounded: row["Team Founded"] || "",
-    teamDivision: row["Team Division"] || "",
-    teamSlug: row["Team Slug"] || "",
-    teamAbbreviation: row["Team Abbreviation"] || "",
-
-    // Branding
-    logoUrl: row["Team Logo URL"] || "",
-    helmetUrl: row["Team Helmet URL"] || "",
-    primaryColor: row["Primary Color"] || "",
-    secondaryColor: row["Secondary Color"] || "",
-    alternateColor: row["Alternate Color"] || "",
-
-    // Mascot
-    mascotName: row["Mascot Name"] || "",
-    mascotImageUrl: row["Mascot Image URL"] || "",
-
-    // Stadium
-    homeStadium: row["Home Stadium"] || "",
-    homeStadiumLocation: row["Home Stadium Location"] || "",
-
-    // Owner
-    ownerId: row["Owner ID"] || "",
-    ownerName: row["Owner Name"] || "",
-    ownerSlug: row["Owner Slug"] || "",
-    ownerEmail: row["Owner Email"] || "",
-
-    // Rankings
-    preseasonRank: row["Preseason Rank"] || "",
-    preseasonConferenceRank: row["Preseason Conference Rank"] || "",
-    espnRank: row["ESPN Rank"] || "",
-
-    // Motto / misc
-    teamMotto: row["Team Motto"] || "",
-    teamActive: row["Team Active"] || "",
-
-    // Raw access
-    raw: row
-  };
-}
-
-// ===============================
-// FULL MASTER NORMALIZER
+// FULL MASTER NORMALIZER (your original normalizeRow)
 // ===============================
 
 function normalizeRow(row) {
   return {
-    // Convenience fields
+    // ----------------------------------
+    // Convenience fields for UI
+    // ----------------------------------
     id: row["Team ID"] || "",
     name: row["Team Name"] || "",
     conference: row["Team Conference"] || "",
@@ -152,7 +58,9 @@ function normalizeRow(row) {
     preseasonRank: row["Preseason Rank"] || "",
     preseasonConferenceRank: row["Preseason Conference Rank"] || "",
 
-    // Full schema (unchanged)
+    // ----------------------------------
+    // Full Master Sheet Schema
+    // ----------------------------------
     source: row["Source"] || "",
     createdTimestamp: row["Created Timestamp"] || "",
     updatedTimestamp: row["Updated Timestamp"] || "",
@@ -302,3 +210,82 @@ function normalizeRow(row) {
     raw: row
   };
 }
+
+// ===============================
+// SCORE NORMALIZER (schedule-friendly)
+// ===============================
+
+function normalizeScoreRow(row) {
+  return {
+    teamId: row["Team ID"] || "",
+    opponent: row["Opponent"] || "",
+    opponentId: row["Opponent ID"] || "",
+    opponentRank: row["Opponent Rank"] || "",
+    rivalry: row["Rivalry?"] || "",
+
+    week: row["Week"] || "",
+    weekDescription: row["Week Description"] || "",
+    gameDate: row["Game Date"] || "",
+    gameVenue: row["Game Venue"] || "",
+    gameLocation: row["Game Location"] || "",
+    gameType: row["Game Type"] || "",
+    neutralSite: row["Neutral Site?"] || "",
+
+    gameId: row["Game ID"] || "",
+    gameUuid: row["Game UUID"] || "",
+    espnGameId: row["ESPN Game ID"] || "",
+    cfbdGameId: row["CFBD Game ID"] || "",
+
+    raw: row
+  };
+}
+
+function normalizeTeamRow(row) {
+  return {
+    // Core identity
+    id: row["Team ID"] || "",
+    name: row["Team Name"] || "",
+    conference: row["Team Conference"] || "",
+    location: row["Team Location"] || "",
+    teamSchool: row["Team School"] || "",
+    teamNickname: row["Team Nickname"] || "",
+    teamFounded: row["Team Founded"] || "",
+    teamDivision: row["Team Division"] || "",
+    teamSlug: row["Team Slug"] || "",
+    teamAbbreviation: row["Team Abbreviation"] || "",
+
+    // Branding
+    logoUrl: row["Team Logo URL"] || "",
+    helmetUrl: row["Team Helmet URL"] || "",
+    primaryColor: row["Primary Color"] || "",
+    secondaryColor: row["Secondary Color"] || "",
+    alternateColor: row["Alternate Color"] || "",
+
+    // Mascot
+    mascotName: row["Mascot Name"] || "",
+    mascotImageUrl: row["Mascot Image URL"] || "",
+
+    // Stadium
+    homeStadium: row["Home Stadium"] || "",
+    homeStadiumLocation: row["Home Stadium Location"] || "",
+
+    // Owner
+    ownerId: row["Owner ID"] || "",
+    ownerName: row["Owner Name"] || "",
+    ownerSlug: row["Owner Slug"] || "",
+    ownerEmail: row["Owner Email"] || "",
+
+    // Rankings
+    preseasonRank: row["Preseason Rank"] || "",
+    preseasonConferenceRank: row["Preseason Conference Rank"] || "",
+    espnRank: row["ESPN Rank"] || "",
+
+    // Motto / misc
+    teamMotto: row["Team Motto"] || "",
+    teamActive: row["Team Active"] || "",
+
+    // Raw access (full data)
+    raw: row
+  };
+}
+

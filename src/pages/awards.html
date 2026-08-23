@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
 
+  <!-- GLOBAL FOUNDATION -->
+  <link rel="stylesheet" href="../styles/main.css">
+
+  <!-- GLOBAL MODULES -->
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/cards.css">
+  <link rel="stylesheet" href="../styles/header.css">
+  <link rel="stylesheet" href="../styles/footer.css">
+
+  <!-- PAGE-SPECIFIC -->
+  <link rel="stylesheet" href="../styles/awards.css">
+  <script type="module" src="../scripts/awards.js"></script>
+
+  <title>Awards — 2BS College Ball</title>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <div class="page-container">
+
+    <h1 class="page-title">League Awards</h1>
+
+    <section>
+      <div id="awards-list" class="awards-list"></div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <!-- LOADERS -->
+  <script type="module">
+    import { loadHeader } from "../scripts/header.js";
+    loadHeader();
+  </script>
+
+  <script type="module">
+    import { loadNavbar } from "../scripts/navbar.js";
+    loadNavbar();
+  </script>
+
+  <script type="module">
+    import { loadFooter } from "../scripts/footer.js";
+    loadFooter();
+  </script>
+
+</body>
+</html>

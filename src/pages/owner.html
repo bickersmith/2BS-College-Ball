@@ -13,10 +13,10 @@
   <link rel="stylesheet" href="../styles/footer.css">
 
   <!-- PAGE-SPECIFIC -->
-  <link rel="stylesheet" href="../styles/index.css">
-  <script type="module" src="../scripts/index.js"></script>
+  <link rel="stylesheet" href="../styles/owners.css">
+  <script type="module" src="../scripts/owner.js"></script>
 
-  <title>2BS College Ball — Dashboard</title>
+  <title>Owner Profile — 2BS College Ball</title>
 </head>
 
 <body>
@@ -30,21 +30,26 @@
   <!-- PAGE CONTENT -->
   <div class="page-container">
 
-    <!-- OWNERS & TEAMS -->
+    <!-- OWNER HERO -->
+    <div id="owner-hero"></div>
+
+    <!-- OWNED TEAMS -->
     <section>
-      <div id="owners-grid" class="grid-3"></div>
+  
+      <div id="owner-teams" class="owner-team-list-lg"></div>
     </section>
+
 
     <!-- NEXT 5 GAMES -->
     <section>
       <h2 class="section-title">Next 5 Games</h2>
-      <div id="next-games" class="grid-3"></div>
+      <div id="owner-next-games" class="grid-3"></div>
     </section>
 
-    <!-- DRAFT RECAP -->
+    <!-- FULL SCHEDULE -->
     <section>
-      <h2 class="section-title">Draft Recap</h2>
-      <div id="draft-recap-grid" class="grid-3"></div>
+      <h2 class="section-title">Full Schedule</h2>
+      <div id="owner-full-schedule" class="schedule-table"></div>
     </section>
 
   </div>

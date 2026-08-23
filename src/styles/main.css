@@ -1,1 +1,87 @@
+/* ============================================================
+   GLOBAL VARIABLES — SPORTS THEME
+   ============================================================ */
 
+:root {
+  --color-bg: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-text: #222;
+  --color-muted: #666;
+  --color-accent: #1a1a1a;
+  --color-border: #ddd;
+
+  --color-primary: #0047ab;
+  --color-secondary: #ff8c00;
+  --color-rivalry: #d9534f;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-xxl: 64px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 3px 8px rgba(0,0,0,0.15);
+  --shadow-lg: 0 6px 16px rgba(0,0,0,0.18);
+
+  --font-main: "Inter", sans-serif;
+  --font-weight-bold: 700;
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+}
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  font-family: var(--font-main);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* GLOBAL LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.15s ease;
+}
+
+a:hover { opacity: 0.8; }
+
+/* PAGE CONTAINER */
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-lg);
+}
+
+/* GLOBAL BUTTON */
+.btn {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  display: inline-block;
+}
+
+.btn:hover {
+  background: var(--color-secondary);
+}

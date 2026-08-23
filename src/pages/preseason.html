@@ -13,46 +13,26 @@
   <link rel="stylesheet" href="../styles/footer.css">
 
   <!-- PAGE-SPECIFIC -->
-  <link rel="stylesheet" href="../styles/index.css">
-  <script type="module" src="../scripts/index.js"></script>
+  <link rel="stylesheet" href="../styles/preseason.css">
+  <script type="module" src="../scripts/preseason.js"></script>
 
-  <title>2BS College Ball — Dashboard</title>
+  <title>Preseason Top 25 — 2BS College Ball</title>
 </head>
 
 <body>
 
-  <!-- HEADER -->
   <div id="header"></div>
-
-  <!-- NAVBAR -->
   <div id="navbar"></div>
 
-  <!-- PAGE CONTENT -->
   <div class="page-container">
-
-    <!-- OWNERS & TEAMS -->
     <section>
-      <div id="owners-grid" class="grid-3"></div>
+      <h1 class="page-title">Preseason Top 25</h1>
+      <div id="preseason-list" class="grid-3"></div>
     </section>
-
-    <!-- NEXT 5 GAMES -->
-    <section>
-      <h2 class="section-title">Next 5 Games</h2>
-      <div id="next-games" class="grid-3"></div>
-    </section>
-
-    <!-- DRAFT RECAP -->
-    <section>
-      <h2 class="section-title">Draft Recap</h2>
-      <div id="draft-recap-grid" class="grid-3"></div>
-    </section>
-
   </div>
 
-  <!-- FOOTER -->
   <div id="footer"></div>
 
-  <!-- LOADERS -->
   <script type="module">
     import { loadHeader } from "../scripts/header.js";
     loadHeader();

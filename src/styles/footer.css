@@ -1,0 +1,27 @@
+.footer {
+  margin-top: 40px;
+  padding: 20px 0;
+  background: var(--color-surface);
+  border-top: 1px solid #ddd;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.footer-left {
+  font-weight: var(--font-weight-bold);
+}
+
+.footer-right {
+  text-align: right;
+  max-width: 60%;
+  line-height: 1.4;
+}

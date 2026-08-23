@@ -1,0 +1,66 @@
+/* TEAMS DIRECTORY CONTROLS */
+.teams-controls {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.teams-search-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.teams-filter-select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* TEAM CARD */
+.team-card {
+  background: var(--color-surface);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.team-logo-link img.logo-lg {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  transition: transform 0.15s ease;
+}
+
+.team-logo-link:hover img.logo-lg {
+  transform: scale(1.08);
+}
+
+.team-card-name {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.team-name-highlight {
+  padding: 6px 14px;
+  background: var(--color-accent);
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.team-card-meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.team-meta-line {
+  margin-top: 4px;
+}

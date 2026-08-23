@@ -1,0 +1,55 @@
+/* TEAM HERO */
+.team-hero-card {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.logo-xl {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: var(--space-md);
+}
+
+.team-hero-name {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.team-hero-owner {
+  font-size: 1.1rem;
+  color: var(--color-muted);
+}
+
+/* TEAM DATA BOX */
+.team-data-box {
+  background: var(--color-surface);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-xl);
+}
+
+.team-data-row {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+}
+
+/* SCHEDULE ROW */
+.schedule-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 40px 1fr 100px;
+  align-items: center;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.schedule-rivalry {
+  background: var(--color-rivalry);
+  color: white;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+}

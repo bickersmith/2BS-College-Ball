@@ -1,0 +1,42 @@
+/* FULL CARDS */
+.card,
+.game-card,
+.team-card,
+.owner-card,
+.owner-full-card {
+  background: var(--color-surface);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* COMPACT CARDS */
+.card-sm,
+.team-card-sm,
+.owner-card-sm {
+  background: var(--color-surface);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+/* LOGO SYSTEM */
+.logo-sm { width: 40px; height: 40px; object-fit: contain; }
+.logo-md { width: 64px; height: 64px; object-fit: contain; }
+.logo-lg { width: 120px; height: 120px; object-fit: contain; }
+
+.team-card img,
+.owner-card img,
+.team-card-sm img,
+.owner-card-sm img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
