@@ -1,33 +1,26 @@
 import { logDraftAction } from "./draftLogger.js";
 
-// ===============================
-// OWNER ORDER (NOW DYNAMIC)
-// ===============================
+/* ============================================================
+   OWNERS (Dynamic Order)
+   ============================================================ */
 let owners = [
   { ownerId: 1, ownerName: "Brian" },
   { ownerId: 2, ownerName: "Jay" },
   { ownerId: 3, ownerName: "Brendan" }
 ];
 
-export function setOwnerOrder(newOrder) {
-  owners = newOrder;
-}
+export const setOwnerOrder = newOrder => owners = newOrder;
+export const getOwners = () => owners;
 
-export function getOwners() {
-  return owners;
-}
-
-// ===============================
-// LIVE UI UPDATE CALLBACK
-// ===============================
+/* ============================================================
+   UI Update Callback
+   ============================================================ */
 let onUpdate = null;
-export function setDraftUpdateCallback(fn) {
-  onUpdate = fn;
-}
+export const setDraftUpdateCallback = fn => onUpdate = fn;
 
-// ===============================
-// POOLS
-// ===============================
+/* ============================================================
+   POOLS
+   ============================================================ */
 export const pools = {
   top5: ["Ohio State", "Oregon", "Georgia", "Notre Dame", "Texas"],
   top10: ["Indiana", "Miami", "Texas A&M", "Ole Miss", "Oklahoma"],
@@ -46,9 +39,17 @@ export const pools = {
   ]
 };
 
-// ===============================
-// DRAFT STATE
-// ===============================
+const poolOrder = [
+  ["top5", pools.top5],
+  ["top10", pools.top10],
+  ["top25", pools.top25],
+  ["sec", pools.secTopHalf],
+  ["bigTen", pools.bigTenTopHalf]
+];
+
+/* ============================================================
+   DRAFT STATE
+   ============================================================ */
 let draftLocked = false;
 
 const draftGrid = {
@@ -59,14 +60,31 @@ const draftGrid = {
 
 let draftLog = [];
 
-// ===============================
-// LOG PICK
-// ===============================
+/* ============================================================
+   Helpers
+   ============================================================ */
+const usedTeams = () =>
+  new Set(
+    Object.values(draftGrid)
+      .flatMap(owner => Object.values(owner))
+      .filter(Boolean)
+  );
+
+const randomPick = list =>
+  list[Math.floor(Math.random() * list.length)];
+
+const triggerUpdate = () => onUpdate && onUpdate();
+
+/* ============================================================
+   Logging
+   ============================================================ */
 function logPick(ownerId, poolName, team) {
+  const ownerName = owners.find(o => o.ownerId === ownerId)?.ownerName;
+
   draftLog.push({
     timestamp: new Date().toISOString(),
     ownerId,
-    ownerName: getOwners().find(o => o.ownerId === ownerId).ownerName,
+    ownerName,
     poolName,
     team
   });
@@ -80,12 +98,12 @@ function logPick(ownerId, poolName, team) {
     teamName: team
   });
 
-  if (onUpdate) onUpdate();
+  triggerUpdate();
 }
 
-// ===============================
-// CLEAR DRAFT
-// ===============================
+/* ============================================================
+   Clear Draft
+   ============================================================ */
 export function clearDraft() {
   if (draftLocked) return;
 
@@ -106,13 +124,13 @@ export function clearDraft() {
     teamName: ""
   });
 
-  if (onUpdate) onUpdate();
+  triggerUpdate();
 }
 
-// ===============================
-// LOCK / UNLOCK
-// ===============================
-export function lockDraft() {
+/* ============================================================
+   Lock / Unlock
+   ============================================================ */
+export const lockDraft = () => {
   draftLocked = true;
 
   logDraftAction({
@@ -124,10 +142,10 @@ export function lockDraft() {
     teamName: ""
   });
 
-  if (onUpdate) onUpdate();
-}
+  triggerUpdate();
+};
 
-export function unlockDraft() {
+export const unlockDraft = () => {
   draftLocked = false;
 
   logDraftAction({
@@ -139,42 +157,27 @@ export function unlockDraft() {
     teamName: ""
   });
 
-  if (onUpdate) onUpdate();
-}
+  triggerUpdate();
+};
 
-// ===============================
-// AUTO DRAFT (USES RANDOMIZED OWNER ORDER)
-// ===============================
+/* ============================================================
+   Auto Draft (Full)
+   ============================================================ */
 export function autoDraft() {
   if (draftLocked) return;
 
-  const used = new Set(
-    Object.values(draftGrid)
-      .flatMap(owner => Object.values(owner))
-      .filter(Boolean)
-  );
-
-  const poolOrder = [
-    ["top5", pools.top5],
-    ["top10", pools.top10],
-    ["top25", pools.top25],
-    ["sec", pools.secTopHalf],
-    ["bigTen", pools.bigTenTopHalf]
-  ];
+  const used = usedTeams();
 
   for (const [poolName, poolList] of poolOrder) {
-    for (const owner of getOwners()) {
+    for (const owner of owners) {
       const ownerId = owner.ownerId;
 
       if (draftGrid[ownerId][poolName]) continue;
 
       let available = poolList.filter(t => !used.has(t));
+      if (available.length === 0) available = poolList;
 
-      if (available.length === 0) {
-        available = poolList;
-      }
-
-      const pick = available[Math.floor(Math.random() * available.length)];
+      const pick = randomPick(available);
 
       draftGrid[ownerId][poolName] = pick;
       used.add(pick);
@@ -184,42 +187,25 @@ export function autoDraft() {
   }
 
   lockDraft();
-
-  if (onUpdate) onUpdate();
 }
 
-// ===============================
-// PICK ONE (USES RANDOMIZED OWNER ORDER)
-// ===============================
+/* ============================================================
+   Pick One (Single Step)
+   ============================================================ */
 export function pickOne() {
   if (draftLocked) return;
 
-  const poolOrder = [
-    ["top5", pools.top5],
-    ["top10", pools.top10],
-    ["top25", pools.top25],
-    ["sec", pools.secTopHalf],
-    ["bigTen", pools.bigTenTopHalf]
-  ];
-
-  const used = new Set(
-    Object.values(draftGrid)
-      .flatMap(owner => Object.values(owner))
-      .filter(Boolean)
-  );
+  const used = usedTeams();
 
   for (const [poolName, poolList] of poolOrder) {
-    for (const owner of getOwners()) {
+    for (const owner of owners) {
       const ownerId = owner.ownerId;
 
       if (!draftGrid[ownerId][poolName]) {
         let available = poolList.filter(t => !used.has(t));
+        if (available.length === 0) available = poolList;
 
-        if (available.length === 0) {
-          available = poolList;
-        }
-
-        const pick = available[Math.floor(Math.random() * available.length)];
+        const pick = randomPick(available);
 
         draftGrid[ownerId][poolName] = pick;
         used.add(pick);
@@ -227,17 +213,15 @@ export function pickOne() {
         logPick(ownerId, poolName, pick);
 
         checkComplete();
-
-        if (onUpdate) onUpdate();
         return;
       }
     }
   }
 }
 
-// ===============================
-// CHECK COMPLETE
-// ===============================
+/* ============================================================
+   Completion Check
+   ============================================================ */
 function checkComplete() {
   const allFilled = Object.values(draftGrid)
     .flatMap(owner => Object.values(owner))
@@ -246,13 +230,11 @@ function checkComplete() {
   if (allFilled) lockDraft();
 }
 
-// ===============================
-// GET STATE
-// ===============================
-export function getDraftState() {
-  return {
-    locked: draftLocked,
-    grid: draftGrid,
-    log: draftLog
-  };
-}
+/* ============================================================
+   Export State
+   ============================================================ */
+export const getDraftState = () => ({
+  locked: draftLocked,
+  grid: draftGrid,
+  log: draftLog
+});

@@ -6,126 +6,120 @@ import {
   unlockDraft,
   getDraftState,
   getOwners,
-  setOwnerOrder
+  setOwnerOrder,
+  setDraftUpdateCallback
 } from "./draftEngine.js";
 
 import { fetchSheet } from "./fetchSheet.js";
 import { setTeamLookup } from "./draftLogger.js";
 
-const container = document.getElementById("draft-body");
-const logBox = document.getElementById("draft-log");
-const statusBox = document.getElementById("draft-status");
+// DOM READY WRAPPER — prevents null errors
+window.addEventListener("DOMContentLoaded", async () => {
 
-let randomizedOwners = [...getOwners()];
+  const container = document.getElementById("draft-body");
+  const logBox = document.getElementById("draft-log");
+  const statusBox = document.getElementById("draft-status");
 
-function shuffleOwners(list) {
-  return [...list].sort(() => Math.random() - 0.5);
-}
+  let randomizedOwners = [...getOwners()];
 
-document.getElementById("btn-randomize").onclick = () => {
-  randomizedOwners = shuffleOwners(getOwners());
-  setOwnerOrder(randomizedOwners);
-  renderAll();
-};
+  function shuffleOwners(list) {
+    return [...list].sort(() => Math.random() - 0.5);
+  }
 
-async function loadTeams() {
+  // SAFE BUTTON WIRING
+  const btnRandomize = document.getElementById("btn-randomize");
+  const btnAuto = document.getElementById("btn-auto");
+  const btnPick = document.getElementById("btn-pick");
+  const btnClear = document.getElementById("btn-clear");
+  const btnLock = document.getElementById("btn-lock");
+  const btnUnlock = document.getElementById("btn-unlock");
+
+  if (btnRandomize) {
+    btnRandomize.onclick = () => {
+      randomizedOwners = shuffleOwners(getOwners());
+      setOwnerOrder(randomizedOwners);
+      renderAll();
+    };
+  }
+
+  if (btnAuto) btnAuto.onclick = () => autoDraft();
+  if (btnPick) btnPick.onclick = () => pickOne();
+  if (btnClear) btnClear.onclick = () => clearDraft();
+  if (btnLock) btnLock.onclick = () => lockDraft();
+  if (btnUnlock) btnUnlock.onclick = () => unlockDraft();
+
+  // Load teams
   const teams = await fetchSheet("Teams");
   setTeamLookup(teams);
-}
 
-await loadTeams();
+  // Live update callback
+  setDraftUpdateCallback(() => {
+    renderAll();
+  });
 
-import { setDraftUpdateCallback } from "./draftEngine.js";
-setDraftUpdateCallback(() => {
-  renderAll();
-});
+  function renderPicks() {
+    const { grid } = getDraftState();
 
-function renderPicks() {
-  const { grid } = getDraftState();
+    container.innerHTML = randomizedOwners.map(o => {
+      const picks = grid[o.ownerId];
 
-  container.innerHTML = randomizedOwners.map(o => {
-    const picks = grid[o.ownerId];
+      const pickCards = Object.entries(picks)
+        .map(([pool, team]) => {
+          if (!team) return "";
+          const logo = window.teamLogos?.[team];
 
-    const pickCards = Object.entries(picks)
-      .map(([pool, team]) => {
-        if (!team) return "";
-        const logo = window.teamLogos?.[team];
+          return `
+            <div class="pick-card">
+              <div class="pool-label">${pool.toUpperCase()}</div>
+              ${logo ? `<img class="draft-logo" src="${logo}" alt="${team}">` : ""}
+              <div class="team-name">${team}</div>
+            </div>
+          `;
+        })
+        .join("");
 
-        return `
-          <div class="pick-card">
-            <div class="pool-label">${pool.toUpperCase()}</div>
-            ${logo ? `<img class="draft-logo" src="${logo}" alt="${team}">` : ""}
-            <div class="team-name">${team}</div>
-          </div>
-        `;
-      })
-      .join("");
-
-    return `
-      <div class="owner-card">
-        <h3>${o.ownerName}</h3>
-        ${pickCards || "<div class='pick-card'>No picks yet</div>"}
-      </div>
-    `;
-  }).join("");
-}
-
-function renderLog() {
-  const { log } = getDraftState();
-
-  logBox.innerHTML = log.map(entry => `
-    <div class="log-entry">
-      <strong>${entry.ownerName}</strong> → ${entry.poolName.toUpperCase()}
-      <span style="color:#444">(${entry.team})</span>
-    </div>
-  `).join("");
-}
-
-function renderStatus() {
-  const { locked } = getDraftState();
-
-  if (locked) {
-    statusBox.textContent = "🔒 Draft Locked";
-    statusBox.style.background = "#D32F2F";
-    statusBox.style.color = "#fff";
-  } else {
-    statusBox.textContent = "🔓 Draft Unlocked";
-    statusBox.style.background = "#81C784";
-    statusBox.style.color = "#000";
+      return `
+        <div class="owner-card">
+          <h3>${o.ownerName}</h3>
+          ${pickCards || "<div class='pick-card'>No picks yet</div>"}
+        </div>
+      `;
+    }).join("");
   }
-}
 
-document.getElementById("btn-auto").onclick = () => autoDraft();
-document.getElementById("btn-pick").onclick = () => pickOne();
-document.getElementById("btn-clear").onclick = () => clearDraft();
-document.getElementById("btn-lock").onclick = () => lockDraft();
-document.getElementById("btn-unlock").onclick = () => unlockDraft();
+  function renderLog() {
+    const { log } = getDraftState();
 
-function renderAll() {
-  renderPicks();
-  renderLog();
-  renderStatus();
-}
+    logBox.innerHTML = log.map(entry => `
+      <div class="log-entry">
+        <strong>${entry.ownerName}</strong> → ${entry.poolName.toUpperCase()}
+        <span style="color:#444">(${entry.team})</span>
+      </div>
+    `).join("");
+  }
 
-renderAll();
+  function renderStatus() {
+    const { locked } = getDraftState();
 
-// ============================================================
-// EXPORT RESULTS
-// ============================================================
+    if (locked) {
+      statusBox.textContent = "🔒 Draft Locked";
+      statusBox.style.background = "#D32F2F";
+      statusBox.style.color = "#fff";
+    } else {
+      statusBox.textContent = "🔓 Draft Unlocked";
+      statusBox.style.background = "#81C784";
+      statusBox.style.color = "#000";
+    }
+  }
 
-document.getElementById("btn-export").onclick = () => {
-  const state = getDraftState();
+  function renderAll() {
+    renderPicks();
+    renderLog();
+    renderStatus();
+  }
 
-  const exportData = {
-    ownerOrder: getOwners().map(o => o.ownerName),
-    picks: getOwners().map(o => ({
-      ownerId: o.ownerId,
-      ownerName: o.ownerName,
-      selections: state.grid[o.ownerId]
-    })),
-    log: state.log
-  };
+  // Initial render
+  renderAll();
 
-  const output = document.getElementById("export-output");
-  output.textContent = JSON.stringify(exportData, null, 2);
-};
+  // EXPORT REMOVED — page is now test-only
+});
