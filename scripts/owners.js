@@ -1,52 +1,34 @@
-// ===============================
-// 2BS College Ball — owners.js
-// Owners Directory Logic
-// ===============================
+import { fetchSheet } from "./fetchSheet.js";
 
-import { fetchSheet } from "../scripts/fetchSheet.js";
-
-async function loadOwners() {
+async function initOwnersPage() {
+  const owners = await fetchSheet("Owners");
   const teams = await fetchSheet("Teams");
 
-  // Build owner → teams mapping
-  const ownersMap = new Map();
-  teams.forEach(t => {
-    if (!t.ownerId) return;
-    if (!ownersMap.has(t.ownerId)) ownersMap.set(t.ownerId, []);
-    ownersMap.get(t.ownerId).push(t);
-  });
-
-  const container = document.getElementById("owners-list");
-
-  container.innerHTML = [...ownersMap.entries()]
-    .map(([ownerId, ownerTeams]) => {
-      const ownerName = ownerTeams[0].ownerName;
-
-      return `
-        <div class="owner-card-sm">
-
-          <!-- OWNER NAME (clickable + dark highlight) -->
-          <a href="./owner.html?owner=${ownerId}" class="owner-name-highlight">
-            ${ownerName}
-          </a>
-
-          <!-- COLUMN OF TEAM LOGOS -->
-          <div class="owner-team-logos">
-            ${ownerTeams
-              .map(
-                t => `
-              <a href="./team.html?team=${t.id}">
-                <img src="${t.logoUrl}" class="logo-lg" alt="${t.teamSchool}">
-              </a>
-            `
-              )
-              .join("")}
-          </div>
-
-        </div>
-      `;
-    })
-    .join("");
+  renderOwners(owners, teams);
 }
 
-loadOwners();
+function renderOwners(owners, teams) {
+  const container = document.getElementById("owners-section");
+  if (!container) return;
+
+  container.innerHTML = owners.map(owner => {
+    const ownerTeams = teams.filter(t => String(t.ownerId) === String(owner.ownerId));
+
+    const logos = ownerTeams.map(t => `
+      <a href="./team.html?team=${t.id}">
+        <img src="${t.logoUrl}" alt="${t.teamSchool}">
+      </a>
+    `).join("");
+
+    return `
+      <div class="owner-block">
+        <a href="./owner.html?owner=${owner.ownerId}" class="owner-name">
+          ${owner.ownerName}
+        </a>
+        <div class="owner-team-logos">${logos}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+initOwnersPage();

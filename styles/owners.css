@@ -1,26 +1,53 @@
 /* ============================================================
-   OWNER PAGE — HEADER
+   PAGE TITLE
    ============================================================ */
 
-.owner-header {
-  text-align: center;
-  padding: var(--space-xl) var(--space-lg);
-}
-
-.owner-title {
+.page-title {
   font-size: 2.4rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--space-xl);
 }
 
 /* ============================================================
-   SECTION TITLES
+   OWNERS SECTION
    ============================================================ */
 
-.section-title {
-  font-size: 1.4rem;
+.owners-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+/* ============================================================
+   OWNER BLOCK
+   ============================================================ */
+
+.owner-block {
+  text-align: center;
+}
+
+/* ============================================================
+   OWNER NAME PILL (MATCHES YOUR IMAGE)
+   ============================================================ */
+
+.owner-name {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 10px 26px;
+  font-size: 1.6rem;
   font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-md);
+  border-radius: 8px;
+  margin-bottom: var(--space-lg);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.owner-name:hover {
+  background: #222;
 }
 
 /* ============================================================
@@ -29,67 +56,19 @@
 
 .owner-team-logos {
   display: flex;
-  gap: var(--space-lg);
-  flex-wrap: wrap;
   justify-content: center;
-  padding: var(--space-md) 0;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
 }
 
-.owner-team-logo-link-lg img.logo-lg {
-  width: 120px;
-  height: 120px;
+.owner-team-logos img {
+  width: 140px;
+  height: 140px;
   object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.15s ease;
 }
 
-/* ============================================================
-   NEXT FIVE + FULL SCHEDULE
-   ============================================================ */
-
-.owner-next-five,
-.owner-games {
-  padding: var(--space-lg) 0;
-}
-
-.schedule-grid {
-  margin-top: var(--space-md);
-}
-
-/* ============================================================
-   FULL TABLE
-   ============================================================ */
-
-.owner-games-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: var(--space-lg);
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.owner-games-table th,
-.owner-games-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #ddd;
-  font-size: 0.9rem;
-}
-
-.owner-games-table th {
-  background: var(--color-muted-light);
-  font-weight: 700;
-}
-
-.owner-games-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 700px) {
-  .owner-team-logo-link-lg img.logo-lg {
-    width: 90px;
-    height: 90px;
-  }
+.owner-team-logos img:hover {
+  transform: scale(1.08);
 }

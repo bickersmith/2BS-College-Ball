@@ -32,6 +32,7 @@ function renderOwnerHeader(owner) {
   document.getElementById("ownerName").textContent = owner.ownerName;
 }
 
+
 /* -----------------------------------------
    TEAM LOGOS
 ----------------------------------------- */
