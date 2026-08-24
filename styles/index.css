@@ -1,198 +1,175 @@
 /* ============================================================
-   INDEX PAGE — Dashboard Styling
+   TIGHT INDEX LAYOUT
    ============================================================ */
 
-/* GRID LAYOUT */
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-xl);
-  margin-bottom: var(--space-xl);
+.index-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.index-section {
+  margin-bottom: 18px;
+}
+
+.index-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 /* ============================================================
-   OWNERS — BIG LOGO CARDS
+   GRID TIGHTENING
    ============================================================ */
 
-.owner-card {
-  background: var(--color-surface);
-  padding: var(--space-xl);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+/* ============================================================
+   OWNERS — BIG & PROMINENT
+   ============================================================ */
+
+.owner-card-tight {
+  background: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   text-align: center;
 }
 
-.owner-card-name {
-  font-size: 1.6rem;
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-lg);
+
+.owner-link-tight {
+  font-weight: 900;
+  font-size: 2.2rem;        /* BIG */
+  line-height: 1.15;
+  display: block;
+  margin-bottom: 14px;
+
+  background: #000;         /* BLACK BACKGROUND */
+  color: #fff;              /* WHITE TEXT */
+  padding: 8px 0;           /* TIGHT BUT CLEAN */
+  border-radius: 6px;       /* SMOOTH CORNERS */
+  letter-spacing: 0.5px;    /* SPORTS LOOK */
+  text-transform: uppercase; /* OPTIONAL: BIG LEAGUE FEEL */
 }
 
-.owner-team-logos {
+
+.owner-team-logos-tight {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: var(--space-lg);
+  gap: 10px;
 }
 
-.owner-team-logos img {
-  width: 96px;
-  height: 96px;
+.owner-team-logos-tight img {
+  width: 100px;   /* BIG AGAIN */
+  height: 100px;  /* BIG AGAIN */
   object-fit: contain;
+}
+
+
+/* ============================================================
+   NEXT 5 GAMES — TIGHT
+   ============================================================ */
+
+.next-game-card-tight {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: block;
+}
+
+.next-game-row-tight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.next-game-logo-tight {
+  width: 24px;
+  height: 24px;
+}
+
+.next-game-vs-tight {
+  font-weight: 700;
+  margin: 0 4px;
+}
+
+.next-game-info-tight {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  opacity: 0.8;
 }
 
 /* ============================================================
-   NEXT 5 GAMES — NORMAL LOGOS
+   STORYLINES — TIGHT
    ============================================================ */
 
-.next-game-card {
-  background: var(--color-surface);
-  padding: var(--space-lg);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+.index-storyline-tight {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-.next-game-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.index-meta-tight {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-bottom: 4px;
 }
 
-.next-game-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.next-game-logo {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-
-.next-game-name {
-  font-size: 1rem;
-  font-weight: var(--font-weight-bold);
-}
-
-.next-game-vs {
-  font-size: 1.4rem;
-  font-weight: var(--font-weight-bold);
-}
-
-.next-game-bottom {
-  margin-top: var(--space-md);
+.index-headline-tight {
   font-size: 0.9rem;
-  color: var(--color-muted);
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
-.next-game-rivalry {
-  background: var(--color-accent);
-  color: white;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: var(--font-weight-bold);
-  text-align: center;
+.index-teaser-tight {
+  font-size: 0.75rem;
+  line-height: 1.2;
 }
 
-/* ============================================================
-   DRAFT BLOCKS
-   ============================================================ */
-
-.draft-block {
-  background: var(--color-surface);
-  padding: var(--space-xl);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--space-xl);
-}
-
-.recap-list {
-  margin-top: var(--space-sm);
-  line-height: 1.6;
-}
-
-/* ============================================================
-   NEXT 5 GAMES — FRIENDLY DATE + VENUE + LOCATION
-   ============================================================ */
-
-.next-game-bottom {
-  margin-top: var(--space-md);
-  font-size: 0.9rem;
-  color: var(--color-muted);
-  line-height: 1.4;
-}
-
-/* ============================================================
-   DRAFT RECAP — BOARD STYLE WITH LOGOS
-   ============================================================ */
-
-.draft-recap-card {
-  background: var(--color-surface);
-  padding: var(--space-xl);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.draft-recap-owner {
-  font-size: 1.4rem;
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-lg);
-  text-align: center;
-}
-
-.draft-recap-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.draft-recap-row:last-child {
-  border-bottom: none;
-}
-
-.draft-recap-label {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
-}
-
-.draft-recap-team {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.draft-recap-logo {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
-.owner-team-link img {
-  transition: transform 0.15s ease;
-}
-
-.owner-team-link:hover img {
-  transform: scale(1.08);
-}
-
-/* OWNER NAME LINK */
-.owner-link {
-  font-size: 1.4rem;
-  font-weight: var(--font-weight-bold);
-  color: #222; /* dark highlight */
+.index-storyline-link {
   text-decoration: none;
-  display: inline-block;
-  margin-bottom: var(--space-lg);
+  color: inherit;
+  display: block;
+}
+.index-storyline-link:hover {
+  background: #f0f4ff;
 }
 
-.owner-link:hover {
-  color: var(--color-accent);
+
+
+/* ============================================================
+   DRAFT RECAP — TIGHT
+   ============================================================ */
+
+.draft-card-tight {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.draft-owner-tight {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.draft-row-tight {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.draft-logo-tight {
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
 }

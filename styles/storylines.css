@@ -1,0 +1,95 @@
+.story-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  margin-bottom: 28px;
+    margin-top: 32px; /* ADD THIS */
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  border-left: 6px solid #2b6cb0; /* bold accent */
+}
+
+.story-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #1a365d;
+}
+
+.story-subtitle {
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin-bottom: 18px;
+}
+
+.story-teams {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.story-team {
+  background: #edf2f7;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #2d3748;
+  border: 1px solid #cbd5e0;
+}
+
+.story-body {
+  margin-bottom: 20px;
+  line-height: 1.55;
+  font-size: 1.05rem;
+  color: #2d3748;
+}
+
+.story-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: #2b6cb0;
+  font-weight: 700;
+}
+
+.story-section p {
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.story-watch-list {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.story-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.story-tag {
+  background: #bee3f8;
+  color: #1a365d;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.story-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.story-id {
+  font-weight: 700;
+  color: #2b6cb0;
+}
+
+.story-date {
+  opacity: 0.8;
+}

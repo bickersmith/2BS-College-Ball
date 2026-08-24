@@ -1,167 +1,114 @@
-// ===============================
-// 2BS College Ball — owner.js
-// Owner Profile Page Logic
-// ===============================
+import { fetchSheet } from "./fetchSheet.js";
+import { renderScheduleCard } from "../components/cards/scheduleCard.js";
 
-import { fetchSheet } from "../scripts/fetchSheet.js";
-
-async function loadOwnerPage() {
+async function initOwnerPage() {
   const params = new URLSearchParams(window.location.search);
   const ownerId = params.get("owner");
+  if (!ownerId) return;
 
+  const owners = await fetchSheet("Owners");
   const teams = await fetchSheet("Teams");
   const scores = await fetchSheet("Scores");
 
-  const ownedTeams = teams.filter(t => t.ownerId == ownerId);
-  if (ownedTeams.length === 0) return;
+  const owner = owners.find(o => String(o.ownerId) === String(ownerId));
+  if (!owner) return;
 
-  const ownerName = ownedTeams[0].ownerName;
+  renderOwnerHeader(owner);
 
-  // HERO SECTION
-  const hero = document.getElementById("owner-hero");
-  hero.innerHTML = `
-    <div class="owner-hero-card">
-      <a href="./owner.html?owner=${ownerId}" class="owner-name-highlight">
-        ${ownerName}
-      </a>
-    </div>
-  `;
+  const ownerTeams = teams.filter(t => String(t.ownerId) === String(ownerId));
+  renderOwnerTeams(ownerTeams);
 
-// OWNED TEAMS (large logos)
-const teamList = document.getElementById("owner-teams");
-teamList.innerHTML = ownedTeams
-  .map(
-    t => `
+  const ownerGames = getOwnerGames(ownerTeams, scores);
+
+  renderNextFive(ownerGames, teams);
+  renderAllGames(ownerGames, teams);
+  renderGameTable(ownerGames, teams);
+}
+
+/* -----------------------------------------
+   HEADER
+----------------------------------------- */
+function renderOwnerHeader(owner) {
+  document.getElementById("ownerName").textContent = owner.ownerName;
+}
+
+/* -----------------------------------------
+   TEAM LOGOS
+----------------------------------------- */
+function renderOwnerTeams(ownerTeams) {
+  const container = document.getElementById("ownerTeamListLg");
+  if (!container) return;
+
+  container.innerHTML = ownerTeams.map(t => `
     <a href="./team.html?team=${t.id}" class="owner-team-logo-link-lg">
-      <img src="${t.logoUrl}" class="logo-lg" alt="${t.teamSchool}">
+      <img src="${t.logoUrl}" class="logo-lg">
     </a>
-  `
-  )
-  .join("");
+  `).join("");
+}
 
-  // FILTER ALL GAMES FOR THIS OWNER
-  const ownerGames = scores.filter(g => {
+/* -----------------------------------------
+   GET OWNER GAMES
+----------------------------------------- */
+function getOwnerGames(ownerTeams, scores) {
+  const teamIds = ownerTeams.map(t => String(t.id));
+
+  return scores
+    .filter(g => teamIds.includes(String(g.teamId)))
+    .sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate));
+}
+
+/* -----------------------------------------
+   NEXT FIVE GAMES
+----------------------------------------- */
+function renderNextFive(games, teams) {
+  const container = document.getElementById("ownerNextFive");
+  if (!container) return;
+
+  const nextFive = games.slice(0, 5);
+
+  container.innerHTML = nextFive
+    .map(g => renderScheduleCard(g, teams))
+    .join("");
+}
+
+/* -----------------------------------------
+   FULL SCHEDULE (mini cards)
+----------------------------------------- */
+function renderAllGames(games, teams) {
+  const container = document.getElementById("ownerGamesList");
+  if (!container) return;
+
+  container.innerHTML = games
+    .map(g => renderScheduleCard(g, teams))
+    .join("");
+}
+
+/* -----------------------------------------
+   FULL TABLE
+----------------------------------------- */
+function renderGameTable(games, teams) {
+  const tbody = document.querySelector("#ownerGameTable tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = games.map(g => {
     const team = teams.find(t => t.id == g.teamId);
-    return team?.ownerId == ownerId;
-  });
+    const opp = teams.find(t => t.id == g.opponentId);
 
-  // NEXT 5 GAMES
-  const upcoming = ownerGames
-    .filter(g => new Date(g.gameDate) >= new Date())
-    .sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate))
-    .slice(0, 5);
-
-  const nextGamesContainer = document.getElementById("owner-next-games");
-  nextGamesContainer.innerHTML = upcoming
-    .map(g => renderGameCard(g, teams))
-    .join("");
-
-  // FULL SCHEDULE
-  const fullScheduleContainer = document.getElementById("owner-full-schedule");
-  fullScheduleContainer.innerHTML = ownerGames
-    .sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate))
-    .map(g => renderScheduleRow(g, teams))
-    .join("");
+    return `
+      <tr>
+        <td>${formatDate(g.gameDate)}</td>
+        <td>${team?.teamSchool || ""}</td>
+        <td>${opp?.teamSchool || g.opponent}</td>
+        <td>${g.gameVenue}</td>
+        <td>${g.gameLocation}</td>
+      </tr>
+    `;
+  }).join("");
 }
 
-// ===============================
-// GAME CARD
-// ===============================
-
-function renderGameCard(g, teams) {
-  const team = teams.find(t => t.id == g.teamId);
-  const opp = teams.find(t => t.id == g.opponentId);
-
-  const dateLabel = new Date(g.gameDate).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric"
-  });
-
-  const rivalry =
-    team?.ownerId &&
-    opp?.ownerId &&
-    team.ownerId !== opp.ownerId;
-
-  return `
-    <div class="card-sm next-game-card">
-
-      ${rivalry ? `<div class="next-game-rivalry">RIVALRY</div>` : ""}
-
-      <div class="next-game-top">
-        <div class="next-game-team">
-          <a href="./team.html?team=${team.id}">
-            <img src="${team.logoUrl}" class="logo-sm">
-          </a>
-          <a href="./team.html?team=${team.id}" class="next-game-name">${team.teamSchool}</a>
-        </div>
-
-        <div class="next-game-vs">vs</div>
-
-        <div class="next-game-team">
-          <a href="./team.html?team=${opp?.id || ""}">
-            <img src="${opp?.logoUrl || ""}" class="logo-sm">
-          </a>
-          <a href="./team.html?team=${opp?.id || ""}" class="next-game-name">
-            ${opp?.teamSchool || g.opponent}
-          </a>
-        </div>
-      </div>
-
-      <div class="next-game-bottom">
-        <div class="next-game-date">${dateLabel}</div>
-        <div class="next-game-location">${g.gameVenue} — ${g.gameLocation}</div>
-      </div>
-
-    </div>
-  `;
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-// ===============================
-// FULL SCHEDULE ROW
-// ===============================
-
-function renderScheduleRow(g, teams) {
-  const team = teams.find(t => t.id == g.teamId);
-  const opp = teams.find(t => t.id == g.opponentId);
-
-  const dateLabel = new Date(g.gameDate).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric"
-  });
-
-  const rivalry =
-    team?.ownerId &&
-    opp?.ownerId &&
-    team.ownerId !== opp.ownerId;
-
-  return `
-    <div class="schedule-row">
-
-      <div class="schedule-date">${dateLabel}</div>
-
-      <div class="schedule-team">
-        <a href="./team.html?team=${team.id}">
-          <img src="${team.logoUrl}" class="logo-sm">
-        </a>
-        <a href="./team.html?team=${team.id}" class="schedule-team-name">${team.teamSchool}</a>
-      </div>
-
-      <div class="schedule-vs">vs</div>
-
-      <div class="schedule-team">
-        <a href="./team.html?team=${opp?.id || ""}">
-          <img src="${opp?.logoUrl || ""}" class="logo-sm">
-        </a>
-        <a href="./team.html?team=${opp?.id || ""}" class="schedule-team-name">
-          ${opp?.teamSchool || g.opponent}
-        </a>
-      </div>
-
-      ${rivalry ? `<div class="schedule-rivalry">RIVALRY</div>` : ""}
-
-    </div>
-  `;
-}
-
-loadOwnerPage();
+initOwnerPage();

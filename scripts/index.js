@@ -26,10 +26,11 @@ async function loadDashboard() {
   renderOwnersGrid(owners, teams);
   renderNextFiveGames(scores, teams);
   renderDraftRecap(teams);
+  loadStorylinesForIndex();
 }
 
 /* ============================================================
-   OWNERS GRID
+   OWNERS GRID — TIGHT
    ============================================================ */
 function renderOwnersGrid(owners, teams) {
   const container = document.getElementById("owners-grid");
@@ -39,98 +40,137 @@ function renderOwnersGrid(owners, teams) {
     const ownedTeams = teams.filter(t => t.ownerId === owner.ownerId);
 
     return `
-      <div class="owner-card">
-
-        <a href="./owner.html?owner=${owner.ownerId}" class="owner-link">
+      <div class="owner-card-tight">
+        <a href="./owner.html?owner=${owner.ownerId}" class="owner-link-tight">
           ${owner.ownerName}
         </a>
-
-        <div class="owner-team-logos">
-          ${ownedTeams
-            .map(
-              team => `
-            <a href="./team.html?team=${team.id}" class="owner-team-link">
+        <div class="owner-team-logos-tight">
+          ${ownedTeams.map(team => `
+            <a href="./team.html?team=${team.id}">
               <img src="${team.logoUrl}" alt="${team.teamSchool}">
             </a>
-          `
-            )
-            .join("")}
+          `).join("")}
         </div>
-
       </div>
     `;
   }).join("");
 }
 
-
 /* ============================================================
-   NEXT 5 GAMES
+   NEXT 5 GAMES — TIGHT
    ============================================================ */
 function renderNextFiveGames(scores, teams) {
   const container = document.getElementById("next-games");
   if (!container) return;
 
   const upcoming = scores.filter(g => g.gameDate && !g.result);
-
-  const sorted = upcoming.sort(
-    (a, b) => new Date(a.gameDate) - new Date(b.gameDate)
-  );
-
+  const sorted = upcoming.sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate));
   const nextFive = sorted.slice(0, 5);
 
-  container.innerHTML = nextFive
-    .map(game => {
-      const team = teams.find(t => t.id === game.teamId);
-      const opp = teams.find(t => t.id === game.opponentId);
+  container.innerHTML = nextFive.map(game => {
+    const team = teams.find(t => t.id === game.teamId);
+    const opp = teams.find(t => t.id === game.opponentId);
 
-      const teamLogo = team?.logoUrl || team?.helmetUrl || "";
-      const oppLogo = opp?.logoUrl || opp?.helmetUrl || "";
-
-      const teamName = team?.teamSchool || "";
-      const oppName = opp?.teamSchool || "";
-
-      const friendly = friendlyDateTime(game.gameDate);
-
-      const isRivalry =
-        team?.ownerId &&
-        opp?.ownerId &&
-        team.ownerId !== opp.ownerId;
-
-      return `
-        <a href="./game.html?id=${game.gameId}" class="next-game-card">
-
-          ${isRivalry ? `<div class="next-game-rivalry">RIVALRY</div>` : ""}
-
-          <div class="next-game-top">
-
-            <div class="next-game-team">
-              <img src="${teamLogo}" class="next-game-logo">
-              <div class="next-game-name">${teamName}</div>
-            </div>
-
-            <div class="next-game-vs">vs</div>
-
-            <div class="next-game-team">
-              <img src="${oppLogo}" class="next-game-logo">
-              <div class="next-game-name">${oppName}</div>
-            </div>
-
-          </div>
-
-          <div class="next-game-bottom">
-            ${friendly}<br>
-            ${game.gameVenue}<br>
-            ${game.gameLocation}
-          </div>
-
-        </a>
-      `;
-    })
-    .join("");
+    return `
+      <a href="./game.html?id=${game.gameId}" class="next-game-card-tight">
+        <div class="next-game-row-tight">
+          <img src="${team.logoUrl}" class="next-game-logo-tight">
+          <span>${team.teamSchool}</span>
+          <span class="next-game-vs-tight">vs</span>
+          <img src="${opp.logoUrl}" class="next-game-logo-tight">
+          <span>${opp.teamSchool}</span>
+        </div>
+        <div class="next-game-info-tight">
+          ${friendlyDateTime(game.gameDate)} — ${game.gameLocation}
+        </div>
+      </a>
+    `;
+  }).join("");
 }
 
 /* ============================================================
-   DRAFT RECAP (USING EXPORT LOG — FINAL DATA)
+   STORYLINES — TIGHT
+   ============================================================ */
+   
+async function loadStorylinesForIndex() {
+  const res = await fetch("./assets/docs/storylines.txt");
+  const text = await res.text();
+
+  const blocks = text.split("# ID:").slice(1);
+  const entries = [];
+
+  for (const block of blocks) {
+    const lines = block.trim().split("\n");
+
+    const id = lines[0].trim();
+
+    const getSection = (key) => {
+      const start = lines.findIndex(l => l.startsWith(key + ":"));
+      if (start === -1) return "";
+      let content = lines[start].replace(key + ":", "").trim();
+      let i = start + 1;
+      while (i < lines.length && !lines[i].includes(":")) {
+        content += " " + lines[i].trim();
+        i++;
+      }
+      return content.trim();
+    };
+
+    entries.push({
+      id,
+      date: getSection("DATE"),
+      headline: getSection("HEADLINE"),
+      story: getSection("STORY")
+    });
+  }
+
+  // --- NUMERIC ID SORTER (same as storylines.js) ---
+  const parseId = (id) => {
+    const parts = id.split("-");
+    return {
+      year: parseInt(parts[0]),
+      week: parseInt(parts[1].replace("W", "")),
+      group: parseInt(parts[2]),
+      entry: parseInt(parts[3])
+    };
+  };
+
+  entries.sort((a, b) => {
+    const A = parseId(a.id);
+    const B = parseId(b.id);
+
+    if (A.year !== B.year) return B.year - A.year;
+    if (A.week !== B.week) return B.week - A.week;
+    if (A.group !== B.group) return B.group - A.group;
+    return B.entry - A.entry;
+  });
+
+  // Show latest 3
+  renderLatestStorylines(entries.slice(0, 3));
+}
+
+function renderLatestStorylines(list) {
+  const container = document.getElementById("latest-storylines-container");
+
+  container.innerHTML = list.map(s => {
+    const teaser = s.story.split(" ").slice(0, 12).join(" ") + "...";
+
+    return `
+      <a href="./storylines.html?id=${s.id}" class="index-storyline-tight index-storyline-link">
+        <div class="index-meta-tight">
+          <span>${s.id}</span>
+          <span>${s.date}</span>
+        </div>
+        <div class="index-headline-tight">${s.headline}</div>
+        <div class="index-teaser-tight">${teaser}</div>
+      </a>
+    `;
+  }).join("");
+}
+
+
+/* ============================================================
+   DRAFT RECAP — TIGHT
    ============================================================ */
 function renderDraftRecap(teams) {
   const container = document.getElementById("draft-recap-grid");
@@ -168,33 +208,23 @@ function renderDraftRecap(teams) {
     }
   ];
 
-  container.innerHTML = draft
-    .map(d => {
-      return `
-        <div class="draft-recap-card">
-          <div class="draft-recap-owner">${d.owner}</div>
-
-          ${Object.entries(d.picks)
-            .map(([label, teamName]) => {
-              const team = teams.find(t => t.teamSchool === teamName);
-              const logo = team?.logoUrl || team?.helmetUrl || "";
-
-              return `
-                <div class="draft-recap-row">
-                  <div class="draft-recap-label">${label}</div>
-                  <div class="draft-recap-team">
-                    <img src="${logo}" class="draft-recap-logo">
-                    ${teamName}
-                  </div>
-                </div>
-              `;
-            })
-            .join("")}
-
-        </div>
-      `;
-    })
-    .join("");
+  container.innerHTML = draft.map(d => `
+    <div class="draft-card-tight">
+      <div class="draft-owner-tight">${d.owner}</div>
+      ${Object.entries(d.picks).map(([label, teamName]) => {
+        const team = teams.find(t => t.teamSchool === teamName);
+        return `
+          <div class="draft-row-tight">
+            <span class="draft-label-tight">${label}</span>
+            <span class="draft-team-tight">
+              <img src="${team.logoUrl}" class="draft-logo-tight">
+              ${teamName}
+            </span>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `).join("");
 }
 
 /* ============================================================

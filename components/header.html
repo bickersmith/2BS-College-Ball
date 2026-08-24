@@ -1,21 +1,58 @@
-<div class="header">
-  <div class="header-inner">
+<header class="main-header">
 
-    <a class="header-logo-link" href="./index.html">
-      2BSCB
-    </a>
-
-    <nav class="header-nav">
-      <a href="./index.html">Dashboard</a>
-      <a href="./schedule.html">Schedule</a>
-      <a href="./teams.html">Teams</a>
-      <a href="./owners.html">Owners</a>
-      <a href="./rivalries.html">Rivalries</a>
-      <a href="./standings.html">Standings</a>
-      <a href="./awards.html">Awards</a>
-      <a href="./draft.html">Draft</a>
-      <a href="./preseason.html">Preseason</a>
-    </nav>
-
+  <div class="header-left">
+    <a href="./index.html" class="header-title">2BSCB</a>
   </div>
-</div>
+
+  <nav class="header-nav">
+
+    <div class="header-item">
+      <a href="./index.html" class="header-link">Home</a>
+    </div>
+
+    <div class="header-item header-dropdown">
+      <a href="./schedule.html" class="header-link header-link-parent">Schedule</a>
+      <div class="header-dropdown-menu">
+        <a href="./schedule.html">Full Schedule</a>
+        <a href="./rivalries.html">Rivalry Games</a>
+      </div>
+    </div>
+
+    <div class="header-item header-dropdown">
+      <a href="./teams.html" class="header-link header-link-parent">Teams</a>
+      <div class="header-dropdown-menu" id="header-teams-menu">
+        <a href="./preseason.html">Preseason Top 25</a>
+        <!-- AUTO‑POPULATED OWNED TEAMS -->
+      </div>
+    </div>
+
+    <div class="header-item header-dropdown">
+      <a href="./owners.html" class="header-link header-link-parent">Owners</a>
+      <div class="header-dropdown-menu" id="header-owners-menu">
+        <!-- AUTO‑POPULATED OWNERS -->
+      </div>
+    </div>
+
+    <div class="header-item header-dropdown">
+      <a href="./storylines.html" class="header-link header-link-parent">Storylines</a>
+      <div class="header-dropdown-menu">
+        <a href="./storylines.html">All Storylines</a>
+        <a href="./storylines.html?id=latest">Latest Storylines</a>
+      </div>
+    </div>
+
+    <div class="header-item">
+      <a href="./standings.html" class="header-link">Standings</a>
+    </div>
+
+    <div class="header-item">
+      <a href="./awards.html" class="header-link">Awards</a>
+    </div>
+
+    <div class="header-item">
+      <a href="./draft.html" class="header-link">Draft</a>
+    </div>
+
+  </nav>
+
+</header>

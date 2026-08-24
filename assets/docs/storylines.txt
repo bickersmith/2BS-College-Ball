@@ -1,0 +1,83 @@
+# ID: 2026-W1-01-01
+DATE: 2026-08-23
+HEADLINE: Chaos Reigns as the Randomizer Sets the Season in Motion
+TITLE: The Randomizer Has Spoken
+SUBTITLE: Fate, chaos, and a button press decide the season
+STORY:
+No owner drafted with a plan. No one built a strategy. No one even picked a team.
+The 2BS College Ball randomizer assigned every roster with a single click, creating instant chaos and unexpected alliances.
+Georgia landed with Brian. Texas landed with Brendan. Notre Dame landed with Jay.
+The randomizer didn’t care about balance, rivalry, or logic — it simply rolled the dice and built the league.
+WHY:
+The randomness defines Week 1. Every owner must embrace the teams they didn’t choose and prove they can win with whatever fate handed them.
+TAGS:
+Randomizer, Fate, Chaos, Week 1 identity
+
+# ID: 2026-W1-01-02
+DATE: 2026-08-23
+HEADLINE: Brian Inherits a Powerhouse Without Lifting a Finger
+TITLE: Brian’s Blueblood Lottery Ticket
+SUBTITLE: Georgia and Alabama land in his lap — no strategy required.
+TEAMS: Georgia, Miami, USC, Alabama, Indiana
+STORY:
+Brian didn’t draft a powerhouse — he woke up and found one assigned to him.
+Georgia and Alabama form the strongest random pairing in the league, while Miami and USC add explosive upside.
+Indiana is the oddball, but even they bring Big Ten grit.
+Brian didn’t choose this roster, but he might be holding the best hand anyway.
+WHY:
+If the bluebloods dominate early, Brian becomes the league’s first true frontrunner.
+TAGS:
+Bluebloods, Random assignment, Heavy hitters
+
+# ID: 2026-W1-01-03
+DATE: 2026-08-23
+HEADLINE: Jay Lands the Most Stable Roster by Pure Chance
+TITLE: Jay’s Accidental Balance
+SUBTITLE: The randomizer hands him the most stable roster in 2BS.
+TEAMS: Notre Dame, Ole Miss, Louisville, Tennessee, Michigan
+STORY:
+Jay didn’t build a balanced roster — the randomizer did it for him.
+Notre Dame and Michigan anchor the top end, while Ole Miss, Louisville, and Tennessee provide reliable scoring depth.
+No owner has a more evenly distributed set of teams, and Jay didn’t have to lift a finger to get it.
+WHY:
+Jay’s roster has no weak spots, making him dangerous every single week.
+TAGS:
+Balance, Stability, Random perfection
+
+# ID: 2026-W1-01-04
+DATE: 2026-08-23
+HEADLINE: Brendan’s Texas‑Heavy Draw Could Boom or Explode
+TITLE: Brendan’s Lone Star Chaos Pack
+SUBTITLE: The randomizer gives him Texas — and a whole lot of volatility.
+TEAMS: Texas, Oklahoma, Texas Tech, Texas A&M, Washington
+STORY:
+Brendan didn’t choose Texas — Texas chose him.
+The randomizer handed him a roster full of Lone Star volatility: Texas, Oklahoma, Texas Tech, and Texas A&M.
+Washington is the lone outsider, but they might be the most stable team he has.
+This is the highest‑variance roster in the league, and Brendan didn’t plan any of it.
+WHY:
+If Brendan’s teams hit, he could lead the league in scoring by a mile.
+If they miss, he could be buried by Week 3.
+TAGS:
+Chaos, Lone Star, Boom or bust
+
+# ID: 2026-W1-01-05
+DATE: 2026-08-23
+HEADLINE: 2BSCB Launches in 48 Hours of Coding, Grilling, and Madness
+TITLE: The Weekend Build & The Sausage Summit
+SUBTITLE: 2BS College Ball launched in 48 hours — fueled by meat, madness, and momentum.
+STORY:
+While most college fantasy leagues take months to prepare, 2BS College Ball was forged in a single weekend.
+Brian built the entire multi-page league website in 48 hours — schedule, draft board, owners, teams, storylines, all live.
+Meanwhile, the Sausage Summit became the unofficial kickoff event: a gathering of owners, grills, questionable decisions, and draft theories shouted over sizzling bratwurst.
+WHY:
+The weekend build and the Summit set the tone for the entire 2BS season.
+The website became the league’s backbone, and the Summit became its chaotic, smoky soul.
+WATCH:
+Georgia vs Clemson
+Texas vs Colorado State
+Notre Dame vs Texas A&M
+Michigan vs Fresno State
+Oklahoma vs Temple
+TAGS:
+League lore, Sausage Summit, Weekend grind, 2BS culture

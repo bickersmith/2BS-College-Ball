@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
 
-<!-- GLOBAL FOUNDATION -->
-<link rel="stylesheet" href="./styles/main.css">
+  <!-- GLOBAL FOUNDATION -->
+  <link rel="stylesheet" href="./styles/main.css">
 
-<!-- GLOBAL MODULES -->
-<link rel="stylesheet" href="./styles/layout.css">
-<link rel="stylesheet" href="./styles/cards.css">
-<link rel="stylesheet" href="./styles/header.css">
-<link rel="stylesheet" href="./styles/navbar.css">
-<link rel="stylesheet" href="./styles/footer.css">
+  <!-- GLOBAL MODULES -->
+  <link rel="stylesheet" href="./styles/layout.css">
+  <link rel="stylesheet" href="./styles/cards.css">
+  <link rel="stylesheet" href="./styles/header.css">
+  <link rel="stylesheet" href="./styles/navbar.css">
+  <link rel="stylesheet" href="./styles/footer.css">
 
-<!-- PAGE-SPECIFIC -->
-<link rel="stylesheet" href="./styles/owners.css">
+  <!-- PAGE-SPECIFIC -->
+  <link rel="stylesheet" href="./styles/owner.css">
   <script type="module" src="./scripts/owner.js"></script>
 
-  <title>Owner Profile — 2BS College Ball</title>
+  <title>2BS College Ball — Owner</title>
 </head>
 
 <body>
@@ -31,26 +31,43 @@
   <!-- PAGE CONTENT -->
   <div class="page-container">
 
-    <!-- OWNER HERO -->
-    <div id="owner-hero"></div>
+    <!-- OWNER HEADER -->
+    <header class="owner-header" align="center">
+      <h1 id="ownerName" class="owner-title"></h1>
+    </header>
 
-    <!-- OWNED TEAMS -->
-    <section>
-  
-      <div id="owner-teams" class="owner-team-list-lg"></div>
+    <!-- OWNER TEAMS -->
+    <section class="owner-teams" align="center">
+      <div id="ownerTeamListLg" class="owner-team-logos"></div>
     </section>
 
-
-    <!-- NEXT 5 GAMES -->
-    <section>
-      <h2 class="section-title">Next 5 Games</h2>
-      <div id="owner-next-games" class="grid-3"></div>
+    <!-- NEXT FIVE GAMES -->
+    <section class="owner-next-five">
+      <h2 class="section-title">Next Five Games</h2>
+      <div id="ownerNextFive" class="schedule-grid"></div>
     </section>
 
-    <!-- FULL SCHEDULE -->
-    <section>
+    <!-- FULL SCHEDULE 
+    <section class="owner-games">
       <h2 class="section-title">Full Schedule</h2>
-      <div id="owner-full-schedule" class="schedule-table"></div>
+      <div id="ownerGamesList" class="schedule-grid"></div>
+    </section>
+-->
+    <!-- FULL TABLE -->
+    <section class="owner-table">
+      <h2 class="section-title">Full Game Table</h2>
+      <table id="ownerGameTable" class="owner-games-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Team</th>
+            <th>Opponent</th>
+            <th>Venue</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
 
   </div>
@@ -73,7 +90,6 @@
     import { loadFooter } from "./scripts/footer.js";
     loadFooter();
   </script>
-
 
 </body>
 </html>

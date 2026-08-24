@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
 
-<!-- GLOBAL FOUNDATION -->
-<link rel="stylesheet" href="./styles/main.css">
+  <!-- GLOBAL FOUNDATION -->
+  <link rel="stylesheet" href="./styles/main.css">
 
-<!-- GLOBAL MODULES -->
-<link rel="stylesheet" href="./styles/layout.css">
-<link rel="stylesheet" href="./styles/cards.css">
-<link rel="stylesheet" href="./styles/header.css">
-<link rel="stylesheet" href="./styles/navbar.css">
-<link rel="stylesheet" href="./styles/footer.css">
+  <!-- GLOBAL MODULES -->
+  <link rel="stylesheet" href="./styles/layout.css">
+  <link rel="stylesheet" href="./styles/cards.css">
+  <link rel="stylesheet" href="./styles/header.css">
+  <link rel="stylesheet" href="./styles/navbar.css">
+  <link rel="stylesheet" href="./styles/footer.css">
 
-<!-- PAGE-SPECIFIC -->
-<link rel="stylesheet" href="./styles/team.css">
+  <!-- PAGE-SPECIFIC -->
+  <link rel="stylesheet" href="./styles/team.css">
   <script type="module" src="./scripts/team.js"></script>
 
-  <title>Team Profile — 2BS College Ball</title>
+  <title>2BS College Ball — Team</title>
 </head>
 
 <body>
@@ -31,25 +31,40 @@
   <!-- PAGE CONTENT -->
   <div class="page-container">
 
-    <!-- TEAM HERO -->
-    <div id="team-hero"></div>
+    <!-- TEAM HEADER -->
+    <header class="team-header">
+      <img id="teamLogo" class="team-header-logo">
+      <h1 id="teamName" class="team-header-name"></h1>
+      <div id="teamNickname" class="team-header-nickname"></div>
+    </header>
 
-    <!-- TEAM DATA -->
-    <section>
-      <h2 class="section-title">Team Data</h2>
-      <div id="team-data" class="team-data-box"></div>
+
+    <!-- NEXT FIVE GAMES -->
+    <section class="team-next-five">
+      <h2 class="section-title">Next Five Games</h2>
+      <div id="teamNextFive" class="schedule-grid"></div>
     </section>
 
-    <!-- NEXT 5 GAMES -->
-    <section>
-      <h2 class="section-title">Next 5 Games</h2>
-      <div id="team-next-games" class="grid-3"></div>
+    <!-- FULL SCHEDULE 
+    <section class="team-schedule">
+      <h2 class="team-schedule-title">Full Schedule</h2>
+      <div id="teamScheduleGrid" class="team-schedule-grid"></div>
     </section>
-
-    <!-- FULL SCHEDULE -->
-    <section>
-      <h2 class="section-title">Full Schedule</h2>
-      <div id="team-full-schedule" class="schedule-table"></div>
+-->
+    <!-- FULL TABLE -->
+    <section class="team-table">
+      <h2 class="section-title">Full Game Table</h2>
+      <table id="teamGameTable" class="owner-games-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Opponent</th>
+            <th>Venue</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
 
   </div>
@@ -72,7 +87,6 @@
     import { loadFooter } from "./scripts/footer.js";
     loadFooter();
   </script>
-
 
 </body>
 </html>
