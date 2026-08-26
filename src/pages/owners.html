@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Owners</title>
+</head>
+
+<body>
+  <div id="owners-container"></div>
+
+<script type="module">
+  import { loadConfig } from "../scripts/config/env.js";
+  import { initOwnersPage } from "../scripts/owners.js";
+
+  await loadConfig();
+  initOwnersPage();
+</script>
+
+</body>
+</html>

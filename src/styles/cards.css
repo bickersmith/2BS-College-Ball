@@ -1,0 +1,216 @@
+/* ============================================================
+   UNIVERSAL CARD SYSTEM — BOLD SPORTS DASHBOARD
+   ============================================================ */
+
+/* ---------- ROOT TOKENS ---------- */
+:root {
+  /* Colors */
+  --color-surface: #ffffff;
+  --color-text: #111111;
+  --color-muted: #666666;
+  --color-accent: #000000; /* fallback accent */
+  --color-border: #e0e0e0;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 3px 6px rgba(0,0,0,0.16);
+  --shadow-lg: 0 6px 12px rgba(0,0,0,0.20);
+
+  /* Typography */
+  --font-sm: 0.8rem;
+  --font-md: 1rem;
+  --font-lg: 1.25rem;
+  --font-xl: 1.5rem;
+}
+
+/* ---------- UNIVERSAL CARD ---------- */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: default;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- CARD SIZES ---------- */
+.card-sm {
+  width: 220px;
+  padding: var(--space-sm);
+}
+
+.card-md {
+  width: 320px;
+  padding: var(--space-md);
+}
+
+.card-lg {
+  width: 420px;
+  padding: var(--space-md);
+}
+
+.card-xl {
+  width: 600px;
+  padding: var(--space-lg);
+}
+
+/* ---------- ACCENT BAR ---------- */
+.card-accent {
+  height: 6px;
+  width: 100%;
+  background: var(--color-accent);
+}
+
+/* ---------- CARD SECTIONS ---------- */
+.card-header {
+  padding: var(--space-md) var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.card-body {
+  padding: var(--space-md) var(--space-sm);
+  color: var(--color-text);
+}
+
+.card-footer {
+  padding: var(--space-md) var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- TEAM LOGO ---------- */
+.team-logo {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+}
+
+.card-sm .team-logo {
+  height: 32px;
+  width: 32px;
+}
+
+.card-xl .team-logo {
+  height: 64px;
+  width: 64px;
+}
+
+.team-logo.clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.team-logo.clickable:hover {
+  transform: scale(1.08);
+}
+
+/* ---------- OWNER PILL ---------- */
+.owner-pill {
+  background: #000;
+  color: #fff;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.owner-pill:hover {
+  background: #222;
+}
+
+/* ---------- GAME INFO ---------- */
+.game-header .vs {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  font-size: var(--font-md);
+}
+
+.game-score {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- BUTTON ---------- */
+.game-button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  transition: background 0.15s ease;
+}
+
+.game-button:hover {
+  background: #222;
+}
+
+
+/* ---------- SCHEDULE PAGE LAYOUT ---------- */
+
+.schedule-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.schedule-week-header {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+}
+
+.schedule-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+
+.team-logo.placeholder {
+  height: 48px;
+  width: 48px;
+  background: #ddd;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-sm);
+  border-radius: var(--radius-md);
+}

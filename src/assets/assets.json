@@ -1,0 +1,14 @@
+{
+  "logos": {
+    "default": "/assets/logos/default.png"
+  },
+  "helmets": {
+    "default": "/assets/logos/default-helmet.png"
+  },
+  "mascots": {
+    "default": "/assets/logos/default-mascot.png"
+  },
+  "backgrounds": {
+    "default": "/assets/backgrounds/default.jpg"
+  }
+}

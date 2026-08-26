@@ -1,0 +1,16 @@
+{
+  "environment": "development",
+  "debugMode": true,
+
+  "defaultLeague": "2BSCB",
+  "defaultSeason": "2026",
+
+  "supportedLeagues": ["2BSCB-1"],
+
+  "sheets": {
+    "spreadsheetId": "key",
+    "apiKey": "key"
+  }
+}
+
+

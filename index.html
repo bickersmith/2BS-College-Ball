@@ -2,76 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>2BS College Ball</title>
 
-  <!-- GLOBAL FOUNDATION -->
-  <link rel="stylesheet" href="./styles/main.css">
-
-  <!-- GLOBAL MODULES -->
-  <link rel="stylesheet" href="./styles/layout.css">
-  <link rel="stylesheet" href="./styles/cards.css">
-  <link rel="stylesheet" href="./styles/header.css">
-  <link rel="stylesheet" href="./styles/navbar.css">
-  <link rel="stylesheet" href="./styles/footer.css">
-
-  <!-- PAGE-SPECIFIC -->
-  <link rel="stylesheet" href="./styles/index.css">
-  <script type="module" src="./scripts/index.js"></script>
-
-  <title>2BS College Ball — Dashboard</title>
+  <script type="module" src="./src/scripts/index.js"></script>
 </head>
 
 <body>
 
-  <!-- HEADER -->
   <div id="header"></div>
-
-  <!-- NAVBAR -->
   <div id="navbar"></div>
 
-  <!-- PAGE CONTENT -->
-  <div class="index-container">
+  <main id="content">
+    <h1>Welcome to 2BS College Ball</h1>
+  </main>
 
-    <!-- OWNERS -->
-    <section class="index-section">
-      <div id="owners-grid" class="index-grid"></div>
-    </section>
-
-    <!-- NEXT 5 GAMES -->
-    <section class="index-section">
-      <h2 class="index-title">Next 5 Games</h2>
-      <div id="next-games" class="index-grid"></div>
-    </section>
-
-    <!-- LATEST STORYLINES -->
-    <section class="index-section">
-      <h2 class="index-title">Latest Storylines</h2>
-      <div id="latest-storylines-container"></div>
-    </section>
-
-    <!-- DRAFT RECAP -->
-    <section class="index-section">
-      <h2 class="index-title">Draft Recap</h2>
-      <div id="draft-recap-grid" class="index-grid"></div>
-    </section>
-
-  </div>
-
-  <!-- FOOTER -->
   <div id="footer"></div>
 
-  <!-- LOADERS -->
+  <!-- HEADER -->
   <script type="module">
-    import { loadHeader } from "./scripts/header.js";
+    import { loadHeader } from "./src/scripts/header.js";
     loadHeader();
   </script>
 
+  <!-- NAVBAR -->
   <script type="module">
-    import { loadNavbar } from "./scripts/navbar.js";
+    import { loadNavbar } from "./src/scripts/navbar.js";
     loadNavbar();
   </script>
 
+  <!-- FOOTER -->
   <script type="module">
-    import { loadFooter } from "./scripts/footer.js";
+    import { loadFooter } from "./src/scripts/footer.js";
     loadFooter();
   </script>
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- ========================= -->
+  <!-- GLOBAL FOUNDATION (OFF) -->
+  <!-- ========================= -->
+  <!-- <link rel="stylesheet" href="./styles/main.css"> -->
+
+  <!-- ========================= -->
+  <!-- GLOBAL MODULES (OFF) -->
+  <!-- ========================= -->
+  <!-- <link rel="stylesheet" href="./styles/layout.css"> -->
+  <!-- <link rel="stylesheet" href="./styles/cards.css"> -->
+  <!-- <link rel="stylesheet" href="./styles/header.css"> -->
+  <!-- <link rel="stylesheet" href="./styles/navbar.css"> -->
+  <!-- <link rel="stylesheet" href="./styles/footer.css"> -->
+
+  <!-- ========================= -->
+  <!-- PAGE-SPECIFIC (OFF) -->
+  <!-- ========================= -->
+  <!-- <link rel="stylesheet" href="./styles/index.css"> -->
+
+  <script type="module" src="./scripts/index.js"></script>
+
+  <title>2BS College Ball — Dashboard</title>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- PAGE CONTENT -->
+  <main id="content"></main>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <!-- LOADERS -->
+  <script type="module">
+    import { loadHeader } from "./scripts/header.js";
+    loadHeader();
+  </script>
+
+  <script type="module">
+    import { loadNavbar } from "./scripts/navbar.js";
+    loadNavbar();
+  </script>
+
+  <script type="module">
+    import { loadFooter } from "./scripts/footer.js";
+    loadFooter();
+  </script>
+
+</body>
+</html>

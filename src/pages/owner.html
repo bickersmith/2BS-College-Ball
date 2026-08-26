@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Owner</title>
+  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="/styles/cards.css">
+</head>
+
+<body>
+  <div id="owner-container"></div>
+  <div id="owner-teams-container"></div>
+
+  <script type="module">
+    import { loadConfig } from "../scripts/config/env.js";
+    import { initOwnerPage } from "../scripts/owner.js";
+
+    await loadConfig();
+    initOwnerPage();
+  </script>
+</body>
+</html>
