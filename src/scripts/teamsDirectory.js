@@ -1,133 +1,53 @@
-import { fetchSheet } from "./fetchSheet.js";
+/*
+
+// scripts/teamsDirectory.js
+import { getTeams } from "./api/api.teams.js";
+import { getGamesByTeam } from "./api/api.games.js";
+import { log } from "../scripts/diagnostics/logger.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const tbody = document.getElementById("teams-body");
-  const searchInput = document.getElementById("team-search");
-  const filterSelect = document.getElementById("team-filter");
+  log("TEAMS", "Rendering Teams Directory");
 
-  let teams = await fetchSheet("Teams");
+  const container = document.getElementById("teams-container");
+  container.innerHTML = "";
 
-  function normalizeTeam(team) {
-    return {
-      id: team.id || "",
-      name: team.name || "Unknown Team",
-      conference: team.conference || "Independent",
-      location: team.location || "",
-      logoUrl: team.logoUrl || "",
-      preseasonRank: parseInt(team.preseasonRank) || null
-    };
+  const teams = await getTeams();
+
+      log("TEAMS", `Loaded ${teams.length} teams`);
+   
+  if (!Array.isArray(teams)) {
+    log("TEAMS", "❌ getTeams did not return an array");
+    container.innerHTML = "<p>Error loading teams.</p>";
+    return;
   }
 
-  teams = teams.map(normalizeTeam);
 
-  // Add conference options to unified filter
-  const conferences = [...new Set(teams.map(t => t.conference))].sort();
-  conferences.forEach(conf => {
-    const opt = document.createElement("option");
-    opt.value = `conf:${conf}`;
-    opt.textContent = conf;
-    filterSelect.appendChild(opt);
-  });
+  teams.forEach(team => {
 
-  function renderTable() {
-    tbody.innerHTML = "";
 
-    const searchTerm = searchInput.value.toLowerCase();
-    const filterValue = filterSelect.value;
+    const card = document.createElement("div");
+    card.classList.add("team-card");
 
-    let filtered = teams.filter(t =>
-      (!searchTerm || t.name.toLowerCase().includes(searchTerm))
-    );
+    card.innerHTML = `
+      <div class="team-header" style="background:${team["Primary Color"]}; border-bottom:4px solid ${team["Secondary Color"]};">
+        <img class="team-logo" src="${team["Team Logo URL"]}" alt="${team["Team Name"]} logo">
+        <h2>${team["Team Name"]}</h2>
+        <p class="team-nickname">${team["Team Nickname"]}</p>
+      </div>
 
-    // Unified filter logic
-    if (filterValue === "top25") {
-      filtered = filtered.filter(t => t.preseasonRank && t.preseasonRank <= 25);
-    }
+      <div class="team-meta">
+        <p><strong>School:</strong> ${team["Team School"]}</p>
+        <p><strong>Conference:</strong> ${team["Team Conference"]}</p>
+        <p><strong>Location:</strong> ${team["Team Location"]}</p>
+      </div>
 
-    if (filterValue === "rank") {
-      filtered.sort((a, b) => {
-        const A = a.preseasonRank ?? 999;
-        const B = b.preseasonRank ?? 999;
-        return A - B;
-      });
-    }
-
-    if (filterValue.startsWith("conf:")) {
-      const conf = filterValue.replace("conf:", "");
-      filtered = filtered.filter(t => t.conference === conf);
-    }
-
-    filtered.forEach(team => {
-      const tr = document.createElement("tr");
-      tr.classList.add("team-row");
-
-      tr.addEventListener("mouseenter", () => showHoverCard(team, tr));
-      tr.addEventListener("mouseleave", hideHoverCard);
-
-      tr.addEventListener("click", () => {
-        window.location.href = `team.html?team=${encodeURIComponent(team.id)}`;
-      });
-
-      tr.innerHTML = `
-        <td>${team.preseasonRank ?? ""}</td>
-        <td>
-          <img src="${team.logoUrl}" class="team-logo-small">
-          ${team.name}
-        </td>
-        <td>${team.conference}</td>
-        <td>${team.location}</td>
-      `;
-
-      tbody.appendChild(tr);
-    });
-  }
-
-  // Hover card
-  const hoverCard = document.createElement("div");
-  hoverCard.classList.add("hover-card");
-  document.body.appendChild(hoverCard);
-
-  function showHoverCard(team, row) {
-    hoverCard.innerHTML = `
-      <div class="hover-title">${team.name}</div>
-      <div class="hover-sub">${team.conference}</div>
-      <div class="hover-sub">${team.location}</div>
-      <img src="${team.logoUrl}" class="hover-logo">
+      <a class="team-link" href="team.html?team=${team["Team Slug"]}">
+        View Team Page
+      </a>
     `;
-    const rect = row.getBoundingClientRect();
-    hoverCard.style.top = `${rect.top + window.scrollY}px`;
-    hoverCard.style.left = `${rect.right + 10}px`;
-    hoverCard.style.display = "block";
-  }
 
-  function hideHoverCard() {
-    hoverCard.style.display = "none";
-  }
-
-  // Column sorting restored
-  const headers = document.querySelectorAll("th");
-  headers.forEach(header => {
-    header.addEventListener("click", () => {
-      const sortKey = header.dataset.sort;
-
-      teams.sort((a, b) => {
-        const A = normalizeTeam(a);
-        const B = normalizeTeam(b);
-
-        if (sortKey === "preseason") {
-          return (A.preseasonRank ?? 999) - (B.preseasonRank ?? 999);
-        }
-        if (sortKey === "team") return A.name.localeCompare(B.name);
-        if (sortKey === "conference") return A.conference.localeCompare(B.conference);
-        if (sortKey === "location") return A.location.localeCompare(B.location);
-      });
-
-      renderTable();
-    });
+    container.appendChild(card);
   });
-
-  searchInput.addEventListener("input", renderTable);
-  filterSelect.addEventListener("change", renderTable);
-
-  renderTable();
 });
+
+*/

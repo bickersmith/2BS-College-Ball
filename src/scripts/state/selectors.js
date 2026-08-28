@@ -10,3 +10,7 @@ export const selectOwners = () => getState().owners;
 export const selectGames = () => getState().games;
 export const selectAwards = () => getState().awards;
 export const selectDraft = () => getState().draft;
+
+export function selectOwners() {
+  return window.__STATE__.owners || [];
+}

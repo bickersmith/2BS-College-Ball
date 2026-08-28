@@ -1,25 +1,47 @@
-import { validateId } from "../utils/validate.js";
-import { getTeamById, getOwnerById } from "../utils/lookups.js";
-import { log } from "../utils/logger.js";
+// =======================================
+// composeDraft.js — v2
+// =======================================
 
-export function composeDraft(draft, teams, owners) {
-  validateId(draft.teamId, "Team ID");
-  validateId(draft.draftOwnerId, "Draft Owner ID");
+import {
+  getTeamById,
+  getOwnerById
+} from "../utils/lookups.js";
 
-  const team = getTeamById(teams, draft.teamId);
-  const owner = getOwnerById(owners, draft.draftOwnerId);
-
-  if (!team) {
-    log(`Draft ${draft.draftId} missing team ${draft.teamId}`);
-  }
-
-  if (!owner) {
-    log(`Draft ${draft.draftId} missing owner ${draft.draftOwnerId}`);
-  }
+export function composeDraftPick(raw, teams, owners) {
+  const team = raw.teamId ? getTeamById(teams, raw.teamId) : null;
+  const draftOwner = raw.draftOwnerId
+    ? getOwnerById(owners, raw.draftOwnerId)
+    : null;
 
   return {
-    ...draft,
+    draftId: raw.draftId,
+    leagueId: raw.leagueId,
+
+    draftPickNumber: raw.draftPickNumber,
+    draftRound: raw.draftRound,
+    draftSourceSheet: raw.draftSourceSheet,
+    draftPickType: raw.draftPickType,
+    draftNotes: raw.draftNotes,
+
     team,
-    owner
+    teamName: raw.teamName,
+
+    draftOwner,
+
+    season: raw.season,
+
+    createdTimestamp: raw.createdTimestamp,
+    updatedTimestamp: raw.updatedTimestamp,
+    updatedBy: raw.updatedBy,
+    updateFlag: raw.updateFlag,
+    version: raw.version,
+    lastAction: raw.lastAction,
+    actionNotes: raw.actionNotes,
+    updatedByScript: raw.updatedByScript,
+    updatedByHuman: raw.updatedByHuman,
+    status: raw.status,
+    valid: raw.valid,
+
+    raw
   };
 }

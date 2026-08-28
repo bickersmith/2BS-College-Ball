@@ -1,60 +1,72 @@
-export function normalizeTeam(row) {
-  return {
-    teamId: String(row["Team ID"] || ""),
-    teamName: String(row["Team Name"] || ""),
-    teamSchool: String(row["Team School"] || ""),
-    teamNickname: String(row["Team Nickname"] || ""),
-    mascotName: String(row["Mascot Name"] || ""),
+// src/data/normalize/normalizeTeam.js
 
-    teamAbbreviation: String(row["Team Abbreviation"] || ""),
-    teamSlug: String(row["Team Slug"] || ""),
+import { log } from "../../scripts/diagnostics/logger.js";
 
-    conference: String(row["Team Conference"] || ""),
-    division: String(row["Team Division"] || ""),
+export function normalizeTeam(header, row) {
+  // ⭐ Clean header names
+  header = header.map(h => h.trim());
 
-    location: String(row["Team Location"] || ""),
-    founded: Number(row["Team Founded"] || 0),
-    active: row["Team Active"] === "TRUE",
+  // ⭐ Column lookup helper
+  const col = name => header.indexOf(name);
 
-    logoUrl: String(row["Team Logo URL"] || ""),
-    helmetUrl: String(row["Team Helmet URL"] || ""),
+  // ⭐ Universal field sanitizer
+  const get = key => String(row[col(key)] || "").trim();
 
-    primaryColor: String(row["Primary Color"] || ""),
-    secondaryColor: String(row["Secondary Color"] || ""),
-    alternateColor: String(row["Alternate Color"] || ""),
+  const team = {
+    leagueId: get("LeagueID"),
+    season: get("Season"),
+    teamId: get("TeamID"),
+    ownerId: get("OwnerID"),
 
-    mascotImageUrl: String(row["Mascot Image URL"] || ""),
-    teamMotto: String(row["Team Motto"] || ""),
+    teamName: get("TeamName"),
+    teamSchool: get("TeamSchool"),
+    teamNickname: get("TeamNickname"),
+    mascotName: get("MascotName"),
+    teamAbbreviation: get("TeamAbbreviation"),
+    teamSlug: get("TeamSlug"),
+    teamConference: get("TeamConference"),
+    teamDivision: get("TeamDivision"),
+    teamLocation: get("TeamLocation"),
+    teamFounded: get("TeamFounded"),
+    teamActive: get("TeamActive"),
 
-    homeStadium: String(row["Home Stadium"] || ""),
-    homeStadiumLocation: String(row["Home Stadium Location"] || ""),
+    teamLogo: get("TeamLogoURL"),
+    teamHelmet: get("TeamHelmetURL"),
+    primaryColor: get("PrimaryColor"),
+    secondaryColor: get("SecondaryColor"),
+    alternateColor: get("AlternateColor"),
 
-    espnTeamId: String(row["ESPN Team ID"] || ""),
-    espnTeamSlug: String(row["ESPN Team Slug"] || ""),
-    espnLogoUrl: String(row["ESPN Logo URL"] || ""),
-    espnHelmetUrl: String(row["ESPN Helmet URL"] || ""),
-    espnRank: Number(row["ESPN Rank"] || 0),
+    mascotImageUrl: get("MascotImageURL"),
+    teamMotto: get("TeamMotto"),
+    homeStadium: get("HomeStadium"),
+    homeStadiumLocation: get("HomeStadiumLocation"),
 
-    cfbdTeamId: String(row["CFBD Team ID"] || ""),
-    cfbdTeamSlug: String(row["CFBD Team Slug"] || ""),
+    espnTeamId: get("ESPNTeamID"),
+    espnTeamSlug: get("ESPNTeamSlug"),
+    espnLogoUrl: get("ESPNLogoURL"),
+    espnHelmetUrl: get("ESPNHelmetURL"),
+    espnRank: get("ESPNRank"),
 
-    preseasonRank: Number(row["Preseason Rank"] || 0),
-    preseasonConferenceRank: Number(row["Preseason Conference Rank"] || 0),
+    cfbdTeamId: get("CFBDTeamID"),
+    cfbdTeamSlug: get("CFBDTeamSlug"),
 
-    ownerId: String(row["Owner ID"] || ""),
+    preseasonRank: get("PreseasonRank"),
+    preseasonConferenceRank: get("PreseasonConferenceRank"),
 
-    // Audit Trail
-    season: Number(row["Season"] || 2026),
-    createdTimestamp: new Date(row["Created Timestamp"] || new Date()),
-    updatedTimestamp: new Date(row["Updated Timestamp"] || new Date()),
-    updatedBy: String(row["Updated By"] || "Migration Script"),
-    updateFlag: row["Update Flag"] === "TRUE",
-    version: Number(row["Version"] || 1),
-    lastAction: String(row["Last Action"] || "Migrated from V1"),
-    actionNotes: String(row["Action Notes"] || "Auto-migration"),
-    updatedByScript: row["Updated By Script"] === "TRUE",
-    updatedByHuman: row["Updated By Human"] === "TRUE",
-    status: String(row["Status"] || "Active"),
-    valid: row["Valid"] === "TRUE"
+    createdTimestamp: get("CreatedTimestamp"),
+    updatedTimestamp: get("UpdatedTimestamp"),
+    updatedBy: get("UpdatedBy"),
+    updateFlag: get("UpdateFlag"),
+    version: get("Version"),
+    lastAction: get("LastAction"),
+    actionNotes: get("ActionNotes"),
+    updatedByScript: get("UpdatedByScript"),
+    updatedByHuman: get("UpdatedByHuman"),
+    status: get("Status"),
+    valid: get("Valid")
   };
+
+  log("NORMALIZE", `Normalized team ${team.teamId} (${team.teamName})`);
+
+  return team;
 }

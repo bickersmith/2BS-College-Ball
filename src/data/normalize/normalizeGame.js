@@ -1,89 +1,110 @@
-export function normalizeGame(row) {
-  return {
-    gameId: String(row["Game ID"] || ""),
-    gameUuid: String(row["Game UUID"] || ""),
-    espnGameId: String(row["ESPN Game ID"] || ""),
-    cfbdGameId: String(row["CFBD Game ID"] || ""),
+// src/data/normalize/normalizeGame.js
 
-    gameDate: row["Game Date"] ? new Date(row["Game Date"]) : null,
-    bowlName: String(row["Bowl Name"] || ""),
-    week: Number(row["Week"] || 0),
-    weekDescription: String(row["Week Description"] || ""),
-    gameType: String(row["Game Type"] || ""),
-    postseasonType: String(row["Postseason Type"] || ""),
-    gameDescription: String(row["Game Description"] || ""),
-    gameNotes: String(row["Game Notes"] || ""),
+import { log } from "../../scripts/diagnostics/logger.js";
 
-    espnKickoffTime: String(row["ESPN Kickoff Time"] || ""),
-    espnVenue: String(row["ESPN Venue"] || ""),
-    espnBroadcastNetwork: String(row["ESPN Broadcast Network"] || ""),
+export function normalizeGame(header, row) {
+  // ⭐ Clean header names
+  header = header.map(h => h.trim());
 
-    cfbdVenue: String(row["CFBD Venue"] || ""),
-    cfbdWeather: String(row["CFBD Weather"] || ""),
-    cfbdTemperature: Number(row["CFBD Temperature"] || 0),
-    cfbdConditions: String(row["CFBD Conditions"] || ""),
-    cfbdAttendance: Number(row["CFBD Attendance"] || 0),
-    cfbdRank: Number(row["CFBD Rank"] || 0),
+  // ⭐ Column lookup helper
+  const col = name => header.indexOf(name);
 
-    neutral: row["Neutral"] === "TRUE",
-    gameVenue: String(row["Game Venue"] || ""),
-    gameLocation: String(row["Game Location"] || ""),
-    gameAttendance: Number(row["Game Attendance"] || 0),
-    gameBroadcastNetwork: String(row["Game Broadcast Network"] || ""),
-    gameWeather: String(row["Game Weather"] || ""),
-    gameTemperature: Number(row["Game Temperature"] || 0),
-    gameConditions: String(row["Game Conditions"] || ""),
+  // ⭐ Universal field sanitizer (same as owners + teams)
+  const get = key => String(row[col(key)] || "").trim();
 
-    gameDuration: String(row["Game Duration"] || ""),
-    gameKeyPlays: String(row["Game Key Plays"] || ""),
-    gameSummary: String(row["Game Summary"] || ""),
+  const game = {
+    leagueId: get("LeagueID"),
+    season: get("Season"),
 
-    teamId: String(row["Team ID"] || ""),
-    opponent: String(row["Opponent"] || ""),
-    opponentId: String(row["Opponent ID"] || ""),
-    opponentRank: Number(row["Opponent Rank"] || 0),
-    rivalry: row["Rivalry"] === "TRUE",
+    gameId: get("GameID"),
+    gameUuid: get("GameUUID"),
+    espnGameId: get("ESPNGameID"),
+    cfbdGameId: get("CFBDGameID"),
 
-    schoolScore: Number(row["School Score"] || 0),
-    opponentScore: Number(row["Opponent Score"] || 0),
+    gameDate: get("GameDate"),
+    bowlName: get("BowlName"),
+    week: get("Week"),
+    neutral: get("Neutral"),
+    gameType: get("GameType"),
+    postseasonType: get("PostseasonType"),
+    postseasonFlags: get("PostseasonFlags"),
+    gamePoints: get("GamePoints"),
 
-    rankStart: Number(row["Rank Start"] || 0),
-    rankEnd: Number(row["Rank End"] || 0),
+    // TEAM SIDE
+    teamId: get("TeamID"),
+    ownerId: get("OwnerID"),
+    teamName: get("TeamName"),
+    teamHomeAway: get("TeamHomeAway"),
+    teamRank: get("TeamRank"),
 
-    result: String(row["Result"] || ""),
-    ot: row["OT"] === "TRUE",
-    win: row["Win"] === "TRUE",
-    loss: row["Loss"] === "TRUE",
+    // OPPONENT SIDE
+    opponentTeamId: get("OpponentTeamID"),
+    opponentOwnerId: get("OpponentOwnerID"),
+    opponentTeamName: get("OpponentTeamName"),
+    opponentRank: get("OpponentRank"),
+    rivalry: get("Rivalry"),
 
-    blowoutWin: row["Blowout Win"] === "TRUE",
-    closeWin: row["Close Win"] === "TRUE",
-    shutoutWin: row["Shutout Win"] === "TRUE",
-    otWin: row["OT Win"] === "TRUE",
-    otLoss: row["OT Loss"] === "TRUE",
+    // SCORE
+    teamScore: get("TeamScore"),
+    opponentScore: get("OpponentScore"),
+    result: get("Result"),
+    ot: get("OT"),
+    win: get("Win"),
+    loss: get("Loss"),
+    blowoutWin: get("BlowoutWin"),
+    closeWin: get("CloseWin"),
+    shutoutWin: get("ShutoutWin"),
+    otWin: get("OTWin"),
+    otLoss: get("OTLoss"),
+    beatTop10: get("BeatTop10"),
+    beatTop25: get("BeatTop25"),
+    rivalWin: get("RivalWin"),
+    rivalLoss: get("RivalLoss"),
 
-    beatTop10: row["Beat Top 10"] === "TRUE",
-    beatTop25: row["Beat Top 25"] === "TRUE",
+    // ESPN
+    espnKickoffTime: get("ESPNKickoffTime"),
+    espnVenue: get("ESPNVenue"),
+    espnBroadcastNetwork: get("ESPNBroadcastNetwork"),
 
-    rivalWin: row["Rival Win"] === "TRUE",
-    rivalLoss: row["Rival Loss"] === "TRUE",
+    // CFBD
+    cfbdVenue: get("CFBDVenue"),
+    cfbdWeather: get("CFBDWeather"),
+    cfbdTemperature: get("CFBDTemperature"),
+    cfbdConditions: get("CFBDConditions"),
+    cfbdAttendance: get("CFBDAttendance"),
+    cfbdRank: get("CFBDRank"),
 
-    pollMove: Number(row["Poll Move"] || 0),
-    weeklyTotal: Number(row["Weekly Total"] || 0),
+    // GAME DETAILS
+    gameVenue: get("GameVenue"),
+    gameLocation: get("GameLocation"),
+    gameAttendance: get("GameAttendance"),
+    gameBroadcastNetwork: get("GameBroadcastNetwork"),
+    gameWeather: get("GameWeather"),
+    gameTemperature: get("GameTemperature"),
+    gameConditions: get("GameConditions"),
+    gameDuration: get("GameDuration"),
+    gameKeyPlays: get("GameKeyPlays"),
+    gameSummary: get("GameSummary"),
+    gameDescription: get("GameDescription"),
+    gameNotes: get("GameNotes"),
 
-    postseasonFlags: String(row["Postseason Flags"] || ""),
-    postseasonPoints: Number(row["Postseason Points"] || 0),
+    // META
+    createdTimestamp: get("CreatedTimestamp"),
+    updatedTimestamp: get("UpdatedTimestamp"),
+    updatedBy: get("UpdatedBy"),
+    updateFlag: get("UpdateFlag"),
+    version: get("Version"),
+    lastAction: get("LastAction"),
+    actionNotes: get("ActionNotes"),
+    updatedByScript: get("UpdatedByScript"),
+    updatedByHuman: get("UpdatedByHuman"),
+    status: get("Status"),
+    valid: get("Valid"),
 
-    season: Number(row["Season"] || 2026),
-    createdTimestamp: new Date(row["Created Timestamp"] || new Date()),
-    updatedTimestamp: new Date(row["Updated Timestamp"] || new Date()),
-    updatedBy: String(row["Updated By"] || "Migration Script"),
-    updateFlag: row["Update Flag"] === "TRUE",
-    version: Number(row["Version"] || 1),
-    lastAction: String(row["Last Action"] || "Migrated from V1"),
-    actionNotes: String(row["Action Notes"] || "Auto-migration"),
-    updatedByScript: row["Updated By Script"] === "TRUE",
-    updatedByHuman: row["Updated By Human"] === "TRUE",
-    status: String(row["Status"] || "Active"),
-    valid: row["Valid"] === "TRUE"
+    raw: row
   };
+
+  log("NORMALIZE", `Normalized game ${game.gameId}`);
+
+  return game;
 }

@@ -1,1 +1,0 @@
-export const MASTER_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5-gSKyfjo7MMsav38tHh7XYbplK8c4HzzT65hLKhwHRwkWcLJEWq7LW6_5Wrlk6ngz4jOirpdSuHa/pub?gid=1094319531&single=true&output=csv";

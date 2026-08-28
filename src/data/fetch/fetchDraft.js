@@ -1,18 +1,25 @@
-import { fetchSheet } from "../sheetApi.js";
+import { fetchSheet } from "./fetchSheet.js";
 import { SHEET_DRAFT } from "../constants.js";
 import { normalizeDraft } from "../normalize/normalizeDraft.js";
+import { log } from "../../scripts/diagnostics/logger.js";
 
-export async function fetchDraft() {
+export async function fetchDraftData() {
   const rows = await fetchSheet(SHEET_DRAFT);
-  return rows.map(normalizeDraft);
-}
 
+  if (!rows || rows.length === 0) {
+    log("FETCH", "❌ No draft rows returned");
+    return [];
+  }
 
+  const header = rows[0];
+  const idCol = header.indexOf("Draft ID");
 
-import { normalizeGame } from "../normalize/normalizeGame.js";
-import { SHEET_API } from "../sheetApi.js";
+  const filtered = rows.slice(1).filter(row => {
+    const id = (row[idCol] || "").trim();
+    return id !== "";
+  });
 
-export async function fetchGame() {
-  const raw = await SHEET_API.getSheet("Games");
-  return raw.map(normalizeGame);
+  log("FETCH", `Draft rows: ${filtered.length}`);
+
+  return filtered.map(row => normalizeDraft(row, header));
 }

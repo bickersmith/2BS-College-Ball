@@ -1,36 +1,53 @@
+// =======================================
+// scheduleGameCard.js — v2 HOME/AWAY SAFE
+// =======================================
+
 import { cardBase } from "./cardBase.js";
 import {
   getClickableTeamLogo,
   getOwnerPill,
   formatGameLocation,
   formatGameScore
-} from "../../utils/cardUtils.js"; 
+} from "../../utils/cardUtils.js";
 
 import { goToGame } from "../../utils/navigation.js";
+import { log } from "../../scripts/diagnostics/logger.js";
 
 export function scheduleGameCard(game, size = "md") {
 
-    console.log("🎴 scheduleGameCard()", game.gameId, game);
+ // log("CARD", `Rendering schedule card for game ${game.gameId}`);
 
-  if (!game.homeTeam || !game.awayTeam) {
-    console.error("❌ Missing team data in game:", game);
+  const { homeTeam, awayTeam } = game;
+
+  if (!homeTeam || !awayTeam) {
+    log("CARD", `❌ Missing team data in composed game ${game.gameId}`);
   }
+
+  // ---------------------------------------
+  // Header (team logos + names)
+  // ---------------------------------------
 
   const header = `
     <div class="schedule-card-header">
-      <div class="team-side">
-        ${getClickableTeamLogo(game.awayTeam)}
-        <div class="team-name">${game.awayTeam?.teamName || "Unknown"}</div>
-      </div>
-
-      <div class="vs">@</div>
 
       <div class="team-side">
-        ${getClickableTeamLogo(game.homeTeam)}
-        <div class="team-name">${game.homeTeam?.teamName || "Unknown"}</div>
+        ${getClickableTeamLogo(awayTeam)}
+        <div class="team-name">${awayTeam?.teamName || "Unknown"}</div>
       </div>
+
+      <div class="vs">${game.neutral ? "vs" : "@"}</div>
+
+      <div class="team-side">
+        ${getClickableTeamLogo(homeTeam)}
+        <div class="team-name">${homeTeam?.teamName || "Unknown"}</div>
+      </div>
+
     </div>
   `;
+
+  // ---------------------------------------
+  // Body (date, location, score)
+  // ---------------------------------------
 
   const body = `
     <div class="schedule-card-body">
@@ -40,22 +57,28 @@ export function scheduleGameCard(game, size = "md") {
     </div>
   `;
 
+  // ---------------------------------------
+  // Footer (owner + button)
+  // ---------------------------------------
+
   const footer = `
     <div class="schedule-card-footer">
-      ${getOwnerPill(game.owner)}
+      ${getOwnerPill(homeTeam?.owner)}
       <button class="game-button" onclick="goToGame('${game.gameId}')">
         View Game
       </button>
     </div>
   `;
 
+  // ---------------------------------------
+  // Final card
+  // ---------------------------------------
+
   return cardBase({
-    team: game.homeTeam,
+    team: homeTeam,
     size,
     header,
     body,
     footer
   });
 }
-
-

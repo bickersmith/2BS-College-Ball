@@ -1,27 +1,78 @@
-// ===============================
-// v2 Card Utilities (with debugging)
-// ===============================
+// =======================================
+// cardUtils.js — v2 SAFE + CLEAN HTML
+// =======================================
 
+import { goToTeam, goToOwner } from "./navigation.js";
+import { log } from "../scripts/diagnostics/logger.js";
+
+// ---------------------------------------
+// Team Logo (clickable)
+// ---------------------------------------
 
 export function getClickableTeamLogo(team) {
-  console.log("🔧 getClickableTeamLogo()", team);
-  if (!team) return `<div class="team-logo missing"></div>`;
+  const logo = team.teamLogo || "";   // ⭐ correct composed field
+  const id   = team.teamId;
+
   return `
-    <div class="team-logo" onclick="window.location.href='team.html?id=${team.teamId}'">
-      <img src="${team.logoUrl}" alt="${team.teamName}" />
+    <div class="team-logo-clickable" onclick="goToTeam('${id}')">
+      <img src="${logo}" alt="${team.teamName}" class="team-logo-lg">
     </div>
   `;
 }
 
+
+// ---------------------------------------
+// Owner Pill
+// ---------------------------------------
+
 export function getOwnerPill(owner) {
-  console.log("🔧 getOwnerPill()", owner);
-  if (!owner) return `<div class="owner-pill unknown">Unknown Owner</div>`;
-  return `<div class="owner-pill">${owner.ownerName}</div>`;
+  if (!owner) return "";
+
+  const abbrev = owner.abbreviation || "";
+  const color = owner.colors?.primary || "#444";
+
+  return `
+    <div class="owner-pill" style="background-color: ${color}">
+      ${abbrev}
+    </div>
+  `;
 }
 
-export function formatGameDate(dateString) {
-  console.log("🔧 formatGameDate()", dateString);
 
+// ---------------------------------------
+// Game Location Formatting
+// ---------------------------------------
+
+export function formatGameLocation(game) {
+  if (!game) return "";
+
+  const venue = game.venue || "";
+  const location = game.location || "";
+
+  if (venue && location) return `${venue} — ${location}`;
+  if (venue) return venue;
+  return location;
+}
+
+// ---------------------------------------
+// Game Score Formatting
+// ---------------------------------------
+
+export function formatGameScore(game) {
+  if (!game || !game.score) return "";
+
+  const home = game.score.home ?? "";
+  const away = game.score.away ?? "";
+
+  return `${away} - ${home}`;
+}
+
+
+// =======================================
+// Game Date Formatting
+// =======================================
+
+export function formatGameDate(dateString) {
   if (!dateString) return "Unknown Date";
 
   const date = new Date(dateString);
@@ -34,23 +85,22 @@ export function formatGameDate(dateString) {
 }
 
 
-export function formatGameLocation(game) {
-  console.log("🔧 formatGameLocation()", game);
-  return game.location || "Unknown Location";
-}
-
-export function formatGameScore(game) {
-  console.log("🔧 formatGameScore()", game);
-  if (!game.score) return "TBD";
-  return `${game.score.away} - ${game.score.home}`;
-}
+// =======================================
+// Accent Color
+// =======================================
 
 export function getAccentColor(team) {
-  console.log("🔧 getAccentColor()", team);
-  return team?.accentColor || "#333";
+  return team?.colors?.primary || team?.accentColor || "#333";
 }
 
+// =======================================
+// Card Size Class
+// =======================================
+
 export function getCardSizeClass(size) {
-  console.log("🔧 getCardSizeClass()", size);
-  return size === "lg" ? "card-lg" : "card-md";
+  switch (size) {
+    case "sm": return "card-sm";
+    case "lg": return "card-lg";
+    default:   return "card-md";
+  }
 }

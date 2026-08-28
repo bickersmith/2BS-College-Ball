@@ -3,22 +3,27 @@
 const cache = {};
 const TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-export function getCacheKey(sheetName, leagueId, seasonId) {
-  return `${sheetName}:${leagueId}:${seasonId}`;
-}
-
-export async function cachedFetch(sheetName, leagueId, seasonId, fetchFn) {
-  const key = getCacheKey(sheetName, leagueId, seasonId);
-  const now = Date.now();
+export async function cachedFetch(key, fetchFn) {
   const entry = cache[key];
 
-  // Cache hit
-  if (entry && now - entry.timestamp < TTL_MS) {
+  // If cached AND not expired → return it
+  if (entry && (Date.now() - entry.timestamp < TTL_MS)) {
     return entry.data;
   }
 
-  // Cache miss → fetch
-  const data = await fetchFn();
-  cache[key] = { data, timestamp: now };
-  return data;
+  // Otherwise fetch fresh
+  const result = await fetchFn();
+
+  // Only cache valid arrays (prevents caching broken objects)
+  if (Array.isArray(result)) {
+    cache[key] = {
+      timestamp: Date.now(),
+      data: result
+    };
+  } else {
+    // Do NOT cache invalid results
+    console.warn("cachedFetch: Not caching non-array result for key:", key);
+  }
+
+  return result;
 }

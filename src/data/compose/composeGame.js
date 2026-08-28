@@ -1,53 +1,45 @@
-// ===============================
-// v2 Compose Game — aligned with normalizeGame()
-// ===============================
-
-import { getTeamById, getOwnerById } from "../utils/lookups.js";
+import { getTeamById } from "../utils/lookups.js";
 import { formatGameDate } from "../../utils/cardUtils.js";
+import { log } from "../../scripts/diagnostics/logger.js";
 
 export function composeGame(raw, teams, owners) {
-  console.log("🛠 composeGame RAW:", raw);
 
-  // Teams
-  const homeTeam = getTeamById(teams, raw.teamId);
-  const awayTeam = getTeamById(teams, raw.opponentId);
+  const team = getTeamById(teams, raw.teamId);
+  const opponent = getTeamById(teams, raw.opponentTeamId);
 
-  if (!homeTeam || !awayTeam) {
-    console.warn("⚠️ Missing team data in game:", raw);
-  }
+  const safeTeam = (id, label) => ({
+    teamId: id,
+    teamName: label,
+    logo: "",
+    city: "",
+    stadium: "",
+    colors: { primary: "#666" },
+    owner: null
+  });
 
-  // Owner (if applicable)
-  const owner = getOwnerById(owners, raw.ownerId);
+  const t = team || safeTeam(raw.teamId, "Unknown Team");
+  const o = opponent || safeTeam(raw.opponentTeamId, "Unknown Opponent");
 
-  // Date formatting
   const dateFormatted = formatGameDate(raw.gameDate);
 
-  // Build composed object for schedule rendering
   return {
     gameId: raw.gameId,
-
-    // Dates
     date: raw.gameDate,
     dateFormatted,
 
-    // Location / Venue
     location: raw.gameLocation,
     venue: raw.gameVenue,
+    neutral: raw.neutral === "Y",
 
-    // Teams
-    homeTeam,
-    awayTeam,
+    homeTeam: t,
+    awayTeam: o,
 
-    // Score
     score: {
-      home: raw.schoolScore,
-      away: raw.opponentScore
+      home: Number(raw.teamScore || 0),
+      away: Number(raw.opponentScore || 0)
     },
 
-    // Season
     season: raw.season,
-
-    // Raw reference (optional but useful)
     raw
   };
 }

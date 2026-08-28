@@ -1,18 +1,86 @@
-// src/components/cards/ownerCard.js
+// =======================================
+// ownerCard.js — v3 CLEAN + TEAM LIST + NAV
+// =======================================
 
-import { ComponentBase } from "../core/componentBase.js";
-import { escapeHtml } from "../core/renderUtils.js";
-import { withFallback } from "../core/fallbacks.js";
+import { cardBase } from "./cardBase.js";
+import {
+  getOwnerPill,
+  getClickableTeamLogo
+} from "../../utils/cardUtils.js";
 
-export function ownerCard(owner) {
-  const safeName = escapeHtml(owner.ownerName);
-  const safeSlug = escapeHtml(owner.ownerSlug || owner.ownerId);
+import { goToTeam, goToOwner } from "../../utils/navigation.js";
+import { log } from "../../scripts/diagnostics/logger.js";
 
-  return `
-    <div class="card owner-card">
-      <h2>${safeName}</h2>
-      <p>Owner ID: ${escapeHtml(owner.ownerId)}</p>
-      <a href="/pages/owner.html?ownerId=${safeSlug}">View Owner</a>
+export function ownerCard(owner, teams = [], size = "lg") {
+
+  log("CARD", `Rendering owner card for owner ${owner.id}`);
+
+  // ---------------------------------------
+  // Header (owner pill + name)
+  // ---------------------------------------
+
+  const header = `
+    <div class="owner-card-header">
+      ${getOwnerPill(owner)}
+      <div class="owner-name">${owner.name}</div>
     </div>
   `;
+
+  // ---------------------------------------
+  // Body (owner metadata + team list)
+  // ---------------------------------------
+
+  const ownerTeams = teams.filter(t => t.ownerId === owner.id);
+
+  const teamList = ownerTeams.length
+    ? ownerTeams.map(team => `
+        <div class="owner-team-row">
+          ${getClickableTeamLogo(team)}
+          <div class="owner-team-name">${team.teamName}</div>
+          <button class="team-button" onclick="goToTeam('${team.teamId}')">
+            View Team
+          </button>
+        </div>
+      `).join("")
+    : `<div class="owner-no-teams">No teams assigned</div>`;
+
+  const body = `
+    <div class="owner-card-body">
+
+      <div class="owner-meta">
+        <div class="owner-email">${owner.email || ""}</div>
+        <div class="owner-notes">${owner.notes || ""}</div>
+      </div>
+
+      <div class="owner-teams-section">
+        <div class="owner-teams-title">Teams</div>
+        ${teamList}
+      </div>
+
+    </div>
+  `;
+
+  // ---------------------------------------
+  // Footer (navigation)
+  // ---------------------------------------
+
+const footer = `
+  <div class="owner-card-footer">
+    <button class="owner-button" onclick="window.location.href='owners.html'">
+      View All Owners
+    </button>
+  </div>
+`;
+
+  // ---------------------------------------
+  // Final card
+  // ---------------------------------------
+
+  return cardBase({
+    team: ownerTeams[0] || null,   // theming based on first team (if any)
+    size,
+    header,
+    body,
+    footer
+  });
 }

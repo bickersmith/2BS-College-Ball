@@ -1,27 +1,38 @@
-export function normalizeOwner(row) {
-  return {
-    ownerId: String(row["Owner ID"] || ""),
-    ownerName: String(row["Owner Name"] || ""),
-    ownerAbbreviation: String(row["Owner Abbreviation"] || ""),
-    ownerSlug: String(row["Owner Slug"] || ""),
-    ownerEmail: String(row["Owner Email"] || ""),
+import { log } from "../../scripts/diagnostics/logger.js";
 
-    colorPrimary: String(row["Owner Team Color Primary"] || ""),
-    colorSecondary: String(row["Owner Team Color Secondary"] || ""),
-    colorAlternate: String(row["Owner Team Color Alternate"] || ""),
+export function normalizeOwner(header, row) {
 
-    // Audit Trail
-    season: Number(row["Season"] || 2026),
-    createdTimestamp: new Date(row["Created Timestamp"] || new Date()),
-    updatedTimestamp: new Date(row["Updated Timestamp"] || new Date()),
-    updatedBy: String(row["Updated By"] || "Migration Script"),
-    updateFlag: row["Update Flag"] === "TRUE",
-    version: Number(row["Version"] || 1),
-    lastAction: String(row["Last Action"] || "Migrated from V1"),
-    actionNotes: String(row["Action Notes"] || "Auto-migration"),
-    updatedByScript: row["Updated By Script"] === "TRUE",
-    updatedByHuman: row["Updated By Human"] === "TRUE",
-    status: String(row["Status"] || "Active"),
-    valid: row["Valid"] === "TRUE"
+
+
+  const get = key => row[header.indexOf(key)];
+  const owner = {
+    leagueId: get("LeagueID"),
+    season: get("Season"),
+    ownerId: get("OwnerID"),
+    ownerName: get("OwnerName"),
+    ownerAbbreviation: get("OwnerAbbreviation"),
+    ownerSlug: get("OwnerSlug"),
+    ownerEmail: get("OwnerEmail"),
+    ownerTeamColorPrimary: get("OwnerTeamColorPrimary"),
+    ownerTeamColorSecondary: get("OwnerTeamColorSecondary"),
+    ownerTeamColorAlternate: get("OwnerTeamColorAlternate"),
+    ownerNotes: get("OwnerNotes"),
+    createdTimestamp: get("CreatedTimestamp"),
+    updatedTimestamp: get("UpdatedTimestamp"),
+    updatedBy: get("UpdatedBy"),
+    updateFlag: get("UpdateFlag"),
+    version: get("Version"),
+    lastAction: get("LastAction"),
+    actionNotes: get("ActionNotes"),
+    updatedByScript: get("UpdatedByScript"),
+    updatedByHuman: get("UpdatedByHuman"),
+    status: get("Status"),
+    valid: get("Valid")
   };
+
+
+//log (owner);
+
+  return owner;
+
 }
