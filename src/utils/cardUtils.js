@@ -15,7 +15,7 @@ export function getClickableTeamLogo(team) {
 
   return `
     <div class="team-logo-clickable" onclick="goToTeam('${id}')">
-      <img src="${logo}" alt="${team.teamName}" class="team-logo-lg">
+      <img src="${logo}" alt="${team.teamName}" class="team-logo-xs">
     </div>
   `;
 }

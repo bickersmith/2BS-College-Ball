@@ -1,0 +1,62 @@
+/* ============================
+   OWNERS PAGE GRID (unchanged)
+   ============================ */
+.owners-page .owners-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* ============================
+   OWNERS → TEAMS TABLE (normal)
+   ============================ */
+.owners-teams-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* natural sizing */
+  margin-top: var(--space-lg);
+}
+
+/* Header + cell spacing */
+.owners-teams-table th,
+.owners-teams-table td {
+  padding: 8px 12px; /* normal spacing */
+  font-size: 0.9rem;
+  white-space: normal; /* allow wrapping */
+  vertical-align: middle;
+}
+
+/* Owner column */
+.owners-teams-table .owner-col {
+  font-weight: 600;
+  vertical-align: top;
+  padding-top: var(--space-sm);
+}
+
+/* Team column */
+.owners-teams-table .team-col {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* normal spacing */
+}
+
+/* Team logo */
+.owners-teams-table .team-col img.team-logo-xs {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 2px;
+}
+
+/* Hover effect */
+.owners-teams-table tbody tr:hover {
+  background: var(--color-accent-light);
+}
+
+/* No-team row */
+.owners-teams-table .no-team {
+  color: var(--color-muted);
+  font-style: italic;
+}

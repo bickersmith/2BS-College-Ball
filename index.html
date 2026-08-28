@@ -1,40 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>2BS College Ball</title>
+  <meta charset="UTF-8">
+<!-- CORE -->
+<link rel="stylesheet" href="/src/styles/core/reset.css">
+<link rel="stylesheet" href="/src/styles/core/tokens.css">
+<link rel="stylesheet" href="/src/styles/core/layout.css">
 
-  <script type="module" src="./src/scripts/index.js"></script>
+<!-- COMPONENTS -->
+<link rel="stylesheet" href="/src/styles/components/cards.css">
+<link rel="stylesheet" href="/src/styles/components/logos.css">
+<link rel="stylesheet" href="/src/styles/components/badges.css">
+<link rel="stylesheet" href="/src/styles/components/pills.css">
+<link rel="stylesheet" href="/src/styles/components/tables.css">
+
+<!-- PAGES -->
+<link rel="stylesheet" href="/src/styles/pages/awards.css">
+<link rel="stylesheet" href="/src/styles/pages/draft.css">
+<link rel="stylesheet" href="/src/styles/pages/game.css">
+<link rel="stylesheet" href="/src/styles/pages/owner.css">
+<link rel="stylesheet" href="/src/styles/pages/owners.css">
+<link rel="stylesheet" href="/src/styles/pages/schedule.css">
+<link rel="stylesheet" href="/src/styles/pages/standings.css">
+<link rel="stylesheet" href="/src/styles/pages/team.css">
+
+  <title>2BS College Ball</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
+  <!-- Dynamic Navigation -->
   <div id="header"></div>
   <div id="navbar"></div>
 
+  <!-- Main Content -->
   <main id="content">
     <h1>Welcome to 2BS College Ball</h1>
+
+    <p>Your hub for teams, owners, schedules, games, and league history.</p>
+
+    <h2>Explore the League</h2>
+    <ul>
+      <li><a href="/src/pages/teams.html">Teams</a></li>
+      <li><a href="/src/pages/owners.html">Owners</a></li>
+      <li><a href="/src/pages/schedule.html">Schedule</a></li>
+      <li><a href="/src/pages/standings.html">Standings</a></li>
+      <li><a href="/src/pages/awards.html">Awards</a></li>
+      <li><a href="/src/pages/draft.html">Draft</a></li>
+    </ul>
+
+    <h2>...</h2>
+    <p>More...</p>
   </main>
 
+  <!-- Dynamic Footer -->
   <div id="footer"></div>
 
-  <!-- HEADER -->
-  <script type="module">
-    import { loadHeader } from "./src/scripts/header.js";
-    loadHeader();
-  </script>
-
-  <!-- NAVBAR -->
-  <script type="module">
-    import { loadNavbar } from "./src/scripts/navbar.js";
-    loadNavbar();
-  </script>
-
-  <!-- FOOTER -->
-  <script type="module">
-    import { loadFooter } from "./src/scripts/footer.js";
-    loadFooter();
-  </script>
+  <!-- Scripts -->
+  <script type="module" src="/src/scripts/indexPage.js"></script>
+  
 
 </body>
 </html>
+
+

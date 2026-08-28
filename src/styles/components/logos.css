@@ -1,0 +1,21 @@
+.team-logo-sm {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.team-logo-md {
+  width: 64px;
+  height: 64px;
+}
+
+.team-logo-lg {
+  width: 96px;
+  height: 96px;
+}
+
+.team-logo-xs {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}

@@ -1,0 +1,7 @@
+.pill {
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: 0.8rem;
+  font-weight: 500;
+}

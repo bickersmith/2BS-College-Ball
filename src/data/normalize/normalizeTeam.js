@@ -3,15 +3,21 @@
 import { log } from "../../scripts/diagnostics/logger.js";
 
 export function normalizeTeam(header, row) {
-  // ⭐ Clean header names
   header = header.map(h => h.trim());
-
-  // ⭐ Column lookup helper
   const col = name => header.indexOf(name);
 
-  // ⭐ Universal field sanitizer
-  const get = key => String(row[col(key)] || "").trim();
+  const get = key => {
+    const index = col(key);
+    if (index === -1) return "";
+    const value = row[index];
 
+    if (value === undefined || value === null) return "";
+    if (typeof value === "number") return String(value).trim();
+    if (typeof value === "string") return value.trim();
+
+    return "";
+  };
+//console.log("HEADER:", header);
   const team = {
     leagueId: get("LeagueID"),
     season: get("Season"),

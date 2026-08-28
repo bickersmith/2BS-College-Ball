@@ -1,0 +1,42 @@
+.team-page .team-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.team-page .team-section {
+  margin-bottom: var(--space-xl);
+}
+
+
+.teams-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-lg);
+}
+
+.teams-table th,
+.teams-table td {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.team-logo-xs {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 2px;
+}
+
+.team-row:hover {
+  background: var(--color-accent-light);
+}
+
+.team-name-col a {
+  font-weight: 600;
+}

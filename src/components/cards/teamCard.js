@@ -83,7 +83,7 @@ export function teamCard(team, size = "lg") {
   });
 }
 */
-
+/*
 // =======================================
 // teamCard.js — v2 SAFE + COMPOSED
 // =======================================
@@ -157,4 +157,42 @@ export function teamCard(team, games = [], size = "md") {
     body,
     footer
   });
+}
+*/
+import { cardBase } from "./cardBase.js";
+import {
+  getClickableTeamLogo,
+  getOwnerPill
+} from "../../utils/cardUtils.js";
+
+import { goToTeam, goToOwner } from "../../utils/navigation.js";
+import { log } from "../../scripts/diagnostics/logger.js";
+
+export function teamCard(team, owners = [], size = "lg") {
+  return `
+    <div class="team-card ${size}">
+      
+      <div class="team-card-header">
+        <img src="${team.teamLogo}" class="team-card-logo" alt="${team.teamName} logo">
+        <h3 class="team-card-name">${team.teamName}</h3>
+      </div>
+
+      <div class="team-card-meta">
+        <div class="team-card-meta-row">
+          <span class="meta-label">Conference:</span>
+          <span class="meta-value">${team.teamConference || "—"}</span>
+        </div>
+
+        <div class="team-card-meta-row">
+          <span class="meta-label">Location:</span>
+          <span class="meta-value">${team.teamLocation || "—"}</span>
+        </div>
+      </div>
+
+      <button class="team-card-button" onclick="goToTeam(${team.teamId})">
+        View Team
+      </button>
+
+    </div>
+  `;
 }

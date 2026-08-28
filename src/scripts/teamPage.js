@@ -3,26 +3,27 @@ import { getTeams } from "./api/api.teams.js";
 import { getOwners } from "./api/api.owners.js";
 import { getGamesByTeam } from "./api/api.games.js";
 import { teamCard } from "../components/cards/teamCard.js";
+import { loadNavigation } from "../utils/navigation.js";
 
-console.log("TEAM PAGE: loaded");
-
-await loadConfig();
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadConfig();
+  await loadNavigation();
+  renderTeamPage();
+});
 
 function getTeamIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("team"); // always a string
+  return params.get("team");
 }
 
 export async function renderTeamPage() {
   const teamId = getTeamIdFromUrl();
   console.log("TEAM PAGE: teamId =", teamId);
 
-  // Fetch composed data
-  const teams = await getTeams();     // composed teams
-  const owners = await getOwners();   // composed owners
-  const games = await getGamesByTeam(teamId); // composed games
+  const teams = await getTeams();
+  const owners = await getOwners();
+  const games = await getGamesByTeam(teamId);
 
-  // Find team (string compare)
   const team = teams.find(t => String(t.teamId) === String(teamId));
 
   const container = document.getElementById("content");
@@ -32,10 +33,8 @@ export async function renderTeamPage() {
     return;
   }
 
-  // Render team card
   container.innerHTML = teamCard(team, games, "xl");
 
-  // Owner section
   const owner = team.owner;
 
   container.innerHTML += `
@@ -44,7 +43,6 @@ export async function renderTeamPage() {
     <p><a href="owner.html?owner=${owner.id}">View Owner</a></p>
   `;
 
-  // Games section
   let gameHtml = "";
 
   if (!games || games.length === 0) {
@@ -65,5 +63,3 @@ export async function renderTeamPage() {
     ${gameHtml}
   `;
 }
-
-renderTeamPage();

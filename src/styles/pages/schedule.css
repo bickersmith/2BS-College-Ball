@@ -1,0 +1,8 @@
+.schedule-page .week-group {
+  margin-bottom: var(--space-xl);
+}
+
+.schedule-page .game-row {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
