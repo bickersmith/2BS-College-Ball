@@ -16,8 +16,8 @@ export function normalizeTeam(header, row) {
     leagueId: get("LeagueID"),
     season: get("Season"),
     teamId: get("TeamID"),
-    ownerId: get("OwnerID"),
-
+    ownerId: String(get("OwnerID") || "").trim(),
+    //ownerId: String(get("OwnerID") || "").trim(),
     teamName: get("TeamName"),
     teamSchool: get("TeamSchool"),
     teamNickname: get("TeamNickname"),
@@ -66,7 +66,7 @@ export function normalizeTeam(header, row) {
     valid: get("Valid")
   };
 
-  log("NORMALIZE", `Normalized team ${team.teamId} (${team.teamName})`);
+  //log("NORMALIZE", `Normalized team ${team.teamId} (${team.ownerId})`);
 
   return team;
 }

@@ -27,5 +27,5 @@ export async function renderOwnersPage() {
   container.innerHTML = html;
 }
 
-log("are we updated tho?");
+//log("are we updated tho?");
 renderOwnersPage();

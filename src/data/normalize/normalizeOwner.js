@@ -2,13 +2,11 @@ import { log } from "../../scripts/diagnostics/logger.js";
 
 export function normalizeOwner(header, row) {
 
-
-
   const get = key => row[header.indexOf(key)];
   const owner = {
     leagueId: get("LeagueID"),
     season: get("Season"),
-    ownerId: get("OwnerID"),
+    ownerId: String(get("OwnerID") || "").trim(),
     ownerName: get("OwnerName"),
     ownerAbbreviation: get("OwnerAbbreviation"),
     ownerSlug: get("OwnerSlug"),

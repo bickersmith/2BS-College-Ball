@@ -4,6 +4,7 @@ import { normalizeGame } from "../normalize/normalizeGame.js";
 import { log } from "../../scripts/diagnostics/logger.js";
 
 export async function fetchGameData() {
+  // Fetch raw rows from Google Sheets
   const rows = await fetchSheet(SHEET_GAME);
 
   if (!rows || rows.length === 0) {
@@ -11,9 +12,9 @@ export async function fetchGameData() {
     return [];
   }
 
-  const header = rows[0];
+  const header = rows[0]; // first row = column names
 
-  // Convert row arrays → objects
+  // Convert each row array → object keyed by header names
   const objects = rows.slice(1).map(row => {
     const obj = {};
     header.forEach((key, i) => {
@@ -22,13 +23,14 @@ export async function fetchGameData() {
     return obj;
   });
 
-  // Filter out rows missing GameID
+  // Filter out rows missing Game ID
   const filtered = objects.filter(obj => {
-    const id = String(obj["GameID"] || "").trim();
+    const id = String(obj["Game ID"] || "").trim();
     return id !== "";
   });
 
- // log("FETCH", `Game rows: ${filtered.length}`);
+  log("FETCH", `Game rows: ${filtered.length}`);
 
-  return filtered.map(obj => normalizeGame(obj));
+  // Normalize each game object
+  return filtered.map(obj => normalizeGame(header, obj));
 }

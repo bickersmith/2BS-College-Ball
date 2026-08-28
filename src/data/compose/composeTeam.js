@@ -78,6 +78,7 @@ export function composeTeam(teamRaw, owners) {
     },
 
     // Owner (composed)
+    ownerId: teamRaw.ownerId,
     owner,
 
     // Raw passthrough

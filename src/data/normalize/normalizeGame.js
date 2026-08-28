@@ -32,14 +32,14 @@ export function normalizeGame(header, row) {
 
     // TEAM SIDE
     teamId: get("TeamID"),
-    ownerId: get("OwnerID"),
+    ownerId: String(get("OwnerID") || "").trim(),
     teamName: get("TeamName"),
     teamHomeAway: get("TeamHomeAway"),
     teamRank: get("TeamRank"),
 
     // OPPONENT SIDE
     opponentTeamId: get("OpponentTeamID"),
-    opponentOwnerId: get("OpponentOwnerID"),
+    opponentOwnerId: String(get("OpponentOwnerID") || "").trim(),
     opponentTeamName: get("OpponentTeamName"),
     opponentRank: get("OpponentRank"),
     rivalry: get("Rivalry"),

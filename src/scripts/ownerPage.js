@@ -12,7 +12,7 @@ import { ownerCard } from "../components/cards/ownerCard.js";
 getTeamsByOwner.js
 
 
-console.log("OWNER PAGE: loaded");
+//console.log("OWNER PAGE: loaded");
 
 window.goToTeam = function(teamId) {
   window.location.href = `team.html?team=${teamId}`;
@@ -44,17 +44,17 @@ export async function renderOwnerPage() {
     return;
   }
 
-  console.log("OWNER PAGE: owner =", owner);
+  //console.log("OWNER PAGE: owner =", owner);
 
   // Load teams
   const teams = await getTeams();   // composed teams
 
-  console.log("OWNER PAGE: teams loaded =", teams.length);
+  //console.log("OWNER PAGE: teams loaded =", teams.length);
 
   // ⭐ THIS IS THE ONLY PART THAT CHANGED ⭐
   const ownerTeams = getTeamsByOwner(teams, ownerId);
 
-  console.log("OWNER PAGE: ownerTeams =", ownerTeams);
+  //console.log("OWNER PAGE: ownerTeams =", ownerTeams);
 
   // Render owner card
   container.innerHTML = ownerCard(owner, ownerTeams, "xl");
