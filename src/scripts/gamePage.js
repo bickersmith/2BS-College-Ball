@@ -1,4 +1,128 @@
+
+import { log } from "../scripts/diagnostics/logger.js";
 import { loadConfig } from "./config/env.js";
+import { getOwners } from "./api/api.owners.js";
+import { getTeams } from "./api/api.teams.js";
+import { getGame } from "./api/api.games.js";
+import { gameCard } from "../components/cards/gameCard.js";
+import { loadNavigation } from "../utils/navigation.js";
+
+// =======================================
+// gamePage.js — aligned with ownersPage.js
+// =======================================
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadConfig();
+  await loadNavigation();
+  renderGamePage();
+});
+
+export async function renderGamePage() {
+
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get("game");
+
+  log("GAME PAGE", `gameId = ${gameId}`);
+
+  const game = await getGame(gameId);
+  const teams = await getTeams();
+
+  if (!game) {
+    document.getElementById("content").innerHTML = `<h1>Game Not Found</h1>`;
+    return;
+  }
+
+  const team = teams.find(t => String(t.teamId) === String(game.teamId));
+  const opp  = teams.find(t => String(t.teamId) === String(game.opponentTeamId));
+
+  const container = document.getElementById("content");
+
+  container.innerHTML = `
+    <h1 class="page-title">${team.teamName} vs ${opp.teamName}</h1>
+
+    <div class="game-page">
+
+      <div class="game-score">
+        <div class="team">
+          <img src="${team.teamLogo}" class="team-logo-lg">
+          <div>${team.teamName}</div>
+        </div>
+
+        <div class="score">
+          ${game.teamScore} - ${game.opponentScore}
+        </div>
+
+        <div class="team">
+          <img src="${opp.teamLogo}" class="team-logo-lg">
+          <div>${opp.teamName}</div>
+        </div>
+      </div>
+
+      <div class="game-meta">
+        <div><strong>Date:</strong> ${game.gameDate}</div>
+        <div><strong>Location:</strong> ${game.gameLocation}</div>
+        <div><strong>Network:</strong> ${game.gameBroadcastNetwork}</div>
+        <div><strong>Weather:</strong> ${game.gameWeather}</div>
+        <div><strong>Status:</strong> ${game.status}</div>
+      </div>
+
+    </div>
+  `;
+  
+}
+
+
+
+/*
+export async function renderGamePage() {
+
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get("game");
+
+  const game = await getGame(gameId);
+  const teams = await getTeams();
+
+  const team = teams.find(t => t.teamId === game.teamId);
+  const opp  = teams.find(t => t.teamId === game.opponentTeamId);
+
+  const container = document.getElementById("content");
+
+  container.innerHTML = `
+    <h1 class="page-title">Game ${gameId}</h1>
+
+    <div class="game-page">
+
+      <div class="game-score">
+        <div class="team">
+          <img src="${team.teamLogo}" class="team-logo-lg">
+          <div>${team.teamName}</div>
+        </div>
+
+        <div class="score">
+          ${game.teamScore} - ${game.opponentScore}
+        </div>
+
+        <div class="team">
+          <img src="${opp.teamLogo}" class="team-logo-lg">
+          <div>${opp.teamName}</div>
+        </div>
+      </div>
+
+      <div class="game-meta">
+        <div><strong>Date:</strong> ${game.gameDate}</div>
+        <div><strong>Location:</strong> ${game.gameLocation}</div>
+        <div><strong>Network:</strong> ${game.gameBroadcastNetwork}</div>
+        <div><strong>Weather:</strong> ${game.gameWeather}</div>
+        <div><strong>Status:</strong> ${game.status}</div>
+      </div>
+
+    </div>
+  `;
+}
+*/
+
+/*import { loadConfig } from "./config/env.js";
 import { getGames } from "./api/api.games.js";
 import { getTeams } from "./api/api.teams.js";
 import { getOwners } from "./api/api.owners.js";
@@ -67,7 +191,7 @@ export async function renderGamePage() {
 
 renderGamePage();
 
-
+*/
 
 /*
 import { loadConfig } from "./config/env.js";

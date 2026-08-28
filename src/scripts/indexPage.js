@@ -29,13 +29,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderIndexPage();
 });
 
-/*
 async function renderIndexPage() {
   const container = document.getElementById("content");
 
   const owners = await getOwners();
   const teams = await getTeams();
 
+  // Build owners/teams table rows
   const rows = owners.map(owner => {
     const ownerTeams = teams.filter(t => String(t.ownerId) === String(owner.id));
 
@@ -43,7 +43,7 @@ async function renderIndexPage() {
       return `
         <tr>
           <td class="owner-col">
-            <a href="/src/pages/owner.html?ownerId=${owner.id}" class="owner-link">
+            <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
               ${owner.name}
             </a>
           </td>
@@ -57,16 +57,16 @@ async function renderIndexPage() {
     let html = `
       <tr>
         <td class="owner-col">
-          <a href="/src/pages/owner.html?ownerId=${owner.id}" class="owner-link">
+          <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
             ${owner.name}
           </a>
         </td>
 
         <td class="team-col">
-          <a href="/src/pages/team.html?teamId=${first.teamId}">
+          <a href="/src/pages/team.html?team=${first.teamId}">
             <img src="${first.teamLogo}" class="team-logo-xs">
           </a>
-          <a href="/src/pages/team.html?teamId=${first.teamId}" class="team-link">
+          <a href="/src/pages/team.html?team=${first.teamId}" class="team-link">
             ${first.teamName}
           </a>
         </td>
@@ -84,10 +84,10 @@ async function renderIndexPage() {
           <td class="owner-col"></td>
 
           <td class="team-col">
-            <a href="/src/pages/team.html?teamId=${t.teamId}">
+            <a href="/src/pages/team.html?team=${t.teamId}">
               <img src="${t.teamLogo}" class="team-logo-xs">
             </a>
-            <a href="/src/pages/team.html?teamId=${t.teamId}" class="team-link">
+            <a href="/src/pages/team.html?team=${t.teamId}" class="team-link">
               ${t.teamName}
             </a>
           </td>
@@ -101,28 +101,60 @@ async function renderIndexPage() {
     return html;
   }).join("");
 
-  container.insertAdjacentHTML(
-    "beforeend",
-    `
-      <h2>League Owners</h2>
+  // NEW: Two-column homepage layout
+  container.innerHTML = `
+    <div class="index-grid">
 
-      <table class="table owners-teams-table">
-        <thead>
-          <tr>
-            <th>Owner</th>
-            <th>Team</th>
-            <th>Conference</th>
-            <th>Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    `
-  );
+      <!-- LEFT COLUMN -->
+      <div class="index-left">
+        <table class="table owners-teams-table">
+          <thead>
+            <tr>
+              <th>Owner</th>
+              <th>Team</th>
+              <th>Conference</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="index-right">
+
+        <!-- Welcome Module -->
+          <div class="home-module welcome-module">
+            <h1>2BSCB</h1>
+
+            <p></p>
+
+            <h2></h2>
+            <ul>
+              <li><a href="/src/pages/teams.html">Teams</a></li>
+              <li><a href="/src/pages/owners.html">Owners</a></li>
+              <li><a href="/src/pages/schedule.html">Schedule</a></li>
+              <li><a href="/src/pages/standings.html">Standings</a></li>
+              <li><a href="/src/pages/awards.html">Awards</a></li>
+              <li><a href="/src/pages/draft.html">Draft</a></li>
+            </ul>
+            <h2>...</h2>
+            <p>More Soon...</p>
+          </div>
+
+          <!-- Future modules drop in here -->
+          <div id="home-modules-slot"></div>
+
+      </div>
+
+    </div>
+  `;
 }
-*/
+
+
+/*
 async function renderIndexPage() {
   const container = document.getElementById("content");
 
@@ -216,4 +248,5 @@ async function renderIndexPage() {
     `
   );
 }
+  */
 

@@ -3,14 +3,10 @@
 import { log } from "../../scripts/diagnostics/logger.js";
 
 export function normalizeGame(header, row) {
-  // ⭐ Clean header names
+  // Header is already trimmed in fetchGameData; keep for consistency/logging
   header = header.map(h => h.trim());
 
-  // ⭐ Column lookup helper
-  const col = name => header.indexOf(name);
-
-  // ⭐ Universal field sanitizer (same as owners + teams)
-  const get = key => String(row[col(key)] || "").trim();
+  const get = key => String(row[key] || "").trim();
 
   const game = {
     leagueId: get("LeagueID"),
@@ -30,21 +26,18 @@ export function normalizeGame(header, row) {
     postseasonFlags: get("PostseasonFlags"),
     gamePoints: get("GamePoints"),
 
-    // TEAM SIDE
     teamId: get("TeamID"),
-    ownerId: String(get("OwnerID") || "").trim(),
+    ownerId: get("OwnerID"),
     teamName: get("TeamName"),
     teamHomeAway: get("TeamHomeAway"),
     teamRank: get("TeamRank"),
 
-    // OPPONENT SIDE
     opponentTeamId: get("OpponentTeamID"),
-    opponentOwnerId: String(get("OpponentOwnerID") || "").trim(),
+    opponentOwnerId: get("OpponentOwnerID"),
     opponentTeamName: get("OpponentTeamName"),
     opponentRank: get("OpponentRank"),
     rivalry: get("Rivalry"),
 
-    // SCORE
     teamScore: get("TeamScore"),
     opponentScore: get("OpponentScore"),
     result: get("Result"),
@@ -61,12 +54,10 @@ export function normalizeGame(header, row) {
     rivalWin: get("RivalWin"),
     rivalLoss: get("RivalLoss"),
 
-    // ESPN
     espnKickoffTime: get("ESPNKickoffTime"),
     espnVenue: get("ESPNVenue"),
     espnBroadcastNetwork: get("ESPNBroadcastNetwork"),
 
-    // CFBD
     cfbdVenue: get("CFBDVenue"),
     cfbdWeather: get("CFBDWeather"),
     cfbdTemperature: get("CFBDTemperature"),
@@ -74,7 +65,6 @@ export function normalizeGame(header, row) {
     cfbdAttendance: get("CFBDAttendance"),
     cfbdRank: get("CFBDRank"),
 
-    // GAME DETAILS
     gameVenue: get("GameVenue"),
     gameLocation: get("GameLocation"),
     gameAttendance: get("GameAttendance"),
@@ -88,7 +78,6 @@ export function normalizeGame(header, row) {
     gameDescription: get("GameDescription"),
     gameNotes: get("GameNotes"),
 
-    // META
     createdTimestamp: get("CreatedTimestamp"),
     updatedTimestamp: get("UpdatedTimestamp"),
     updatedBy: get("UpdatedBy"),
@@ -104,7 +93,7 @@ export function normalizeGame(header, row) {
     raw: row
   };
 
-  log("NORMALIZE", `Normalized game ${game.gameId}`);
+  log("NORMALIZE", `Normalized game row ${game.gameId} (${game.teamId} vs ${game.opponentTeamId})`);
 
   return game;
 }

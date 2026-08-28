@@ -1,7 +1,90 @@
-.game-page .score-box {
-  display: flex;
-  justify-content: space-between;
+/* src/styles/game.css */
+
+/* ============================================================
+   GAME CARD — GLOBAL LAYOUT
+   ============================================================ */
+
+.game-card {
+  background: var(--color-surface);
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: box-shadow 0.15s ease;
+}
+
+.game-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   MATCHUP ROW
+   ============================================================ */
+
+.game-card-matchup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: nowrap;
+}
+
+.game-card-matchup .team-logo-sm {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 4px;
+}
+
+.game-card-matchup .team-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.game-card-matchup .at-symbol {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding: 0 4px;
+}
+
+/* ============================================================
+   SCORE ROW
+   ============================================================ */
+
+.game-card-score {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+/* ============================================================
+   META (date, venue, location)
+   ============================================================ */
+
+.game-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.3;
+}
+
+/* ============================================================
+   GRID LAYOUT (Games Page)
+   ============================================================ */
+
+.games-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
 }

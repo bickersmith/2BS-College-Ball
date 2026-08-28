@@ -104,3 +104,7 @@ export function getCardSizeClass(size) {
     default:   return "card-md";
   }
 }
+
+export function stopCardClick(event) {
+  event.stopPropagation();
+}

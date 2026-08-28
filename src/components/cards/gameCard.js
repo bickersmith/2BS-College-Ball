@@ -1,111 +1,44 @@
-// =======================================
-// gameCard.js — v2 HOME/AWAY SAFE
-// =======================================
+// src/components/cards/gameCard.js
 
-import { cardBase } from "./cardBase.js";
-import {
-  getClickableTeamLogo,
-  getOwnerPill,
-  formatGameLocation,
-  formatGameScore
-} from "../../utils/cardUtils.js";
+export function gameCard(game, teams, size = "md") {
 
-import { goToTeam, goToOwner } from "../../utils/navigation.js";
-import { log } from "../../scripts/diagnostics/logger.js";
+  const team = game.team || game.homeTeam;
+  const opponent = game.opponent || game.awayTeam;
 
-export function gameCard(game, size = "lg") {
+  const teamLogo = team.teamLogo || "";
+  const opponentLogo = opponent.teamLogo || "";
 
-  //log("CARD", `Rendering full game card for game ${game.gameId}`);
+  const teamLogoHtml = teamLogo ? `<img src="${teamLogo}" class="team-logo-sm">` : "";
+  const opponentLogoHtml = opponentLogo ? `<img src="${opponentLogo}" class="team-logo-sm">` : "";
 
-  const { homeTeam, awayTeam } = game;
+  return `
+    <a href="game.html?game=${game.gameId}" class="card-link" onclick="stopCardClick(event)">
+      <div class="game-card game-card-${size}">
 
-  if (!homeTeam || !awayTeam) {
-    log("CARD", `❌ Missing team data in composed game ${game.gameId}`);
-  }
+        <!-- MATCHUP ROW -->
+        <div class="game-card-matchup">
+          ${teamLogoHtml}
+          <span class="team-name">${team.teamName}</span>
 
-  // ---------------------------------------
-  // Header (logos + names + score)
-  // ---------------------------------------
+          <span class="at-symbol">@</span>
 
-  const header = `
-    <div class="game-card-header">
+          <span class="team-name">${opponent.teamName}</span>
+          ${opponentLogoHtml}
+        </div>
 
-      <div class="team-side">
-        ${getClickableTeamLogo(awayTeam)}
-        <div class="team-name">${awayTeam?.teamName || "Unknown"}</div>
+        <!-- SCORE -->
+        <div class="game-card-score">
+          ${game.score.home ?? game.score.team} – ${game.score.away ?? game.score.opponent}
+        </div>
+
+        <!-- META -->
+        <div class="game-card-meta">
+          <div>${game.dateFormatted}</div>
+          <div>${game.venue}</div>
+          <div>${game.location}</div>
+        </div>
+
       </div>
-
-      <div class="score-block">
-        <div class="scoreline">${formatGameScore(game)}</div>
-        <div class="vs">${game.neutral ? "vs" : "@"}</div>
-      </div>
-
-      <div class="team-side">
-        ${getClickableTeamLogo(homeTeam)}
-        <div class="team-name">${homeTeam?.teamName || "Unknown"}</div>
-      </div>
-
-    </div>
+    </a>
   `;
-
-  // ---------------------------------------
-  // Body (date, venue, location, metadata)
-  // ---------------------------------------
-
-  const body = `
-    <div class="game-card-body">
-
-      <div class="game-date">${game.dateFormatted}</div>
-
-      <div class="game-location">
-        ${formatGameLocation(game)}
-      </div>
-
-      <div class="game-venue">
-        ${game.venue || ""}
-      </div>
-
-      <div class="game-meta">
-        ${game.neutral ? "Neutral Site Game" : ""}
-      </div>
-
-    </div>
-  `;
-
-  // ---------------------------------------
-  // Footer (owners + navigation)
-  // ---------------------------------------
-
-  const footer = `
-    <div class="game-card-footer">
-
-      <div class="owner-row">
-        ${getOwnerPill(homeTeam?.owner)}
-        ${getOwnerPill(awayTeam?.owner)}
-      </div>
-
-      <div class="game-actions">
-        <button class="team-button" onclick="goToTeam('${homeTeam?.teamId}')">
-          View ${homeTeam?.teamName}
-        </button>
-
-        <button class="team-button" onclick="goToTeam('${awayTeam?.teamId}')">
-          View ${awayTeam?.teamName}
-        </button>
-      </div>
-
-    </div>
-  `;
-
-  // ---------------------------------------
-  // Final card
-  // ---------------------------------------
-
-  return cardBase({
-    team: homeTeam,   // theming based on home team
-    size,
-    header,
-    body,
-    footer
-  });
 }

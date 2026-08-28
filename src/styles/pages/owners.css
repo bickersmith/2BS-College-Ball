@@ -1,29 +1,88 @@
-/* ============================
-   OWNERS PAGE GRID (unchanged)
-   ============================ */
-.owners-page .owners-list {
+/* OWNER CARD — TWO COLUMN LAYOUT */
+.owner-card-body.two-col {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: 1fr auto;
   gap: var(--space-lg);
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+}
+
+/* LEFT COLUMN — Owner Name */
+.owner-col-left {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.owner-name-large {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* RIGHT COLUMN — Team Logos (single horizontal row) */
+.owner-col-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.owner-team-logos.single-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  align-items: center;
+  white-space: nowrap;      /* prevents stacking */
+  overflow-x: auto;         /* allows scroll if many logos */
+  padding-bottom: 4px;
+}
+
+/* Logo styling */
+.owner-team-logo img,
+.team-logo-sm {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 4px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.owner-team-logo img:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ============================
-   OWNERS → TEAMS TABLE (normal)
+   OWNERS → TEAMS TABLE
    ============================ */
+
 .owners-teams-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto; /* natural sizing */
-  margin-top: var(--space-lg);
+  table-layout: auto;
+  margin-top: var(--space-xl);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-/* Header + cell spacing */
-.owners-teams-table th,
-.owners-teams-table td {
-  padding: 8px 12px; /* normal spacing */
+/* Header */
+.owners-teams-table thead th {
+  background: var(--color-border);
+  padding: 10px 14px;
   font-size: 0.9rem;
-  white-space: normal; /* allow wrapping */
+  font-weight: 700;
+  text-align: left;
+  color: var(--color-text);
+}
+
+/* Cells */
+.owners-teams-table td {
+  padding: 8px 12px;
+  font-size: 0.9rem;
   vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
 }
 
 /* Owner column */
@@ -37,7 +96,7 @@
 .owners-teams-table .team-col {
   display: flex;
   align-items: center;
-  gap: 8px; /* normal spacing */
+  gap: 8px;
 }
 
 /* Team logo */

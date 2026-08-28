@@ -1,0 +1,58 @@
+.site-header {
+  background: #000;
+  color: #fff;
+  padding: 20px 0;
+  margin-bottom: var(--space-xl);
+}
+
+.site-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-brand a {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-header-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.site-header-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-header-nav a:hover {
+  color: var(--color-accent);
+}
+
+/* Hamburger (mobile only) */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Mobile rules */
+@media (max-width: 768px) {
+  .site-header-nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}

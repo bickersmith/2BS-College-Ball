@@ -1,0 +1,22 @@
+.mobile-navbar {
+  display: none;
+  flex-direction: column;
+  background: #111;
+  padding: var(--space-md);
+  gap: var(--space-sm);
+}
+
+.mobile-navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.mobile-navbar a:hover {
+  color: var(--color-accent);
+}
+
+/* Show when hamburger toggled */
+.mobile-navbar.open {
+  display: flex;
+}

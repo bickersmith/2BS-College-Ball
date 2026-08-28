@@ -9,6 +9,9 @@
 @import "./components/badges.css";
 @import "./components/pills.css";
 @import "./components/tables.css";
+@import "./components/footer.css";
+@import "./components/header.css";
+@import "./components/navbar.css";
 
 /* PAGES */
 @import "./pages/awards.css";
@@ -19,3 +22,4 @@
 @import "./pages/schedule.css";
 @import "./pages/standings.css";
 @import "./pages/team.css";
+@import "./pages/index.css";

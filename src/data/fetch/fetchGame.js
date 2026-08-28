@@ -1,20 +1,24 @@
-import { fetchSheet } from "./fetchSheet.js";
-import { SHEET_GAME } from "../constants.js";
+// src/data/fetch/fetchGame.js
+
+import { fetchSheet } from "../fetch/fetchSheet.js";
 import { normalizeGame } from "../normalize/normalizeGame.js";
 import { log } from "../../scripts/diagnostics/logger.js";
 
+const SHEET_GAME = "Game";
+
 export async function fetchGameData() {
-  // Fetch raw rows from Google Sheets
   const rows = await fetchSheet(SHEET_GAME);
 
   if (!rows || rows.length === 0) {
-    log("FETCH", "❌ No game rows returned");
+    log("FETCH", "No game rows returned from sheet");
     return [];
   }
 
-  const header = rows[0]; // first row = column names
+  // Header row
+  const rawHeader = rows[0];
+  const header = rawHeader.map(h => String(h).trim());
 
-  // Convert each row array → object keyed by header names
+  // Build objects from remaining rows
   const objects = rows.slice(1).map(row => {
     const obj = {};
     header.forEach((key, i) => {
@@ -23,14 +27,26 @@ export async function fetchGameData() {
     return obj;
   });
 
-  // Filter out rows missing Game ID
+  // Filter out rows without GameID
   const filtered = objects.filter(obj => {
-    const id = String(obj["Game ID"] || "").trim();
+    const id = String(obj["GameID"] || "").trim();
     return id !== "";
   });
 
-  log("FETCH", `Game rows: ${filtered.length}`);
+  // Group rows by GameID
+  const grouped = {};
+  for (const obj of filtered) {
+    const id = String(obj["GameID"]);
+    if (!grouped[id]) grouped[id] = [];
+    grouped[id].push(obj);
+  }
 
-  // Normalize each game object
-  return filtered.map(obj => normalizeGame(header, obj));
+  // Normalize each row in each group
+  const normalizedGroups = Object.values(grouped).map(groupRows => {
+    return groupRows.map(r => normalizeGame(header, r));
+  });
+
+  log("FETCH", `Fetched and grouped ${normalizedGroups.length} games`);
+
+  return normalizedGroups;
 }

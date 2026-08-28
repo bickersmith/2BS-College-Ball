@@ -9,6 +9,18 @@ loadHeader();
 loadNavbar();
 loadFooter();
 
+document.addEventListener("click", () => {
+  const btn = document.getElementById("hamburgerBtn");
+  const nav = document.getElementById("mobileNavbar");
+
+  if (!btn || !nav) return;
+
+  btn.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
+});
+
+
 // ===============================
 // 2. Load v2 page renderers
 // ===============================
