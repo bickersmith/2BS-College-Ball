@@ -1,22 +1,27 @@
+// src/scripts/gamePage.js
 
 import { log } from "../scripts/diagnostics/logger.js";
 import { loadConfig } from "./config/env.js";
 import { getOwners } from "./api/api.owners.js";
 import { getTeams } from "./api/api.teams.js";
-import { getGame } from "./api/api.games.js";
+import { getGames, getGame } from "./api/api.games.js";
 import { gameCard } from "../components/cards/gameCard.js";
 import { loadNavigation } from "../utils/navigation.js";
-
-// =======================================
-// gamePage.js — aligned with ownersPage.js
-// =======================================
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadConfig();
   await loadNavigation();
   renderGamePage();
 });
+
+
+window.goToTeam = function(teamId) {
+  window.location.href = `team.html?team=${teamId}`;
+};
+
+window.goToOwner = function(ownerId) {
+  window.location.href = `owner.html?owner=${ownerId}`;
+};
 
 export async function renderGamePage() {
 
@@ -27,252 +32,174 @@ export async function renderGamePage() {
 
   const game = await getGame(gameId);
   const teams = await getTeams();
+  const owners = await getOwners();
 
   if (!game) {
     document.getElementById("content").innerHTML = `<h1>Game Not Found</h1>`;
     return;
   }
 
-  const team = teams.find(t => String(t.teamId) === String(game.teamId));
-  const opp  = teams.find(t => String(t.teamId) === String(game.opponentTeamId));
-
-  const container = document.getElementById("content");
-
-  container.innerHTML = `
-    <h1 class="page-title">${team.teamName} vs ${opp.teamName}</h1>
-
-    <div class="game-page">
-
-      <div class="game-score">
-        <div class="team">
-          <img src="${team.teamLogo}" class="team-logo-lg">
-          <div>${team.teamName}</div>
-        </div>
-
-        <div class="score">
-          ${game.teamScore} - ${game.opponentScore}
-        </div>
-
-        <div class="team">
-          <img src="${opp.teamLogo}" class="team-logo-lg">
-          <div>${opp.teamName}</div>
-        </div>
-      </div>
-
-      <div class="game-meta">
-        <div><strong>Date:</strong> ${game.gameDate}</div>
-        <div><strong>Location:</strong> ${game.gameLocation}</div>
-        <div><strong>Network:</strong> ${game.gameBroadcastNetwork}</div>
-        <div><strong>Weather:</strong> ${game.gameWeather}</div>
-        <div><strong>Status:</strong> ${game.status}</div>
-      </div>
-
-    </div>
-  `;
-  
-}
-
-
-
-/*
-export async function renderGamePage() {
-
-  const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("game");
-
-  const game = await getGame(gameId);
-  const teams = await getTeams();
-
-  const team = teams.find(t => t.teamId === game.teamId);
-  const opp  = teams.find(t => t.teamId === game.opponentTeamId);
-
-  const container = document.getElementById("content");
-
-  container.innerHTML = `
-    <h1 class="page-title">Game ${gameId}</h1>
-
-    <div class="game-page">
-
-      <div class="game-score">
-        <div class="team">
-          <img src="${team.teamLogo}" class="team-logo-lg">
-          <div>${team.teamName}</div>
-        </div>
-
-        <div class="score">
-          ${game.teamScore} - ${game.opponentScore}
-        </div>
-
-        <div class="team">
-          <img src="${opp.teamLogo}" class="team-logo-lg">
-          <div>${opp.teamName}</div>
-        </div>
-      </div>
-
-      <div class="game-meta">
-        <div><strong>Date:</strong> ${game.gameDate}</div>
-        <div><strong>Location:</strong> ${game.gameLocation}</div>
-        <div><strong>Network:</strong> ${game.gameBroadcastNetwork}</div>
-        <div><strong>Weather:</strong> ${game.gameWeather}</div>
-        <div><strong>Status:</strong> ${game.status}</div>
-      </div>
-
-    </div>
-  `;
-}
-*/
-
-/*import { loadConfig } from "./config/env.js";
-import { getGames } from "./api/api.games.js";
-import { getTeams } from "./api/api.teams.js";
-import { getOwners } from "./api/api.owners.js";
-import { gameCard } from "../components/cards/gameCard.js";
-
-console.log("GAME PAGE: loaded");
-
-await loadConfig();
-
-function getGameIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("game");
-}
-
-export async function renderGamePage() {
-  const gameId = getGameIdFromUrl();
-  console.log("GAME PAGE: gameId =", gameId);
-
-  // Fetch composed data
-  const games = await getGames();     // composed games
-  const teams = await getTeams();     // composed teams
-  const owners = await getOwners();   // composed owners
-
-  // Find the composed game
-  const game = games.find(g => g.gameId === gameId);
-
-  const container = document.getElementById("content");
-
-  if (!game) {
-    container.innerHTML = `<h1>Game Not Found</h1>`;
-    return;
-  }
-
-  console.log("GAME PAGE: game =", game);
-
-  // Render the main game card
-  container.innerHTML = gameCard(game, "xl");
-
-  // ---------------------------------------
-  // Extra Details Section
-  // ---------------------------------------
-
   const home = game.homeTeam;
   const away = game.awayTeam;
 
+  const container = document.getElementById("content");
+
+  // ============================
+  // HERO CARD
+  // ============================
+
+  container.innerHTML = `
+  <div class="game-hero-card">
+
+    <div class="game-hero-header">
+
+      <!-- AWAY TEAM -->
+      <a href="team.html?team=${away.teamId}" class="team-block away">
+        <img src="${away.teamLogo}" class="team-logo-xl">
+        <div class="team-name-xl">${away.teamName}</div>
+      </a>
+
+      <!-- CENTER VS BLOCK -->
+      <div class="vs-block">
+        <div class="vs-text">AT</div>
+        <div class="game-date-xl">${game.dateFormatted}</div>
+      </div>
+
+      <!-- HOME TEAM -->
+      <a href="team.html?team=${home.teamId}" class="team-block home">
+        <img src="${home.teamLogo}" class="team-logo-xl">
+        <div class="team-name-xl">${home.teamName}</div>
+      </a>
+
+    </div>
+
+    <!-- BIGGER SCORE -->
+    <div class="game-hero-score">
+      <span class="score-away">${game.score.away}</span>
+      <span class="score-dash">–</span>
+      <span class="score-home">${game.score.home}</span>
+    </div>
+
+    <div class="game-hero-meta">
+      <span>${game.venue}</span>
+      <span>•</span>
+      <span>${game.location}</span>
+    </div>
+
+  </div>
+`;
+
+
+  // ============================
+  // FULL GAME DETAILS
+  // ============================
+  
+  
+
+
   container.innerHTML += `
-    <h2>Matchup</h2>
-    <p><strong>${home.teamName}</strong> vs <strong>${away.teamName}</strong></p>
-    <p><strong>Date:</strong> ${game.dateFormatted}</p>
-    <p><strong>Venue:</strong> ${game.venue}</p>
-    <p><strong>Location:</strong> ${game.location}</p>
-    <p><strong>Neutral Site:</strong> ${game.neutral ? "Yes" : "No"}</p>
+  <div class="game-detail">
 
-    <h2>Score</h2>
-    <p><strong>${home.teamName}:</strong> ${game.score.home}</p>
-    <p><strong>${away.teamName}:</strong> ${game.score.away}</p>
+    <!-- TOP ROW: MATCHUP + SCORE -->
+    <section class="detail-row">
+      <div class="detail-card flex-2">
+        <h2>Matchup</h2>
+        <div class="detail-grid">
+          <div><strong>Away</strong></div><div>${away.teamName}</div>
+          <div><strong>Home</strong></div><div>${home.teamName}</div>
+          <div><strong>Date</strong></div><div>${game.dateFormatted}</div>
+        </div>
+      </div>
 
-    <h2>Teams</h2>
-    <p><a href="team.html?team=${home.teamId}">View ${home.teamName}</a></p>
-    <p><a href="team.html?team=${away.teamId}">View ${away.teamName}</a></p>
+      <div class="detail-card flex-1">
+        <h2>Score</h2>
+        <div class="detail-grid">
+          <div><strong>${away.teamName}</strong></div><div>${game.score.away}</div>
+          <div><strong>${home.teamName}</strong></div><div>${game.score.home}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECOND ROW: WEATHER / BROADCAST / OWNERS -->
+    <section class="detail-row">
+      <div class="detail-card flex-1">
+        <h2>Weather</h2>
+        <div class="detail-grid">
+          <div><strong>Weather</strong></div><div>${game.weather || "N/A"}</div>
+          <div><strong>Temp</strong></div><div>${game.temperature || "N/A"}</div>
+          <div><strong>Conditions</strong></div><div>${game.conditions || "N/A"}</div>
+        </div>
+      </div>
+
+      <div class="detail-card flex-1">
+        <h2>Broadcast</h2>
+        <div class="detail-grid">
+          <div><strong>Network</strong></div><div>${game.broadcast || "N/A"}</div>
+        </div>
+      </div>
+
+      <div class="detail-card flex-1">
+        <h2>Owners</h2>
+        <div class="detail-grid">
+          <div><strong>Away Owner</strong></div>
+          <div>${away.owner ? away.owner.name : "None"}</div>
+
+          <div><strong>Home Owner</strong></div>
+          <div>${home.owner ? home.owner.name : "None"}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THIRD ROW: VENUE + SEASON INFO -->
+    <section class="detail-row">
+      <div class="detail-card flex-1">
+        <h2>Venue</h2>
+        <div class="detail-grid">
+          <div><strong>Venue</strong></div><div>${game.venue}</div>
+          <div><strong>Neutral</strong></div><div>${game.neutral ? "Yes" : "No"}</div>
+        </div>
+      </div>
+
+      <div class="detail-card flex-2">
+        <h2>Season Info</h2>
+        <div class="detail-grid">
+          <div><strong>Season</strong></div><div>${game.season}</div>
+          <div><strong>Week</strong></div><div>${game.week}</div>
+          <div><strong>Game Type</strong></div><div>${game.gameType}</div>
+          <div><strong>Postseason</strong></div><div>${game.postseasonType || "N/A"}</div>
+          <div><strong>Flags</strong></div><div>${game.postseasonFlags || "None"}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATION -->
+    <section class="detail-card">
+      <h2>Location</h2>
+      <p>${game.location}</p>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="detail-card">
+      <h2>Summary</h2>
+      <p>${game.summary || "No summary available."}</p>
+    </section>
+
+    <!-- DESCRIPTION -->
+    <section class="detail-card">
+      <h2>Description</h2>
+      <p>${game.description || "No description available."}</p>
+    </section>
+
+    <!-- NOTES -->
+    <section class="detail-card">
+      <h2>Notes</h2>
+      <p>${game.notes || "No notes available."}</p>
+    </section>
 
     <hr>
     <p><a href="games.html">Back to Games</a></p>
-  `;
+
+  </div>
+`;
+
 }
-
-renderGamePage();
-
-*/
-
-/*
-import { loadConfig } from "./config/env.js";
-import { getGames } from "./api/api.games.js";
-import { getGameById } from "./api/api.games.js";
-import { getTeams } from "./api/api.teams.js";
-
-console.log("GAME PAGE: loaded");
-
-await loadConfig();
-
-function getGameIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("game");
-}
-
-export async function renderGamePage() {
-  const gameId = getGameIdFromUrl();
-  console.log("GAME PAGE: gameId =", gameId);
-
-  const games = await getGames();
-  const teams = await getTeams();
-
-  const game = games.find(g => g.gameId == gameId);
-
-  const container = document.getElementById("content");
-
-  if (!game) {
-    container.innerHTML = `<h1>Game Not Found</h1>`;
-    return;
-  }
-
-  const homeTeam = teams.find(t => t.teamId == game.teamId);
-  const awayTeam = teams.find(t => t.teamId == game.opponentId);
-
-  container.innerHTML = `
-    <h1>${homeTeam.teamName} vs ${awayTeam.teamName}</h1>
-
-    <h3>Game Info</h3>
-    <p><strong>Game ID:</strong> ${game.gameId}</p>
-    <p><strong>Date:</strong> ${game.gameDate}</p>
-    <p><strong>Week:</strong> ${game.week} — ${game.weekDescription}</p>
-    <p><strong>Type:</strong> ${game.gameType}</p>
-    <p><strong>Venue:</strong> ${game.gameVenue}</p>
-    <p><strong>Location:</strong> ${game.gameLocation}</p>
-
-    <h3>Score</h3>
-    <p><strong>${homeTeam.teamName}:</strong> ${game.schoolScore}</p>
-    <p><strong>${awayTeam.teamName}:</strong> ${game.opponentScore}</p>
-    <p><strong>Result:</strong> ${game.result}</p>
-
-    <h3>Teams</h3>
-    <p><a href="team.html?team=${homeTeam.teamId}">${homeTeam.teamName}</a></p>
-    <p><a href="team.html?team=${awayTeam.teamId}">${awayTeam.teamName}</a></p>
-
-    <h3>Details</h3>
-    <p><strong>Rivalry:</strong> ${game.rivalry}</p>
-    <p><strong>Opponent Rank:</strong> ${game.opponentRank}</p>
-    <p><strong>Rank Start:</strong> ${game.rankStart}</p>
-    <p><strong>Rank End:</strong> ${game.rankEnd}</p>
-
-    <h3>Weather</h3>
-    <p><strong>Weather:</strong> ${game.gameWeather}</p>
-    <p><strong>Temperature:</strong> ${game.gameTemperature}</p>
-    <p><strong>Conditions:</strong> ${game.gameConditions}</p>
-
-    <h3>Attendance</h3>
-    <p><strong>Attendance:</strong> ${game.gameAttendance}</p>
-
-    <h3>Summary</h3>
-    <p>${game.gameSummary}</p>
-
-    <h3>Timestamps</h3>
-    <p><strong>Created:</strong> ${game.createdTimestamp}</p>
-    <p><strong>Updated:</strong> ${game.updatedTimestamp}</p>
-    <p><strong>Updated By:</strong> ${game.updatedBy}</p>
-
-    <hr>
-    <p><a href="teams.html">Back to Teams</a></p>
-  `;
-}
-
-renderGamePage();
-*/

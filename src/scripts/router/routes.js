@@ -25,6 +25,10 @@ export const routes = {
     name: "schedule",
     requiredParams: []
   },
+    "/games.html": {
+    name: "games",
+    requiredParams: []
+  },
   "/game.html": {
     name: "game",
     requiredParams: ["gameId"]

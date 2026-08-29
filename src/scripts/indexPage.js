@@ -135,7 +135,7 @@ async function renderIndexPage() {
             <ul>
               <li><a href="/src/pages/teams.html">Teams</a></li>
               <li><a href="/src/pages/owners.html">Owners</a></li>
-              <li><a href="/src/pages/schedule.html">Schedule</a></li>
+              <li><a href="/src/pages/games.html">Games</a></li>
               <li><a href="/src/pages/standings.html">Standings</a></li>
               <li><a href="/src/pages/awards.html">Awards</a></li>
               <li><a href="/src/pages/draft.html">Draft</a></li>

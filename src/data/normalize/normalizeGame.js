@@ -93,7 +93,7 @@ export function normalizeGame(header, row) {
     raw: row
   };
 
-  log("NORMALIZE", `Normalized game row ${game.gameId} (${game.teamId} vs ${game.opponentTeamId})`);
+  //log("NORMALIZE", `Normalized game row ${game.gameId} (${game.teamId} vs ${game.opponentTeamId})`);
 
   return game;
 }

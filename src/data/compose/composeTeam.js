@@ -1,51 +1,4 @@
-/*import { getOwnerById } from "../utils/lookups.js";
 
-export function composeTeam(teamRaw, owners) {
-  const owner = getOwnerById(owners, teamRaw.ownerId);
-
-  return {
-    // ---------------------------------------
-    // Core identity
-    // ---------------------------------------
-    teamId: teamRaw.teamId,
-    teamName: teamRaw.teamName,
-    teamSlug: teamRaw.teamSlug,
-    teamLogo: teamRaw.teamLogo,
-
-    // ---------------------------------------
-    // Metadata
-    // ---------------------------------------
-    teamConference: teamRaw.teamConference,
-    teamLocation: teamRaw.teamLocation,
-    teamActive: teamRaw.teamActive === "TRUE" || teamRaw.teamActive === true,
-
-    // ---------------------------------------
-    // Colors
-    // ---------------------------------------
-    colors: {
-      primary: teamRaw.teamColorPrimary,
-      secondary: teamRaw.teamColorSecondary,
-      alternate: teamRaw.teamColorAlternate
-    },
-
-    // ---------------------------------------
-    // Owner (composed)
-    // ---------------------------------------
-    owner,
-
-    // ---------------------------------------
-    // Raw passthrough (optional)
-    // ---------------------------------------
-    meta: {
-      created: teamRaw.createdTimestamp,
-      updated: teamRaw.updatedTimestamp,
-      updatedBy: teamRaw.updatedBy,
-      status: teamRaw.status,
-      valid: teamRaw.valid
-    }
-  };
-}
-*/
 
 import { getOwnerById } from "../utils/lookups.js";
 
@@ -57,7 +10,11 @@ export function composeTeam(teamRaw, owners) {
     teamId: teamRaw.teamId,
     teamName: teamRaw.teamName,
     teamSlug: teamRaw.teamSlug,
+    teamNickname: teamRaw.teamNickname,
     teamAbbreviation: teamRaw.teamAbbreviation,
+    teamSchool: teamRaw.teamSchool,
+  
+    espnTeamId: teamRaw.espnTeamId,
 
     // Branding
     teamLogo: teamRaw.teamLogo,
@@ -66,6 +23,9 @@ export function composeTeam(teamRaw, owners) {
     // Conference / location
     teamConference: teamRaw.teamConference,
     teamLocation: teamRaw.teamLocation,
+    teamFounded: teamRaw.teamFounded,
+    preseasonRank: teamRaw.preseasonRank,
+    preseasonConferenceRank: teamRaw.preseasonConferenceRank,
 
     // Active flag (boolean)
     teamActive: teamRaw.teamActive === "TRUE" || teamRaw.teamActive === true,

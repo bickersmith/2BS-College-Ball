@@ -2,33 +2,33 @@
 
 export function gameCard(game, teams, size = "md") {
 
-  const team = game.team || game.homeTeam;
-  const opponent = game.opponent || game.awayTeam;
+  const away = game.awayTeam;
+  const home = game.homeTeam;
 
-  const teamLogo = team.teamLogo || "";
-  const opponentLogo = opponent.teamLogo || "";
+  const awayLogo = away.teamLogo || "";
+  const homeLogo = home.teamLogo || "";
 
-  const teamLogoHtml = teamLogo ? `<img src="${teamLogo}" class="team-logo-sm">` : "";
-  const opponentLogoHtml = opponentLogo ? `<img src="${opponentLogo}" class="team-logo-sm">` : "";
+  const awayLogoHtml = awayLogo ? `<img src="${awayLogo}" class="team-logo-sm">` : "";
+  const homeLogoHtml = homeLogo ? `<img src="${homeLogo}" class="team-logo-sm">` : "";
 
   return `
     <a href="game.html?game=${game.gameId}" class="card-link" onclick="stopCardClick(event)">
       <div class="game-card game-card-${size}">
 
-        <!-- MATCHUP ROW -->
+        <!-- MATCHUP -->
         <div class="game-card-matchup">
-          ${teamLogoHtml}
-          <span class="team-name">${team.teamName}</span>
+          ${awayLogoHtml}
+          <span class="team-name">${away.teamName}</span>
 
           <span class="at-symbol">@</span>
 
-          <span class="team-name">${opponent.teamName}</span>
-          ${opponentLogoHtml}
+          <span class="team-name">${home.teamName}</span>
+          ${homeLogoHtml}
         </div>
 
         <!-- SCORE -->
         <div class="game-card-score">
-          ${game.score.home ?? game.score.team} – ${game.score.away ?? game.score.opponent}
+          ${game.score.away} – ${game.score.home}
         </div>
 
         <!-- META -->

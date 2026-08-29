@@ -31,3 +31,12 @@
   font-weight: 700;
   margin-bottom: var(--space-lg);
 }
+
+
+.raw-rows {
+  background: #f7f7f7;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}

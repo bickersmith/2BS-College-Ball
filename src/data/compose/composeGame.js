@@ -5,20 +5,15 @@ import { formatGameDate } from "../../utils/cardUtils.js";
 import { log } from "../../scripts/diagnostics/logger.js";
 
 export function composeGame(rows, teams, owners) {
-  // rows is an array of normalized rows for the same GameID
-  const homeRow =
-    rows.find(r => r.teamHomeAway === "Home") ||
-    rows[0];
+  // rows = both entries for same GameID
+  const homeRow = rows.find(r => r.teamHomeAway === "Home") || rows[0];
+  const awayRow = rows.find(r => r.teamHomeAway === "Away") ||
+                  rows.find(r => r.teamId !== homeRow.teamId) ||
+                  rows[1] || rows[0];
 
-  const awayRow =
-    rows.find(r => r.teamHomeAway === "Away") ||
-    rows.find(r => r.teamId !== homeRow.teamId) ||
-    rows[1] ||
-    rows[0];
-
-  const safeTeam = (row, labelFallback) => ({
+  const safeTeam = (row, fallback) => ({
     teamId: row.teamId || "",
-    teamName: row.teamName || labelFallback,
+    teamName: row.teamName || fallback,
     teamLogo: "",
     teamCity: "",
     stadium: row.gameVenue || "",
@@ -37,13 +32,6 @@ export function composeGame(rows, teams, owners) {
 
   const dateFormatted = formatGameDate(homeRow.gameDate);
 
-  const homeScore = Number(
-    homeRow.teamScore || homeRow.opponentScore || 0
-  );
-  const awayScore = Number(
-    awayRow.teamScore || awayRow.opponentScore || 0
-  );
-
   const game = {
     gameId: homeRow.gameId,
     gameUuid: homeRow.gameUuid,
@@ -61,8 +49,8 @@ export function composeGame(rows, teams, owners) {
     awayTeam,
 
     score: {
-      home: homeScore,
-      away: awayScore
+      home: Number(homeRow.teamScore || 0),
+      away: Number(awayRow.teamScore || 0)
     },
 
     season: homeRow.season,
@@ -83,7 +71,7 @@ export function composeGame(rows, teams, owners) {
     rows
   };
 
-  log("COMPOSE", `Composed game ${game.gameId} (${homeTeam.teamName} vs ${awayTeam.teamName})`);
+  //log("COMPOSE", `Composed game ${game.gameId} (${awayTeam.teamName} @ ${homeTeam.teamName})`);
 
   return game;
 }

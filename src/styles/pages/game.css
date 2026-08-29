@@ -88,3 +88,135 @@
   gap: var(--space-lg);
   margin-top: var(--space-xl);
 }
+
+
+.detail-grid div {
+  font-size: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.detail-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  flex: 1;
+  min-width: 280px;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.detail-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  row-gap: 10px;
+  column-gap: 20px;
+}
+
+/* ============================================================
+   HERO LAYOUT (Games Page)
+   ============================================================ */
+
+
+.game-hero-card {
+  background: #fff;
+  padding: 40px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.game-hero-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.team-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.team-block:hover {
+  transform: scale(1.05);
+}
+
+.team-logo-xl {
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.team-name-xl {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.vs-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vs-text {
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.game-date-xl {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.game-hero-score {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 20px 0;
+}
+
+.score-away,
+.score-home {
+  padding: 0 12px;
+}
+
+.score-dash {
+  padding: 0 12px;
+  opacity: 0.7;
+}
+
+.game-hero-meta {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
