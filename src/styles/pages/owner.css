@@ -1,3 +1,7 @@
+/* ============================================================
+   OWNER PAGE HEADER
+   ============================================================ */
+
 .owner-page .owner-header {
   display: flex;
   align-items: center;
@@ -5,3 +9,200 @@
   margin-bottom: var(--space-xl);
 }
 
+/* ============================================================
+   ACTIVITY FEED
+   ============================================================ */
+
+.activity-feed {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.activity-item {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+/* ============================================================
+   OWNER TEAM GRID
+   ============================================================ */
+
+.teams-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+
+  width: 320px;
+  min-height: 60px;
+}
+
+/* SMALL LOGOS (team grid) */
+.team-card .team-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* ============================================================
+   TEAM CARD TEXT
+   ============================================================ */
+
+.team-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.team-meta {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* ============================================================
+   OWNER TEAM STANDINGS TABLE
+   ============================================================ */
+
+.owner-team-standings {
+  margin-top: 40px;
+}
+
+.owner-team-standings-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.owner-team-standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.owner-team-standings-table th {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 2px solid #ddd;
+  font-weight: 700;
+  color: #333;
+}
+
+.owner-team-standings-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid #eee;
+  color: #222;
+}
+
+.owner-team-standings-table tr {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.owner-team-standings-table tr:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.team-logo-sm {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* ============================================================
+   OWNER GAME CARDS (Next Five / Recent Five)
+   ============================================================ */
+
+.owner-games-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+/* Shrink game cards for owner page */
+.owner-games-grid .game-card {
+  width: 320px;
+  min-width: 300px;
+  padding: 10px 12px;
+}
+
+/* Make the <a> behave like a block so flex works */
+.owner-games-grid .card-link {
+  display: block;
+}
+
+/* Small game card variant */
+.game-card-sm {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+/* ============================================================
+   FIX: Prevent logo bleed in owner-page game cards
+   ============================================================ */
+
+/* Logos inside game cards */
+.owner-games-grid .game-card img.team-logo,
+.owner-games-grid .game-card img.team-logo-sm,
+.owner-games-grid .game-card .team-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 2px;
+}
+
+/* Helmets inside game cards */
+.owner-games-grid .game-card img.team-helmet,
+.owner-games-grid .game-card img.team-helmet-sm,
+.owner-games-grid .game-card .team-helmet {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+/* Ensure matchup row stays aligned */
+.owner-games-grid .game-card .matchup-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Ensure score row doesn't overflow */
+.owner-games-grid .game-card .score-row {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Badge row cleanup */
+.owner-games-grid .game-card .badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}

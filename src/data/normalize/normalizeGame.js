@@ -1,13 +1,23 @@
+
 // src/data/normalize/normalizeGame.js
 
-import { log } from "../../scripts/diagnostics/logger.js";
+import { GAME_BADGES } from "../../scripts/data/utils/gameBadges.js";
 
 export function normalizeGame(header, row) {
-  // Header is already trimmed in fetchGameData; keep for consistency/logging
   header = header.map(h => h.trim());
 
   const get = key => String(row[key] || "").trim();
 
+const rivalryRaw = get("Rivalry"); // or whatever the real header is
+
+const rivalry = (
+  rivalryRaw === "1" ||
+  rivalryRaw === 1 ||
+  rivalryRaw === "TRUE" ||
+  rivalryRaw === "Yes" ||
+  rivalryRaw === "Rivalry"
+) ? 1 : 0;
+  
   const game = {
     leagueId: get("LeagueID"),
     season: get("Season"),
@@ -36,7 +46,8 @@ export function normalizeGame(header, row) {
     opponentOwnerId: get("OpponentOwnerID"),
     opponentTeamName: get("OpponentTeamName"),
     opponentRank: get("OpponentRank"),
-    rivalry: get("Rivalry"),
+
+    rivalry: rivalry,
 
     teamScore: get("TeamScore"),
     opponentScore: get("OpponentScore"),
@@ -44,15 +55,34 @@ export function normalizeGame(header, row) {
     ot: get("OT"),
     win: get("Win"),
     loss: get("Loss"),
+
     blowoutWin: get("BlowoutWin"),
     closeWin: get("CloseWin"),
     shutoutWin: get("ShutoutWin"),
     otWin: get("OTWin"),
     otLoss: get("OTLoss"),
+
+    upsetWin: get("UpsetWin"),
+    badLoss: get("BadLoss"),
+
+    beatTop5: get("BeatTop5"),
     beatTop10: get("BeatTop10"),
     beatTop25: get("BeatTop25"),
+
+    lostTop5: get("LostTop5"),
+    lostTop10: get("LostTop10"),
+    lostTop25: get("LostTop25"),
+
     rivalWin: get("RivalWin"),
     rivalLoss: get("RivalLoss"),
+
+    highScoringGame: get("HighScoringGame"),
+    lowScoringGame: get("LowScoringGame"),
+    shootOut: get("ShootOut"),
+    defensiveBattle: get("DefensiveBattle"),
+
+    oneScoreLoss: get("OneScoreLoss"),
+    gotShutOut: get("GotShutOut"),
 
     espnKickoffTime: get("ESPNKickoffTime"),
     espnVenue: get("ESPNVenue"),
@@ -93,7 +123,18 @@ export function normalizeGame(header, row) {
     raw: row
   };
 
-  //log("NORMALIZE", `Normalized game row ${game.gameId} (${game.teamId} vs ${game.opponentTeamId})`);
+  // Badge normalization
+  GAME_BADGES.forEach(badge => {
+    const value = get(badge.key);
+    game[badge.key] =
+      value === "1" ||
+      value === "Y" ||
+      value === "true" ||
+      value === "TRUE";
+  });
 
+
+  //console.log("DEBUG NORMALIZED ROW:", row);
+  
   return game;
 }

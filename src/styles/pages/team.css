@@ -1,53 +1,27 @@
-.team-page .team-header {
+/* ============================================================
+   TEAM PAGE — GLOBAL LAYOUT
+   ============================================================ */
+
+.team-page {
   display: flex;
-  align-items: center;
-  gap: var(--space-lg);
-  margin-bottom: var(--space-xl);
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 60px;
 }
 
-.team-page .team-section {
-  margin-bottom: var(--space-xl);
+.team-section {
+  margin-bottom: 40px;
 }
 
-
-.teams-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: var(--space-lg);
-}
-
-.teams-table th,
-.teams-table td {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.team-logo-xs {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
-  background: var(--color-border);
-  padding: 2px;
-}
-
-.team-row:hover {
-  background: var(--color-accent-light);
-}
-
-.team-name-col a {
-  font-weight: 600;
-}
-
+/* ============================================================
+   HERO CARD
+   ============================================================ */
 
 .team-hero-card {
   background: #fff;
   padding: 40px 20px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  margin-bottom: 40px;
   text-align: center;
 }
 
@@ -102,6 +76,10 @@
   gap: 8px;
 }
 
+/* ============================================================
+   DETAIL CARDS (Branding, Colors, Owner)
+   ============================================================ */
+
 .detail-card {
   background: #fff;
   border-radius: 10px;
@@ -125,24 +103,81 @@
   column-gap: 20px;
 }
 
-.team-game-item {
-  margin: 10px 0;
+/* ============================================================
+   TEAM SCHEDULE — NEXT / LAST GAME
+   ============================================================ */
+
+.team-schedule-two-col {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
-.team-game-matchup {
-  font-size: 1.2rem;
+.team-schedule-col {
+  flex: 1;
+  min-width: 280px;
+}
+
+.team-game-card {
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-top: 10px;
+}
+
+/* ============================================================
+   FULL SCHEDULE TABLE
+   ============================================================ */
+
+.team-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.team-schedule-table th,
+.team-schedule-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.team-schedule-table th {
+  background: #f5f5f5;
+  font-weight: 700;
+}
+
+/* ============================================================
+   LEGACY TEAM LIST TABLE (Teams Directory)
+   ============================================================ */
+
+.teams-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+}
+
+.teams-table th,
+.teams-table td {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.team-logo-xs {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  padding: 2px;
+}
+
+.team-row:hover {
+  background: var(--color-accent-light);
+}
+
+.team-name-col a {
   font-weight: 600;
 }
-
-.team-game-meta {
-  font-size: 0.95rem;
-  color: #666;
-}
-
-.team-game-link {
-  display: inline-block;
-  margin-top: 5px;
-  font-weight: 600;
-}
-
-

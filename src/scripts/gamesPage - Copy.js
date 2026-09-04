@@ -8,6 +8,11 @@ import { getTeams } from "./api/api.teams.js";
 import { getOwners } from "./api/api.owners.js";
 
 import { gameCard } from "../components/cards/gameCard.js";
+import { renderGameBadges } from "../components/cards/gameCard.js";
+//"./gameCard.js";
+/* ============================================================
+   NAV HELPERS
+   ============================================================ */
 
 window.goToTeam = teamId => {
   window.location.href = `team.html?team=${teamId}`;
@@ -17,42 +22,34 @@ window.goToOwner = ownerId => {
   window.location.href = `owner.html?owner=${ownerId}`;
 };
 
-let currentMonth = new Date().getMonth() + 1;
+/* ============================================================
+   STATE
+   ============================================================ */
+
+let currentMonth = new Date().getMonth() + 1; // 1–12
 let currentYear = new Date().getFullYear();
 let initialized = false;
 
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
 export function filterOwnedGames(games) {
-  return games.filter(
-    game => !!game.homeTeam?.owner || !!game.awayTeam?.owner
+  return games.filter(game =>
+    !!game.homeTeam?.owner || !!game.awayTeam?.owner
   );
-}
-
-function parseDateSafe(raw) {
-  if (!raw) return null;
-
-  let d = new Date(raw);
-  if (!isNaN(d.getTime())) return d;
-
-  const parts = raw.split("/");
-  if (parts.length === 3) {
-    const [m, day, y] = parts;
-    d = new Date(`${y}-${m}-${day}`);
-    if (!isNaN(d.getTime())) return d;
-  }
-
-  return null;
 }
 
 function filterByMonth(games) {
   return games.filter(game => {
-    const d = parseDateSafe(game.date);
-    if (!d) return false;
-
-    return (
-      d.getMonth() + 1 === currentMonth && d.getFullYear() === currentYear
-    );
+    const d = new Date(game.date);
+    return (d.getMonth() + 1) === currentMonth && d.getFullYear() === currentYear;
   });
 }
+
+/* ============================================================
+   INIT
+   ============================================================ */
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (initialized) return;
@@ -64,6 +61,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderGamesPage(filterOwnedGames);
 });
 
+/* ============================================================
+   PAGE RENDER
+   ============================================================ */
+
 export async function renderGamesPage(filterFn = null) {
   const games = await getGames();
   const teams = await getTeams();
@@ -71,14 +72,15 @@ export async function renderGamesPage(filterFn = null) {
 
   const safeGames = Array.isArray(games) ? games : [];
 
+  // Apply filters
   let filtered = filterFn ? filterFn(safeGames) : safeGames;
   filtered = filterByMonth(filtered);
 
   const container = document.getElementById("content");
 
-  const gameCardsHtml = filtered
-    .map(game => gameCard(game, teams, "md"))
-    .join("");
+  const gameCardsHtml = filtered.map(game => {
+    return gameCard(game, teams, "md");
+  }).join("");
 
   container.innerHTML = `
     <h1 class="page-title">Games</h1>
@@ -101,6 +103,10 @@ export async function renderGamesPage(filterFn = null) {
     </div>
   `;
 
+  /* -----------------------------
+     MONTH NAVIGATION
+     ----------------------------- */
+
   document.getElementById("prev-month").onclick = () => {
     currentMonth--;
     if (currentMonth < 1) {
@@ -119,10 +125,14 @@ export async function renderGamesPage(filterFn = null) {
     renderGamesPage(filterFn);
   };
 
+  /* -----------------------------
+     FILTER DROPDOWN
+     ----------------------------- */
+
   const filterSelect = document.getElementById("games-filter");
   filterSelect.value = filterFn === filterOwnedGames ? "owned" : "all";
 
-  filterSelect.addEventListener("change", e => {
+  filterSelect.addEventListener("change", (e) => {
     const value = e.target.value;
     if (value === "owned") {
       renderGamesPage(filterOwnedGames);
@@ -130,4 +140,12 @@ export async function renderGamesPage(filterFn = null) {
       renderGamesPage();
     }
   });
+}
+
+function renderGameListItem(game) {
+  return `
+    <div class="game-list-card">
+      ${renderGameBadges(game, false)}
+    </div>
+  `;
 }

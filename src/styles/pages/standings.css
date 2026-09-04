@@ -1,3 +1,177 @@
+/* =========================================================
+   TEAM STANDINGS TABLE
+   ========================================================= */
+
 .standings-page .standings-table {
   margin-top: var(--space-lg);
+}
+
+.standings-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.standings-logo.placeholder {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+th[data-sort] {
+  cursor: pointer;
+}
+
+th[data-sort]:hover {
+  background: #eee;
+}
+
+/* =========================================================
+   FILTER NAVIGATION
+   ========================================================= */
+
+.filter-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.filter-nav button {
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s ease-in-out;
+}
+
+.filter-nav button:hover {
+  background: #333;
+  border-color: #666;
+}
+
+.filter-nav button.active {
+  background: #0077ff;
+  border-color: #005fcc;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(0, 119, 255, 0.4);
+}
+
+
+/* OWNER STANDINGS — CENTERED LEFT BLOCK */
+/* OWNER STANDINGS — CENTERED + FLASHY + PERFECT ALIGNMENT */
+
+.owner-standings-section {
+  margin-bottom: 40px;
+  padding: 10px 0;
+}
+
+.owner-standings-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Each owner row */
+.owner-standings-row {
+  display: grid;
+  grid-template-columns: 260px auto;
+  align-items: center;          /* ⭐ vertical centering across entire row */
+  column-gap: 40px;
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.owner-standings-row:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* LEFT SIDE — fully centered block */
+.owner-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;          /* ⭐ center horizontally */
+  justify-content: center;      /* ⭐ center vertically */
+  text-align: center;
+  gap: 10px;
+}
+
+/* Rank + Owner Name */
+.owner-rank-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.owner-rank {
+  font-size: 36px;
+  font-weight: 900;
+  color: #444;
+}
+
+.owner-standings-row:nth-child(1) .owner-rank {
+  color: #d4af37;     /* ⭐ gold */
+}
+
+.owner-standings-row:nth-child(2) .owner-rank {
+  color: #c0c0c0;     /* ⭐ silver */
+}
+
+.owner-standings-row:nth-child(3) .owner-rank {
+  color: #cd7f32;     /* ⭐ bronze */
+}
+
+
+.owner-name {
+  font-size: 26px;              /* ⭐ bigger */
+  font-weight: 700;
+  color: #222;
+}
+
+/* Best team logo */
+.owner-best-logo img {
+  width: 96px;                  /* ⭐ slightly larger */
+  height: 96px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 3px;
+  background: #fafafa;
+  transition: transform 0.15s;
+}
+
+.owner-best-logo img:hover {
+  transform: scale(1.08);
+}
+
+/* RIGHT SIDE — vertically centered, aligned labels */
+.owner-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;      /* ⭐ vertical centering */
+  gap: 6px;
+}
+
+.owner-line {
+  display: flex;
+  gap: 10px;
+}
+
+.owner-line .label {
+  font-size: 12px;
+  color: #666;
+  width: 140px;                 /* ⭐ perfect alignment */
+}
+
+.owner-line .value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
 }

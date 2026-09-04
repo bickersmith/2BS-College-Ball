@@ -50,3 +50,13 @@ export async function fetchGameData() {
 
   return normalizedGroups;
 }
+
+export async function fetchGameDataRaw() {
+  const raw = await fetchSheet("Game");
+
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return [];
+  }
+
+  return raw;   // array-of-arrays
+}

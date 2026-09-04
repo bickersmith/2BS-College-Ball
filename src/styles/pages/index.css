@@ -1,22 +1,191 @@
-.index-grid {
+/* ============================================================
+   INDEX DASHBOARD LAYOUT
+   ============================================================ */
+
+.index-dashboard {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* LEFT bigger, RIGHT smaller */
-  gap: var(--space-xl);
-  align-items: start;
-  margin-top: var(--space-xl);
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  margin-top: 20px;
+  padding: 10px;
 }
 
-.index-left,
-.index-right {
+.index-module {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.index-module h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #222;
+}
+
+/* ============================================================
+   OWNER HERO CARDS — BIGGER RANK + BIGGER OWNER NAME
+   ============================================================ */
+
+.owner-standings-section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: 12px;
 }
 
-/* Optional: make modules look clean */
-.home-module {
-  background: var(--color-surface);
-  padding: var(--space-lg);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+.owner-standings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.owner-standings-row:hover {
+  background: #f0f0f0;
+}
+
+/* LEFT SIDE: rank + name + logo */
+.owner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.owner-rank-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ⭐ Bigger rank */
+.owner-rank {
+  font-size: 1.6rem;      /* was 0.85rem */
+  font-weight: 800;
+  color: #222;
+}
+
+/* ⭐ Bigger owner name */
+.owner-name {
+  font-size: 1.25rem;     /* was 0.95rem */
+  font-weight: 700;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bigger best-team logo */
+.owner-best-logo img {
+  width: 52px;            /* was 48px */
+  height: 52px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  padding: 2px;
+}
+
+/* RIGHT SIDE: stats */
+.owner-right {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.82rem;
+  text-align: right;
+  min-width: 130px;
+}
+
+.owner-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.owner-line .label {
+  color: #666;
+}
+
+.owner-line .value {
+  font-weight: 600;
+  color: #222;
+}
+
+
+/* ============================================================
+   MINI GAME CARDS (Next Five / Recent Five)
+   ============================================================ */
+
+.mini-game-card {
+  padding: 10px;
+  border-radius: 8px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  transition: background 0.15s;
+}
+
+.mini-game-card:hover {
+  background: #f0f0f0;
+}
+
+.mini-game-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #222;
+}
+
+.mini-game-row span:first-child {
+  font-weight: 600;
+  color: #444;
+}
+
+/* ============================================================
+   TABLES (if used)
+   ============================================================ */
+
+.index-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.index-table th,
+.index-table td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.85rem;
+}
+
+.index-table th {
+  font-weight: 700;
+  color: #333;
+}
+
+/* ============================================================
+   RESPONSIVE BEHAVIOR
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .index-dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .index-dashboard {
+    grid-template-columns: 1fr;
+  }
 }

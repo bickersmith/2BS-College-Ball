@@ -98,3 +98,20 @@
   padding: 24px 28px;
 
 }
+
+.rivalry-banner {
+  background: #d62828;        /* rivalry red */
+  color: #fff;
+  font-weight: 900;
+  font-size: 1rem;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.game-card {
+  position: relative;
+}

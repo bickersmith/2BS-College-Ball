@@ -62,3 +62,38 @@ export function teamCard(team, owners = [], size = "lg") {
     footer
   });
 }
+
+/*
+export function renderTeamsGrid(teams) {
+  const container = document.getElementById("owner-teams");
+  if (!container) return;
+
+  const html = teams.map(team => `
+    <div class="team-card">
+      <img src="${team.logo}" class="team-logo" />
+      <h3>${team.name}</h3>
+      <p><strong>Record:</strong> ${team.record.wins}-${team.record.losses}-${team.record.ties}</p>
+      <p><strong>Division:</strong> ${team.division}</p>
+      <a href="${team.links.teamPage}">View Team</a>
+    </div>
+  `).join("");
+
+  container.innerHTML = `<section class="team-grid">${html}</section>`;
+}
+*/
+export function renderTeamsGrid(teams) {
+  const container = document.getElementById("owner-teams");
+  if (!container) return;
+
+  const html = teams.map(team => `
+    <div class="team-card">
+      <a href="${team.links.teamPage}"><img src="${team.logo}" class="team-logo" /></a>
+           <a href="${team.links.teamPage}"><h3>${team.name}</h3></a>
+      <div class="team-info">
+      <p><strong></strong> ${team.record.wins}-${team.record.losses}-${team.record.ties}</p>
+      </div>
+    </div>
+  `).join("");
+
+  container.innerHTML = `<div class="teams-grid">${html}</div>`;
+}

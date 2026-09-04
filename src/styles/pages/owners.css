@@ -39,8 +39,8 @@
 /* Logo styling */
 .owner-team-logo img,
 .team-logo-sm {
-  width: 42px;
-  height: 42px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
   border-radius: var(--radius-sm);
   background: var(--color-border);

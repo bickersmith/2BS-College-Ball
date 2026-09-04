@@ -108,19 +108,5 @@ export async function renderOwnersPage() {
       ${ownerCardsHtml}
     </div>
 
-    <!-- OWNERS TABLE -->
-    <table class="owners-teams-table">
-      <thead>
-        <tr>
-          <th>Owner</th>
-          <th>Team</th>
-          <th>Conference</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows}
-      </tbody>
-    </table>
   `;
 }

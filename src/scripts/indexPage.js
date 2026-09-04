@@ -3,6 +3,11 @@ import { loadNavigation } from "/src/utils/navigation.js";
 
 import { getOwners } from "/src/scripts/api/api.owners.js";
 import { getTeams } from "/src/scripts/api/api.teams.js";
+import { getGames } from "/src/scripts/api/api.games.js";
+
+/* ============================================================
+   INDEX NAVIGATION (special pathing rules)
+   ============================================================ */
 
 async function loadNavigationForIndex() {
   await injectPartial("#header", "/src/components/header.html");
@@ -29,224 +34,154 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderIndexPage();
 });
 
+/* ============================================================
+   MAIN INDEX PAGE RENDER
+   ============================================================ */
+
 async function renderIndexPage() {
   const container = document.getElementById("content");
 
   const owners = await getOwners();
   const teams = await getTeams();
+  const games = await getGames();
 
-  // Build owners/teams table rows
-  const rows = owners.map(owner => {
+  /* ============================================================
+   OWNER STANDINGS (compact, includes total game points)
+   ============================================================ */
+
+/* ============================================================
+   OWNER STANDINGS (correct GamePoints totals)
+   ============================================================ */
+
+/* ============================================================
+   OWNER STANDINGS (compact, includes total game points)
+   ============================================================ */
+
+const ownerStandings = owners
+  .map(owner => {
     const ownerTeams = teams.filter(t => String(t.ownerId) === String(owner.id));
 
-    if (ownerTeams.length === 0) {
-      return `
-        <tr>
-          <td class="owner-col">
-            <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
-              ${owner.name}
-            </a>
-          </td>
-          <td colspan="4" class="no-team">—</td>
-        </tr>
-      `;
-    }
+    // ✅ Match standings page: use t.totalGamePoints
+    const totalGamePoints = ownerTeams.reduce(
+      (sum, t) => sum + Number(t.totalGamePoints || 0),
+      0
+    );
 
-    const first = ownerTeams[0];
+    return {
+      owner,
+      totalGamePoints,
+      teamCount: ownerTeams.length
+    };
+  })
+  .sort((a, b) => b.totalGamePoints - a.totalGamePoints);
 
-    let html = `
-      <tr>
-        <td class="owner-col">
-          <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
-            ${owner.name}
-          </a>
-        </td>
+const ownerStandingsHTML = ownerStandings
+  .map(s => `
+    <tr>
+      <td><a href="/src/pages/owner.html?owner=${s.owner.id}">${s.owner.name}</a></td>
+      <td>${s.teamCount}</td>
+      <td>${s.totalGamePoints}</td>
+    </tr>
+  `)
+  .join("");
 
-        <td class="team-col">
-          <a href="/src/pages/team.html?team=${first.teamId}">
-            <img src="${first.teamLogo}" class="team-logo-xs">
-          </a>
-          <a href="/src/pages/team.html?team=${first.teamId}" class="team-link">
-            ${first.teamName}
-          </a>
-        </td>
 
-        <td>${first.teamConference || "—"}</td>
-        <td>${first.teamLocation || "—"}</td>
-      </tr>
-    `;
+  /* ============================================================
+     OWNED TEAM FILTER (strict owner check)
+     ============================================================ */
 
-    for (let i = 1; i < ownerTeams.length; i++) {
-      const t = ownerTeams[i];
+  const ownerIds = owners.map(o => String(o.id));
+  const now = new Date();
 
-      html += `
-        <tr>
-          <td class="owner-col"></td>
+  function gameHasOwner(g) {
+    return (
+      ownerIds.includes(String(g.homeTeam.ownerId)) ||
+      ownerIds.includes(String(g.awayTeam.ownerId))
+    );
+  }
 
-          <td class="team-col">
-            <a href="/src/pages/team.html?team=${t.teamId}">
-              <img src="${t.teamLogo}" class="team-logo-xs">
-            </a>
-            <a href="/src/pages/team.html?team=${t.teamId}" class="team-link">
-              ${t.teamName}
-            </a>
-          </td>
+  /* ============================================================
+     NEXT FIVE GAMES (owned teams only)
+     ============================================================ */
 
-          <td>${t.teamConference || "—"}</td>
-          <td>${t.teamLocation || "—"}</td>
-        </tr>
-      `;
-    }
+  const upcoming = games
+    .filter(gameHasOwner)
+    .filter(g => new Date(g.date) > now)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 5);
 
-    return html;
-  }).join("");
+  const nextFiveHTML = upcoming
+    .map(g => `
+      <div class="mini-game-card">
+        <a href="/src/pages/game.html?game=${g.gameId}">
+          <div class="mini-game-row">
+            <span>${g.dateFormatted}</span>
+            <span>${g.homeTeam.teamName} vs ${g.awayTeam.teamName}</span>
+          </div>
+        </a>
+      </div>
+    `)
+    .join("");
 
-  // NEW: Two-column homepage layout
+  /* ============================================================
+     RECENT FIVE GAMES (owned teams only)
+     ============================================================ */
+
+  const recent = games
+    .filter(gameHasOwner)
+    .filter(g => new Date(g.date) <= now && g.updateFlag !== "NEW")
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 5);
+
+  const recentFiveHTML = recent
+    .map(g => `
+      <div class="mini-game-card">
+        <a href="/src/pages/game.html?game=${g.gameId}">
+          <div class="mini-game-row">
+            <span>${g.dateFormatted}</span>
+            <span>${g.homeTeam.teamName} ${g.score.home} - ${g.score.away} ${g.awayTeam.teamName}</span>
+          </div>
+        </a>
+      </div>
+    `)
+    .join("");
+
+  /* ============================================================
+     FINAL INDEX DASHBOARD LAYOUT
+     ============================================================ */
+
   container.innerHTML = `
-    <div class="index-grid">
+    <div class="index-dashboard">
 
-      <!-- LEFT COLUMN -->
-      <div class="index-left">
-        <table class="table owners-teams-table">
+      <!-- OWNER STANDINGS -->
+      <section class="index-module">
+        <h2>Owner Standings</h2>
+        <table class="index-table">
           <thead>
             <tr>
               <th>Owner</th>
-              <th>Team</th>
-              <th>Conference</th>
-              <th>Location</th>
+              <th>Teams</th>
+              <th>Game Points</th>
             </tr>
           </thead>
           <tbody>
-            ${rows}
+            ${ownerStandingsHTML}
           </tbody>
         </table>
-      </div>
+      </section>
 
-      <!-- RIGHT COLUMN -->
-      <div class="index-right">
+      <!-- NEXT FIVE GAMES -->
+      <section class="index-module">
+        <h2>Next Five Games</h2>
+        ${nextFiveHTML}
+      </section>
 
-        <!-- Welcome Module -->
-          <div class="home-module welcome-module">
-            <h1>2BSCB</h1>
-
-            <p></p>
-
-            <h2></h2>
-            <ul>
-              <li><a href="/src/pages/teams.html">Teams</a></li>
-              <li><a href="/src/pages/owners.html">Owners</a></li>
-              <li><a href="/src/pages/games.html">Games</a></li>
-              <li><a href="/src/pages/standings.html">Standings</a></li>
-              <li><a href="/src/pages/awards.html">Awards</a></li>
-              <li><a href="/src/pages/draft.html">Draft</a></li>
-            </ul>
-            <h2>...</h2>
-            <p>More Soon...</p>
-          </div>
-
-          <!-- Future modules drop in here -->
-          <div id="home-modules-slot"></div>
-
-      </div>
+      <!-- RECENT FIVE GAMES -->
+      <section class="index-module">
+        <h2>Recent Games</h2>
+        ${recentFiveHTML}
+      </section>
 
     </div>
   `;
 }
-
-
-/*
-async function renderIndexPage() {
-  const container = document.getElementById("content");
-
-  const owners = await getOwners();
-  const teams = await getTeams();
-
-  const rows = owners.map(owner => {
-    const ownerTeams = teams.filter(t => String(t.ownerId) === String(owner.id));
-
-    // Owner with no teams
-    if (ownerTeams.length === 0) {
-      return `
-        <tr>
-          <td class="owner-col">
-            <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
-              ${owner.name}
-            </a>
-          </td>
-          <td colspan="4" class="no-team">—</td>
-        </tr>
-      `;
-    }
-
-    const first = ownerTeams[0];
-
-    // First row (owner name + first team)
-    let html = `
-      <tr>
-        <td class="owner-col">
-          <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-link">
-            ${owner.name}
-          </a>
-        </td>
-
-        <td class="team-col">
-          <a href="/src/pages/team.html?team=${first.teamId}">
-            <img src="${first.teamLogo}" class="team-logo-xs">
-          </a>
-          <a href="/src/pages/team.html?team=${first.teamId}" class="team-link">
-            ${first.teamName}
-          </a>
-        </td>
-
-        <td>${first.teamConference || "—"}</td>
-        <td>${first.teamLocation || "—"}</td>
-      </tr>
-    `;
-
-    // Additional team rows
-    for (let i = 1; i < ownerTeams.length; i++) {
-      const t = ownerTeams[i];
-
-      html += `
-        <tr>
-          <td class="owner-col"></td>
-
-          <td class="team-col">
-            <a href="/src/pages/team.html?team=${t.teamId}">
-              <img src="${t.teamLogo}" class="team-logo-xs">
-            </a>
-            <a href="/src/pages/team.html?team=${t.teamId}" class="team-link">
-              ${t.teamName}
-            </a>
-          </td>
-
-          <td>${t.teamConference || "—"}</td>
-          <td>${t.teamLocation || "—"}</td>
-        </tr>
-      `;
-    }
-
-    return html;
-  }).join("");
-
-  container.insertAdjacentHTML(
-    "beforeend",
-    `
-      <table class="table owners-teams-table">
-        <thead>
-          <tr>
-            <th>Owner</th>
-            <th>Team</th>
-            <th>Conference</th>
-            <th>Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    `
-  );
-}
-  */
-
