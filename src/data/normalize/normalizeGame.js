@@ -8,16 +8,6 @@ export function normalizeGame(header, row) {
 
   const get = key => String(row[key] || "").trim();
 
-const rivalryRaw = get("Rivalry"); // or whatever the real header is
-
-const rivalry = (
-  rivalryRaw === "1" ||
-  rivalryRaw === 1 ||
-  rivalryRaw === "TRUE" ||
-  rivalryRaw === "Yes" ||
-  rivalryRaw === "Rivalry"
-) ? 1 : 0;
-  
   const game = {
     leagueId: get("LeagueID"),
     season: get("Season"),
@@ -47,7 +37,7 @@ const rivalry = (
     opponentTeamName: get("OpponentTeamName"),
     opponentRank: get("OpponentRank"),
 
-    rivalry: rivalry,
+    rivalry: get("Rivalry"),
 
     teamScore: get("TeamScore"),
     opponentScore: get("OpponentScore"),
@@ -123,18 +113,23 @@ const rivalry = (
     raw: row
   };
 
-  // Badge normalization
-  GAME_BADGES.forEach(badge => {
-    const value = get(badge.key);
-    game[badge.key] =
-      value === "1" ||
-      value === "Y" ||
-      value === "true" ||
-      value === "TRUE";
-  });
+// Badge normalization
+GAME_BADGES.forEach(badge => {
+  const value = get(badge.key);
+
+  // Normalize lowercase key
+  game[badge.key] =
+    value === "1" ||
+    value === "Y" ||
+    value === "true" ||
+    value === "TRUE";
+
+  // Normalize capitalized alias
+  const upper = badge.key.charAt(0).toUpperCase() + badge.key.slice(1);
+  game[upper] = game[badge.key];
+});
 
 
-  //console.log("DEBUG NORMALIZED ROW:", row);
-  
+
   return game;
 }

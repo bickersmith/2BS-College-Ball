@@ -8,7 +8,7 @@ const SHEET_GAME = "Game";
 
 export async function fetchGameData() {
   const rows = await fetchSheet(SHEET_GAME);
-
+//console.log(await fetchGameDataRaw());
   if (!rows || rows.length === 0) {
     log("FETCH", "No game rows returned from sheet");
     return [];

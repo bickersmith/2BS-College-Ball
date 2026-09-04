@@ -2,7 +2,7 @@ import { getGameRows } from "../../scripts/api/api.games.js";
 import { getTeams } from "../../scripts/api/api.teams.js";
 
 export async function computeTeamStandings() {
-  const rows = await getGameRows();   // ⭐ raw normalized rows
+  const rows = await getGameRows();   // normalized standings rows
   const teams = await getTeams();
 
   const activeTeams = teams.filter(t =>
@@ -34,7 +34,6 @@ export async function computeTeamStandings() {
       totalGamePoints: 0,
       gamesPlayed: 0,
 
-      // ⭐ NEW: store raw game rows for owner standings
       rawGames: []
     };
   }
@@ -45,26 +44,26 @@ export async function computeTeamStandings() {
     const team = standings[teamId];
     if (!team) continue;
 
-    // ⭐ NEW: store raw row for owner standings
-    team.rawGames.push(row.raw);
+    team.rawGames.push(row);
 
-    // ⭐ NEW: skip NEW games entirely
-    if (row.raw?.UpdateFlag === "NEW") {
-      continue;
-    }
+    // Skip NEW games
+    if (row.UpdateFlag === "NEW") continue;
 
     const teamScore = Number(row.teamScore || 0);
     const oppScore = Number(row.opponentScore || 0);
+
+    // ⭐ USE SHEET GAMEPOINTS ONLY
     const gamePoints = Number(row.gamePoints || 0);
 
     team.pf += teamScore;
     team.pa += oppScore;
     team.diff = team.pf - team.pa;
 
-    if (row.win === "1") {
+    // Correct boolean checks
+    if (row.win === true || row.win === "1") {
       team.wins += 1;
       team.lastResults.push("W");
-    } else if (row.loss === "1") {
+    } else if (row.loss === true || row.loss === "1") {
       team.losses += 1;
       team.lastResults.push("L");
     }
@@ -106,4 +105,6 @@ export async function computeTeamStandings() {
   });
 
   return list;
+
+  
 }

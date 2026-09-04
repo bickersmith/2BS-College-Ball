@@ -11,7 +11,6 @@ window.goToOwner = function(ownerId) {
   window.location.href = `owner.html?owner=${ownerId}`;
 };
 
-
 document.addEventListener("DOMContentLoaded", async () => {
   await loadConfig();
   await loadNavigation();
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     t.ownerName = owner ? owner.name : "";
   });
 
-  // Build owner standings table
+  // Build owner standings
   const ownerRows = buildOwnerStandings(standings, owners);
   const ownerTableHtml = renderOwnerStandingsTable(ownerRows);
 
@@ -99,9 +98,6 @@ function enableStandingsSorting(list, owners) {
 function renderStandings(list, fullList, activeFilter, owners) {
   const container = document.getElementById("content");
 
-  // ⭐ Do NOT rebuild owner standings here
-  // Owner standings are rendered once at page load
-
   const navHtml = `
     <div class="filter-nav">
       <button id="filter-owned" data-filter="owned" class="${activeFilter === "owned" ? "active" : ""}">
@@ -163,7 +159,6 @@ function renderStandings(list, fullList, activeFilter, owners) {
     </div>
   `;
 
-  // ⭐ Replace ONLY the team standings section
   const teamSection = container.querySelector(".team-standings-section");
   if (teamSection) {
     teamSection.outerHTML = html;
@@ -172,17 +167,18 @@ function renderStandings(list, fullList, activeFilter, owners) {
   }
 }
 
-
 function renderOwnerStandingsTable(ownerRows) {
   return `
     <div class="owner-standings-section">
+
+      <h1 class="owner-standings-title">Owner Standings</h1>
 
       ${ownerRows.map(r => `
         <div class="owner-standings-row" onclick="goToOwner(${r.ownerId})">
 
           <div class="owner-left">
             <div class="owner-rank-name">
-              <span class="owner-rank">#${r.rank}</span>
+              <span class="owner-rank">${r.rank}</span>
               <span class="owner-name">${r.ownerName}</span>
             </div>
 
@@ -193,7 +189,6 @@ function renderOwnerStandingsTable(ownerRows) {
 
           <div class="owner-right">
             <div class="owner-line"><span class="label">Total Points:</span><span class="value">${r.totalGPts}</span></div>
-            <div class="owner-line"><span class="label">Game Points:</span><span class="value">${r.totalGPts}</span></div>
             <div class="owner-line"><span class="label">Game Points Avg:</span><span class="value">${r.avgGPts}</span></div>
             <div class="owner-line"><span class="label">Best Team:</span><span class="value">${r.bestTeamName} (${r.bestTeamGPts})</span></div>
             <div class="owner-line"><span class="label">Worst Team:</span><span class="value">${r.worstTeamName} (${r.worstTeamGPts})</span></div>
@@ -204,7 +199,6 @@ function renderOwnerStandingsTable(ownerRows) {
     </div>
   `;
 }
-
 
 function buildOwnerStandings(standings, owners) {
   const rows = [];
@@ -217,23 +211,28 @@ function buildOwnerStandings(standings, owners) {
     let totalGamesPlayed = 0;
 
     teams.forEach(team => {
-      // Count only games that are NOT NEW
       const completedGames = team.rawGames
         ? team.rawGames.filter(g => g.UpdateFlag !== "NEW")
         : [];
 
+      // ⭐ Correct gamePoints source (home vs away)
       const completedGPts = completedGames.reduce((sum, g) => {
-        return sum + (Number(g.GamePoints) || 0);
+        const gp =
+          g.teamHomeAway === "Home"
+            ? Number(g.homeGamePoints || 0)
+            : Number(g.awayGamePoints || 0);
+
+        return sum + gp;
       }, 0);
 
       totalGPts += completedGPts;
       totalGamesPlayed += completedGames.length;
     });
 
-    const avgGPts = totalGamesPlayed > 0
-      ? Math.round(totalGPts / totalGamesPlayed)
-      : 0;
+    const avgGPts =
+      totalGamesPlayed > 0 ? Math.round(totalGPts / totalGamesPlayed) : 0;
 
+    // ⭐ Best/Worst teams based on totalGamePoints (already correct)
     const bestTeam = teams.slice().sort((a, b) => b.totalGamePoints - a.totalGamePoints)[0];
     const worstTeam = teams.slice().sort((a, b) => a.totalGamePoints - b.totalGamePoints)[0];
 
@@ -241,19 +240,23 @@ function buildOwnerStandings(standings, owners) {
       ownerId: owner.id,
       ownerName: owner.name,
       teamCount: teams.length,
+
       totalGPts,
       avgGPts,
-     bestTeamId: bestTeam.teamId,
+
+      bestTeamId: bestTeam.teamId,
       bestTeamLogo: bestTeam.teamLogo,
       bestTeamName: bestTeam.teamName,
       bestTeamGPts: bestTeam.totalGamePoints,
+
       worstTeamName: worstTeam.teamName,
       worstTeamGPts: worstTeam.totalGamePoints
     });
   });
 
   rows.sort((a, b) => b.totalGPts - a.totalGPts);
-  rows.forEach((r, i) => r.rank = i + 1);
+  rows.forEach((r, i) => (r.rank = i + 1));
 
   return rows;
 }
+

@@ -68,6 +68,8 @@ export async function renderGamePage() {
   // ============================================================
 
   function getBreakdownItems(game, isWinner) {
+    const scoring = game.scoringFlags || {};
+
     const breakdownFlags = [
       { key: "win", label: "Win (+3)", winnerOnly: true },
       { key: "loss", label: "Loss (–2)", winnerOnly: false },
@@ -87,44 +89,13 @@ export async function renderGamePage() {
 
     return breakdownFlags
       .filter(f => {
-        const val = game[f.key];
+        const val = scoring[f.key];
         if (!val) return false;
         return f.winnerOnly ? isWinner : !isWinner;
       })
       .map(f => `<li>${f.label}</li>`)
       .join("");
   }
-
-  // ============================================================
-  // RECOMPUTE TEAM POINTS
-  // ============================================================
-
-  function computeTeamPoints(isWinner) {
-    let pts = 0;
-
-    // Outcome
-    pts += isWinner ? 3 : -2;
-
-    // Style bonuses
-    if (isWinner && flags.BlowoutWin) pts += 2;
-    if (isWinner && flags.CloseWin) pts += 1;
-    if (isWinner && flags.ShutoutWin) pts += 3;
-    if (isWinner && flags.OTWin) pts += 3;
-    if (!isWinner && flags.OTLoss) pts += 1;
-
-    // Ranked bonuses
-    if (isWinner && flags.BeatTop10) pts += 5;
-    if (isWinner && flags.BeatTop25) pts += 2;
-
-    // Rivalry
-    if (isWinner && flags.RivalWin) pts += 3;
-    if (!isWinner && flags.RivalLoss) pts -= 3;
-
-    return pts;
-  }
-
-  const awayPoints = computeTeamPoints(game.score.away > game.score.home);
-  const homePoints = computeTeamPoints(game.score.home > game.score.away);
 
   const container = document.getElementById("content");
 
@@ -170,8 +141,11 @@ export async function renderGamePage() {
   `;
 
   // ============================================================
-  // TEAM POINTS BREAKDOWN
+  // TEAM POINTS BREAKDOWN (REAL gamePoints)
   // ============================================================
+
+  const awayPoints = game.awayGamePoints;
+  const homePoints = game.homeGamePoints;
 
   const teamBreakdown = [
     {

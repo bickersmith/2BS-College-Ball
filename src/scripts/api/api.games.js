@@ -40,7 +40,7 @@ export async function getGamesByTeam(teamId) {
 }
 
 export async function getGameRows() {
-  const raw = await fetchGameDataRaw();
+  const raw = await fetchGameDataRaw();   // array-of-arrays from sheet
   if (!raw || raw.length === 0) return [];
 
   const header = raw[0].map(h => String(h).trim());
@@ -48,3 +48,4 @@ export async function getGameRows() {
 
   return dataRows.map(row => normalizeStandingsRow(header, row));
 }
+

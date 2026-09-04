@@ -4,6 +4,7 @@ import { loadNavigation } from "/src/utils/navigation.js";
 import { getOwners } from "/src/scripts/api/api.owners.js";
 import { getTeams } from "/src/scripts/api/api.teams.js";
 import { getGames } from "/src/scripts/api/api.games.js";
+import { computeTeamStandings } from "/src/data/compute/computeTeamStandings.js";
 
 /* ============================================================
    INDEX NAVIGATION (special pathing rules)
@@ -41,50 +42,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function renderIndexPage() {
   const container = document.getElementById("content");
 
+  // ⭐ Load standings FIRST — this is the correct source of GamePoints
+  const standings = await computeTeamStandings();
   const owners = await getOwners();
-  const teams = await getTeams();
   const games = await getGames();
 
   /* ============================================================
-   OWNER STANDINGS (compact, includes total game points)
-   ============================================================ */
+     OWNER STANDINGS (correct GamePoints totals)
+     ============================================================ */
 
-/* ============================================================
-   OWNER STANDINGS (correct GamePoints totals)
-   ============================================================ */
+  const ownerStandings = owners
+    .map(owner => {
+      const ownerTeams = standings.filter(
+        t => String(t.ownerId) === String(owner.id)
+      );
 
-/* ============================================================
-   OWNER STANDINGS (compact, includes total game points)
-   ============================================================ */
+      const totalGamePoints = ownerTeams.reduce(
+        (sum, t) => sum + Number(t.totalGamePoints || 0),
+        0
+      );
 
-const ownerStandings = owners
-  .map(owner => {
-    const ownerTeams = teams.filter(t => String(t.ownerId) === String(owner.id));
-
-    // ✅ Match standings page: use t.totalGamePoints
-    const totalGamePoints = ownerTeams.reduce(
-      (sum, t) => sum + Number(t.totalGamePoints || 0),
-      0
-    );
-
-    return {
-      owner,
-      totalGamePoints,
-      teamCount: ownerTeams.length
-    };
-  })
-  .sort((a, b) => b.totalGamePoints - a.totalGamePoints);
-
-const ownerStandingsHTML = ownerStandings
-  .map(s => `
-    <tr>
-      <td><a href="/src/pages/owner.html?owner=${s.owner.id}">${s.owner.name}</a></td>
-      <td>${s.teamCount}</td>
-      <td>${s.totalGamePoints}</td>
-    </tr>
-  `)
-  .join("");
-
+      return {
+        owner,
+        totalGamePoints,
+        teamCount: ownerTeams.length
+      };
+    })
+    .sort((a, b) => b.totalGamePoints - a.totalGamePoints);
+     // <td>${s.teamCount}</td>
+  const ownerStandingsHTML = ownerStandings
+    .map(s => `
+      <tr>
+        <td><a href="/src/pages/owner.html?owner=${s.owner.id}">${s.owner.name}</a></td>
+  
+        <td>${s.totalGamePoints}</td>
+      </tr>
+    `)
+    .join("");
 
   /* ============================================================
      OWNED TEAM FILTER (strict owner check)
@@ -160,7 +154,6 @@ const ownerStandingsHTML = ownerStandings
           <thead>
             <tr>
               <th>Owner</th>
-              <th>Teams</th>
               <th>Game Points</th>
             </tr>
           </thead>

@@ -1,3 +1,5 @@
+// src/data/compose/composeGame.js
+
 import { getTeamById, getOwnerById } from "../utils/lookups.js";
 import { formatGameDate } from "../../utils/cardUtils.js";
 import { GAME_BADGES } from "../../scripts/data/utils/gameBadges.js";
@@ -52,14 +54,18 @@ export function composeGame(rows, teams, owners) {
       away: Number(awayRow.teamScore || 0)
     },
 
-    // ⭐ Standings-critical fields (lowercase normalized fields)
     teamScore: Number(homeRow.teamScore || 0),
     opponentScore: Number(awayRow.teamScore || 0),
 
     win: homeRow.win === "1",
     loss: homeRow.loss === "1",
 
+    // original gamePoints field
     gamePoints: Number(homeRow.gamePoints || 0),
+
+    // ⭐ real gamePoints for both teams
+    homeGamePoints: Number(homeRow.gamePoints || 0),
+    awayGamePoints: Number(awayRow.gamePoints || 0),
 
     ownerId: homeRow.ownerId,
     opponentOwnerId: awayRow.ownerId,
@@ -81,20 +87,31 @@ export function composeGame(rows, teams, owners) {
     description: homeRow.gameDescription,
     notes: homeRow.gameNotes,
 
-  updateFlag: homeRow.updateFlag,
-    
+    updateFlag: homeRow.updateFlag,
+
     rows
   };
 
+  // ============================================================
+  // SCORING FLAGS
+  // ============================================================
 
-
-  // Scoring Flags
   const scoringFlags = {};
   GAME_BADGES.forEach(badge => {
-    scoringFlags[badge.key] = homeRow[badge.key] === "1";
+    scoringFlags[badge.key] = Boolean(homeRow[badge.key]);
   });
 
   game.scoringFlags = scoringFlags;
+
+  // ============================================================
+  // ⭐ CRITICAL FIX — write gamePoints back into normalized rows
+  // ============================================================
+
+  homeRow.homeGamePoints = Number(homeRow.gamePoints || 0);
+  homeRow.awayGamePoints = Number(awayRow.gamePoints || 0);
+
+  awayRow.homeGamePoints = Number(homeRow.gamePoints || 0);
+  awayRow.awayGamePoints = Number(awayRow.gamePoints || 0);
 
   return game;
 }
