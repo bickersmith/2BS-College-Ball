@@ -171,8 +171,6 @@ function renderOwnerStandingsTable(ownerRows) {
   return `
     <div class="owner-standings-section">
 
-      <h1 class="owner-standings-title">Owner Standings</h1>
-
       ${ownerRows.map(r => `
         <div class="owner-standings-row" onclick="goToOwner(${r.ownerId})">
 
@@ -200,6 +198,7 @@ function renderOwnerStandingsTable(ownerRows) {
   `;
 }
 
+/*
 function buildOwnerStandings(standings, owners) {
   const rows = [];
 
@@ -233,6 +232,57 @@ function buildOwnerStandings(standings, owners) {
       totalGamesPlayed > 0 ? Math.round(totalGPts / totalGamesPlayed) : 0;
 
     // ⭐ Best/Worst teams based on totalGamePoints (already correct)
+    const bestTeam = teams.slice().sort((a, b) => b.totalGamePoints - a.totalGamePoints)[0];
+    const worstTeam = teams.slice().sort((a, b) => a.totalGamePoints - b.totalGamePoints)[0];
+
+    rows.push({
+      ownerId: owner.id,
+      ownerName: owner.name,
+      teamCount: teams.length,
+
+      totalGPts,
+      avgGPts,
+
+      bestTeamId: bestTeam.teamId,
+      bestTeamLogo: bestTeam.teamLogo,
+      bestTeamName: bestTeam.teamName,
+      bestTeamGPts: bestTeam.totalGamePoints,
+
+      worstTeamName: worstTeam.teamName,
+      worstTeamGPts: worstTeam.totalGamePoints
+    });
+  });
+
+  rows.sort((a, b) => b.totalGPts - a.totalGPts);
+  rows.forEach((r, i) => (r.rank = i + 1));
+
+  return rows;
+}
+*/
+function buildOwnerStandings(standings, owners) {
+  const rows = [];
+
+  owners.forEach(owner => {
+    const teams = standings.filter(t => String(t.ownerId) === String(owner.id));
+    if (teams.length === 0) return;
+
+    // ⭐ Use precomputed values from computeTeamStandings()
+    const totalGPts = teams.reduce(
+      (sum, t) => sum + Number(t.totalGamePoints || 0),
+      0
+    );
+
+    const totalGamesPlayed = teams.reduce(
+      (sum, t) => sum + Number(t.gamesPlayed || 0),
+      0
+    );
+
+    const avgGPts =
+      totalGamesPlayed > 0
+        ? Number(totalGPts / totalGamesPlayed).toFixed(2)
+        : "0.00";
+
+    // ⭐ Best/Worst teams based on totalGamePoints
     const bestTeam = teams.slice().sort((a, b) => b.totalGamePoints - a.totalGamePoints)[0];
     const worstTeam = teams.slice().sort((a, b) => a.totalGamePoints - b.totalGamePoints)[0];
 

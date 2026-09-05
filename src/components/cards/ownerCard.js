@@ -1,53 +1,37 @@
-// =======================================
-// ownerCard.js — v7 CLEAN TWO-COLUMN (NO HEADER)
-// =======================================
 
-import { cardBase } from "./cardBase.js";
+//import { cardBase } from "./cardBase.js";
 import { log } from "../../scripts/diagnostics/logger.js";
 
-export function ownerCard(owner, teams = [], size = "lg") {
+// /src/components/cards/ownerCard.js
 
-  //log("CARD", `Rendering owner card for owner ${owner.id}`);
+// =======================================
+// ownerCard.js — v8 FIXED FOR OWNERS PAGE
+// =======================================
 
-  const header = ``; // removed
+// =======================================
+// ownerCard.js — FINAL FIXED VERSION
+// =======================================
 
-  const ownerTeams = teams.filter(t => t.ownerId === owner.id);
-
-  const teamLogos = ownerTeams.map(team => `
-    <a href="team.html?team=${team.teamId}" 
-       class="owner-team-logo"
-       onclick="stopCardClick(event)">
-      <img src="${team.teamLogo}" 
-           alt="${team.teamName} logo"
-           class="team-logo-sm">
-    </a>
+export function ownerCard(owner, teams, size = "md") {
+  const logos = teams.map(t => `
+    <div class="owner-team-logo">
+      <a href="/src/pages/team.html?team=${t.teamId}">
+        <img src="${t.teamLogo}" alt="${t.teamName}">
+      </a>
+    </div>
   `).join("");
 
-  const body = `
-    <div class="owner-card-body two-col">
+  return `
 
-      <div class="owner-col-left">
-        <a href="owner.html?owner=${owner.id}" 
-           class="owner-name-large"
-           onclick="stopCardClick(event)">
-          ${owner.name}
-        </a>
-      </div>
-
-      <div class="owner-col-right">
-        <div class="owner-team-logos single-row">
-          ${teamLogos}
+      <div class="owner-card">
+        <div class="owner-card-left">
+          <div class="owner-name">    <a href="/src/pages/owner.html?owner=${owner.id}" class="owner-card-link">${owner.name}  </a></div>
+          <div class="owner-team-logos">
+            ${logos}  
+          </div>
         </div>
+
       </div>
-
-    </div>
+  
   `;
-
-  return cardBase({
-    owner,
-    size,
-    header,
-    body,
-    footer: ""
-  });
 }

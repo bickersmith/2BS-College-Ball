@@ -1,3 +1,5 @@
+// src/scripts/indexPage.js
+
 import { loadConfig } from "/src/scripts/config/env.js";
 import { loadNavigation } from "/src/utils/navigation.js";
 
@@ -7,7 +9,7 @@ import { getGames } from "/src/scripts/api/api.games.js";
 import { computeTeamStandings } from "/src/data/compute/computeTeamStandings.js";
 
 /* ============================================================
-   INDEX NAVIGATION (special pathing rules)
+   INDEX NAVIGATION
    ============================================================ */
 
 async function loadNavigationForIndex() {
@@ -36,19 +38,57 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 /* ============================================================
+   UNIFIED GAME CARD (same style as gamesPage)
+   ============================================================ */
+
+function renderIndexGameCard(g, isRecent = false) {
+  const away = g.awayTeam;
+  const home = g.homeTeam;
+
+  const date = g.dateFormatted;
+  const score = isRecent ? `${g.score.away} - ${g.score.home}` : null;
+//   <div class="game-team-name-lg">${away.teamName}</div>
+//        <div class="game-team-name-lg">${home.teamName}</div>
+  return `
+    <a href="/src/pages/game.html?game=${g.gameId}" class="index-game-card-v2">
+
+      <div class="game-logo-block">
+        <img src="${away.teamLogo}" class="game-logo-lg">
+     
+      </div>
+
+      <div class="game-at">@</div>
+
+      <div class="game-logo-block">
+        <img src="${home.teamLogo}" class="game-logo-lg">
+      </div>
+
+      <div class="game-meta-v2">
+        <div class="game-date-lg">${date}</div>
+        ${
+          isRecent
+            ? `<div class="game-score-lg">${score}</div>`
+            : `<div class="game-time-lg">${g.timeFormatted || ""}</div>`
+        }
+      </div>
+
+    </a>
+  `;
+}
+
+/* ============================================================
    MAIN INDEX PAGE RENDER
    ============================================================ */
 
 async function renderIndexPage() {
   const container = document.getElementById("content");
 
-  // ⭐ Load standings FIRST — this is the correct source of GamePoints
   const standings = await computeTeamStandings();
   const owners = await getOwners();
   const games = await getGames();
 
   /* ============================================================
-     OWNER STANDINGS (correct GamePoints totals)
+     OWNER STANDINGS — PREMIUM CARD OUTPUT
      ============================================================ */
 
   const ownerStandings = owners
@@ -65,23 +105,52 @@ async function renderIndexPage() {
       return {
         owner,
         totalGamePoints,
-        teamCount: ownerTeams.length
+        teamCount: ownerTeams.length,
+        teams: ownerTeams
       };
     })
     .sort((a, b) => b.totalGamePoints - a.totalGamePoints);
-     // <td>${s.teamCount}</td>
-  const ownerStandingsHTML = ownerStandings
-    .map(s => `
-      <tr>
-        <td><a href="/src/pages/owner.html?owner=${s.owner.id}">${s.owner.name}</a></td>
-  
-        <td>${s.totalGamePoints}</td>
-      </tr>
-    `)
+
+const ownerStandingsHTML = ownerStandings
+    .map((s, idx) => {
+      const teamsList = s.teams
+        .map(t => `
+          <li class="owner-team-item">
+            <a href="/src/pages/team.html?team=${t.teamId}">
+              ${t.teamName}
+            </a>
+          </li>
+        `)
+        .join("");
+
+      return `
+        <a href="/src/pages/owner.html?owner=${s.owner.id}" class="owner-card-link">
+          <div class="owner-card">
+
+            <div class="owner-col owner-col-left">
+              <div class="owner-rank">#${idx + 1}</div>
+            </div>
+
+            <div class="owner-col owner-col-center">
+              <div class="owner-name">${s.owner.name}</div>
+              <div class="owner-sub">${s.teamCount} Teams • ${s.totalGamePoints} GPts</div>
+
+
+            </div>
+
+            <div class="owner-col owner-col-right">
+              <div class="owner-total-label">Total Points</div>
+              <div class="owner-total-value">${s.totalGamePoints}</div>
+            </div>
+
+          </div>
+        </a>
+      `;
+    })
     .join("");
 
   /* ============================================================
-     OWNED TEAM FILTER (strict owner check)
+     OWNED TEAM FILTER
      ============================================================ */
 
   const ownerIds = owners.map(o => String(o.id));
@@ -95,7 +164,7 @@ async function renderIndexPage() {
   }
 
   /* ============================================================
-     NEXT FIVE GAMES (owned teams only)
+     NEXT FIVE GAMES
      ============================================================ */
 
   const upcoming = games
@@ -105,20 +174,11 @@ async function renderIndexPage() {
     .slice(0, 5);
 
   const nextFiveHTML = upcoming
-    .map(g => `
-      <div class="mini-game-card">
-        <a href="/src/pages/game.html?game=${g.gameId}">
-          <div class="mini-game-row">
-            <span>${g.dateFormatted}</span>
-            <span>${g.homeTeam.teamName} vs ${g.awayTeam.teamName}</span>
-          </div>
-        </a>
-      </div>
-    `)
+    .map(g => renderIndexGameCard(g, false))
     .join("");
 
   /* ============================================================
-     RECENT FIVE GAMES (owned teams only)
+     RECENT FIVE GAMES
      ============================================================ */
 
   const recent = games
@@ -128,51 +188,37 @@ async function renderIndexPage() {
     .slice(0, 5);
 
   const recentFiveHTML = recent
-    .map(g => `
-      <div class="mini-game-card">
-        <a href="/src/pages/game.html?game=${g.gameId}">
-          <div class="mini-game-row">
-            <span>${g.dateFormatted}</span>
-            <span>${g.homeTeam.teamName} ${g.score.home} - ${g.score.away} ${g.awayTeam.teamName}</span>
-          </div>
-        </a>
-      </div>
-    `)
+    .map(g => renderIndexGameCard(g, true))
     .join("");
 
   /* ============================================================
-     FINAL INDEX DASHBOARD LAYOUT
+     FINAL INDEX DASHBOARD
      ============================================================ */
 
   container.innerHTML = `
     <div class="index-dashboard">
 
       <!-- OWNER STANDINGS -->
-      <section class="index-module">
-        <h2>Owner Standings</h2>
-        <table class="index-table">
-          <thead>
-            <tr>
-              <th>Owner</th>
-              <th>Game Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${ownerStandingsHTML}
-          </tbody>
-        </table>
+      <section class="index-module owner-standings-section">
+        <div class="owner-standings-grid">
+          ${ownerStandingsHTML}
+        </div>
       </section>
 
       <!-- NEXT FIVE GAMES -->
       <section class="index-module">
         <h2>Next Five Games</h2>
-        ${nextFiveHTML}
+        <div class="index-games-grid">
+          ${nextFiveHTML}
+        </div>
       </section>
 
       <!-- RECENT FIVE GAMES -->
       <section class="index-module">
         <h2>Recent Games</h2>
-        ${recentFiveHTML}
+        <div class="index-games-grid">
+          ${recentFiveHTML}
+        </div>
       </section>
 
     </div>

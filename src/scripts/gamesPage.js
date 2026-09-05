@@ -43,13 +43,28 @@ function parseDateSafe(raw) {
   return null;
 }
 
+function getGameDate(game) {
+  if (game.gameDate) {
+    const d = parseDateSafe(game.gameDate);
+    if (d) return d;
+  }
+
+  if (game.date) {
+    const d = parseDateSafe(game.date);
+    if (d) return d;
+  }
+
+  return null;
+}
+
 function filterByMonth(games) {
   return games.filter(game => {
-    const d = parseDateSafe(game.date);
+    const d = getGameDate(game);
     if (!d) return false;
 
     return (
-      d.getMonth() + 1 === currentMonth && d.getFullYear() === currentYear
+      d.getMonth() + 1 === currentMonth &&
+      d.getFullYear() === currentYear
     );
   });
 }
@@ -74,8 +89,20 @@ export async function renderGamesPage(filterFn = null) {
   let filtered = filterFn ? filterFn(safeGames) : safeGames;
   filtered = filterByMonth(filtered);
 
+  filtered.sort((a, b) => {
+    const da = getGameDate(a);
+    const db = getGameDate(b);
+
+    if (da && db) return da - db;
+    if (da && !db) return -1;
+    if (!da && db) return 1;
+
+    return String(a.gameId).localeCompare(String(b.gameId));
+  });
+
   const container = document.getElementById("content");
 
+  // ⭐ USE REAL gameCard()
   const gameCardsHtml = filtered
     .map(game => gameCard(game, teams, "md"))
     .join("");

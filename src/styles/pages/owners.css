@@ -1,121 +1,49 @@
-/* OWNER CARD — TWO COLUMN LAYOUT */
-.owner-card-body.two-col {
+/* ============================================================
+   OWNERS PAGE — MINIMAL + CORRECT
+   ============================================================ */
+
+/* Grid of owner cards */
+.owners-card-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--space-lg);
-  align-items: center;
-  padding: var(--space-md) var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0;
 }
 
-/* LEFT COLUMN — Owner Name */
-.owner-col-left {
+/* Owner card wrapper */
+.owner-card {
+  width: 100%;
+  padding: 12px 0;
+}
+
+/* Owner card content */
+.owner-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Owner name */
+.owner-name a {
   font-size: 1.4rem;
   font-weight: 700;
-}
-
-.owner-name-large {
+  color: #222;
   text-decoration: none;
-  color: var(--color-text);
-  font-weight: 700;
 }
 
-/* RIGHT COLUMN — Team Logos (single horizontal row) */
-.owner-col-right {
+/* Logo bar */
+.owner-team-logos {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.owner-team-logos.single-row {
-  display: flex;
-  flex-direction: row;
-  gap: var(--space-sm);
-  align-items: center;
-  white-space: nowrap;      /* prevents stacking */
-  overflow-x: auto;         /* allows scroll if many logos */
-  padding-bottom: 4px;
-}
-
-/* Logo styling */
-.owner-team-logo img,
-.team-logo-sm {
-  width: 96px;
-  height: 96px;
+/* Team logos */
+.owner-team-logo img {
+  width: 64px;
+  height: 64px;
   object-fit: contain;
-  border-radius: var(--radius-sm);
-  background: var(--color-border);
+  background: #f2f2f2;
+  border-radius: 8px;
   padding: 4px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.owner-team-logo img:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ============================
-   OWNERS → TEAMS TABLE
-   ============================ */
-
-.owners-teams-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
-  margin-top: var(--space-xl);
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-/* Header */
-.owners-teams-table thead th {
-  background: var(--color-border);
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-align: left;
-  color: var(--color-text);
-}
-
-/* Cells */
-.owners-teams-table td {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--color-border);
-}
-
-/* Owner column */
-.owners-teams-table .owner-col {
-  font-weight: 600;
-  vertical-align: top;
-  padding-top: var(--space-sm);
-}
-
-/* Team column */
-.owners-teams-table .team-col {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Team logo */
-.owners-teams-table .team-col img.team-logo-xs {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
-  background: var(--color-border);
-  padding: 2px;
-}
-
-/* Hover effect */
-.owners-teams-table tbody tr:hover {
-  background: var(--color-accent-light);
-}
-
-/* No-team row */
-.owners-teams-table .no-team {
-  color: var(--color-muted);
-  font-style: italic;
 }

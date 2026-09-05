@@ -113,19 +113,20 @@ export async function renderOwnerPage() {
   });
 
   // ---------------------------------------------
-  // PAGE HEADER      <h1 class="page-title">${owner.name}</h1>
-
+  // PAGE HEADER      
+ //   <div class="owner-card-wrapper">
+ //     ${ownerCard(owner, ownerTeams, "xl")}
+//    </div>
+ //   <h2 class="section-title">Team Standings</h2>
     //    <h2 class="section-title">Activity</h2>
      // <section id="owner-activity"></section>
   // ---------------------------------------------
   container.innerHTML = `
 
+<h1 class="page-title">${owner.name}</h1>
 
-    <div class="owner-card-wrapper">
-      ${ownerCard(owner, ownerTeams, "xl")}
-    </div>
 
-    <h2 class="section-title">Team Standings</h2>
+
     <section id="owner-team-standings"></section>
 
     <h2 class="section-title">Next Five Games</h2>

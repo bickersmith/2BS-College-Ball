@@ -73,8 +73,25 @@ export async function renderGamesPage(filterFn = null) {
   const safeGames = Array.isArray(games) ? games : [];
 
   // Apply filters
-  let filtered = filterFn ? filterFn(safeGames) : safeGames;
-  filtered = filterByMonth(filtered);
+let filtered = filterFn ? filterFn(safeGames) : safeGames;
+filtered = filterByMonth(filtered);
+
+// ⭐ Sort games by date inside the selected month
+filtered.sort((a, b) => {
+  const da = new Date(a.date);
+  const db = new Date(b.date);
+
+  if (da.getTime() !== db.getTime()) return da - db;
+
+  // If same date, sort by time if available
+  if (a.time && b.time) {
+    return a.time.localeCompare(b.time);
+  }
+
+  // Fallback: sort by gameId
+  return String(a.gameId).localeCompare(String(b.gameId));
+});
+
 
   const container = document.getElementById("content");
 

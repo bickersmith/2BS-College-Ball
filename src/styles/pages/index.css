@@ -1,191 +1,338 @@
 /* ============================================================
-   INDEX DASHBOARD LAYOUT
+   INDEX PAGE — GLOBAL LAYOUT
    ============================================================ */
 
 .index-dashboard {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 24px;
-  margin-top: 20px;
-  padding: 10px;
-}
-
-.index-module {
-  background: #fafafa;
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 40px;
 }
 
 .index-module h2 {
-  margin: 0 0 12px 0;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #222;
+  margin-bottom: 16px;
+  font-size: 1.6rem;
+  font-weight: 800;
 }
 
 /* ============================================================
-   OWNER HERO CARDS — BIGGER RANK + BIGGER OWNER NAME
+   NEXT / RECENT GAMES GRID
    ============================================================ */
 
-.owner-standings-section {
+.index-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ============================================================
+   GAME CARD — UNIFIED STYLE
+   ============================================================ */
+/* ============================================================
+   GAME CARD — WIDE SCOREBOARD STYLE
+   ============================================================ */
+
+.index-game-card {
+  background: #fff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+
   display: flex;
-  flex-direction: column;
+  flex-direction: row;          /* horizontal layout */
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+  width: 100%;
+  min-height: 80px;             /* shorter */
+  text-decoration: none;
+  color: inherit;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.index-game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+/* LEFT SIDE — MATCHUP */
+.game-card-matchup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
 }
 
-.owner-standings-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 12px 16px;
-  border-radius: 10px;
-  background: #f7f7f7;
-  border: 1px solid #ddd;
-
-  cursor: pointer;
-  transition: background 0.15s;
+.game-logo {
+  width: 40px;                  /* smaller logos */
+  height: 40px;
+  object-fit: contain;
 }
 
-.owner-standings-row:hover {
-  background: #f0f0f0;
-}
-
-/* LEFT SIDE: rank + name + logo */
-.owner-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-}
-
-.owner-rank-name {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.05;
+.game-team-name {
+  font-size: 1rem;
+  font-weight: 700;
+  max-width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ⭐ Bigger rank */
-.owner-rank {
-  font-size: 1.6rem;      /* was 0.85rem */
+.game-at {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #444;
+}
+
+/* RIGHT SIDE — META */
+.game-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;        /* align right */
+  gap: 2px;
+}
+
+.game-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.game-score {
+  font-size: 1.2rem;
   font-weight: 800;
   color: #222;
 }
 
-/* ⭐ Bigger owner name */
-.owner-name {
-  font-size: 1.25rem;     /* was 0.95rem */
-  font-weight: 700;
-  max-width: 160px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.game-score.upcoming {
+  color: #888;
 }
 
-/* Bigger best-team logo */
-.owner-best-logo img {
-  width: 52px;            /* was 48px */
-  height: 52px;
-  object-fit: contain;
+.game-gpts {
+  background: #ffd54f;
+  padding: 2px 6px;
   border-radius: 6px;
-  background: #fff;
-  padding: 2px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #222;
 }
 
-/* RIGHT SIDE: stats */
-.owner-right {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  font-size: 0.82rem;
-  text-align: right;
-  min-width: 130px;
-}
 
-.owner-line {
+/* NEW GAME CARD LAYOUT */
+.index-game-card-v2 {
   display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  white-space: nowrap;
+
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+
+  gap: 20px;
+  text-decoration: none;
+  color: inherit;
 }
 
-.owner-line .label {
-  color: #666;
-}
-
-.owner-line .value {
-  font-weight: 600;
-  color: #222;
-}
-
-
-/* ============================================================
-   MINI GAME CARDS (Next Five / Recent Five)
-   ============================================================ */
-
-.mini-game-card {
-  padding: 10px;
-  border-radius: 8px;
-  background: #f7f7f7;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-  transition: background 0.15s;
-}
-
-.mini-game-card:hover {
-  background: #f0f0f0;
-}
-
-.mini-game-row {
+.game-logo-block {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 0.85rem;
-  color: #222;
+  align-items: center;
+  width: 100px;
 }
 
-.mini-game-row span:first-child {
-  font-weight: 600;
+.game-logo-lg {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.game-team-name-lg {
+  margin-top: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.game-at {
+  font-size: 1.4rem;
+  font-weight: 900;
   color: #444;
 }
 
+.game-meta-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.game-date-lg {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.game-score-lg {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.game-time-lg {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+}
+
+
+
 /* ============================================================
-   TABLES (if used)
+   OWNER STANDINGS — CLEAN FINAL VERSION
    ============================================================ */
 
-.index-table {
+.owner-standings-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.owner-standings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+/* Entire card clickable */
+.owner-card-link {
+  display: block;          /* FIX: anchor becomes a block container */
   width: 100%;
-  border-collapse: collapse;
+  text-decoration: none;
+  color: inherit;
 }
 
-.index-table th,
-.index-table td {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  font-size: 0.85rem;
+/* Card container */
+.owner-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+
+  display: flex;           /* FIX: stable flex container */
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+  width: 100%;
+  min-height: 140px;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.index-table th {
-  font-weight: 700;
+.owner-card-link:hover .owner-card {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+/* Columns */
+.owner-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.owner-col-left {
+  width: 60px;
+  text-align: center;
+}
+
+.owner-col-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.owner-col-right {
+  width: 100px;
+  text-align: right;
+}
+
+/* Rank */
+.owner-rank {
+  font-size: 2rem;
+  font-weight: 900;
   color: #333;
 }
 
-/* ============================================================
-   RESPONSIVE BEHAVIOR
-   ============================================================ */
-
-@media (max-width: 1100px) {
-  .index-dashboard {
-    grid-template-columns: 1fr 1fr;
-  }
+/* Name + Sub */
+.owner-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #222;
 }
 
-@media (max-width: 800px) {
-  .index-dashboard {
-    grid-template-columns: 1fr;
+.owner-sub {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Team List — THIS IS THE FIX */
+.owner-team-list {
+  margin-top: 6px;
+  padding-left: 0;
+  list-style: none;
+
+  display: flex;           /* FIX: prevents vertical collapse */
+  flex-direction: column;
+  gap: 2px;
+}
+
+.owner-team-item a {
+  font-size: 0.85rem;
+  color: #3366cc;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.owner-team-item a:hover {
+  text-decoration: underline;
+}
+
+/* Total Points */
+.owner-total-label {
+  font-size: 0.75rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.owner-total-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #222;
+}
+
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .owner-standings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .owner-rank {
+    font-size: 1.6rem;
+  }
+
+  .owner-total-value {
+    font-size: 1.3rem;
   }
 }

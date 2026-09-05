@@ -1,74 +1,3 @@
-// src/components/cards/gameCard.js
-
-/*
-import { GAME_BADGES } from "../../scripts/data/utils/gameBadges.js";
-import { filterBadges } from "../../scripts/data/utils/badgeFilter.js";
-
-export function renderGameBadges(game, isTeamPage = false) {
-  if (!filterBadges(game, isTeamPage)) return "";
-
-  const flags = game.scoringFlags || {};
-  const activeBadges = GAME_BADGES.filter(b => flags[b.key]);
-
-  if (!activeBadges.length) return "";
-
-  return `
-    <div class="game-badges">
-      ${activeBadges.map(b => `
-        <span class="badge badge-${b.key}">
-          ${b.icon} ${b.label}
-        </span>
-      `).join("")}
-    </div>
-  `;
-}
-
-export function gameCard(game, teams, size = "md") {
-
-  const away = game.awayTeam;
-  const home = game.homeTeam;
-
-  const awayLogo = away.teamLogo || "";
-  const homeLogo = home.teamLogo || "";
-
-  const awayLogoHtml = awayLogo ? `<img src="${awayLogo}" class="team-logo-sm">` : "";
-  const homeLogoHtml = homeLogo ? `<img src="${homeLogo}" class="team-logo-sm">` : "";
-
-  return `
-    <a href="game.html?game=${game.gameId}" class="card-link" onclick="stopCardClick(event)">
-      <div class="game-card game-card-${size}">
-
-        <!-- MATCHUP -->
-        <div class="game-card-matchup">
-          ${awayLogoHtml}
-          <span class="team-name">${away.teamName}</span>
-
-          <span class="at-symbol">@</span>
-
-          <span class="team-name">${home.teamName}</span>
-          ${homeLogoHtml}
-        </div>
-
-        <!-- SCORE -->
-        <div class="game-card-score">
-          ${game.score.away} – ${game.score.home}
-        </div>
-
-        <!-- BADGES -->
-        ${renderGameBadges(game, false)}
-
-        <!-- META -->
-        <div class="game-card-meta">
-          <div>${game.dateFormatted}</div>
-          <div>${game.venue}</div>
-          <div>${game.location}</div>
-        </div>
-
-      </div>
-    </a>
-  `;
-}
-*/
 
 // src/components/cards/gameCard.js
 
@@ -98,45 +27,46 @@ export function renderGameBadges(game, isTeamPage = false) {
   `;
 }
 
-export function gameCard(game, teams, size = "md") {
 
+export function gameCard(game, teams, size = "md") {
   const away = game.awayTeam;
   const home = game.homeTeam;
 
-  const awayLogoHtml = away.teamLogo
-    ? `<img src="${away.teamLogo}" class="team-logo-sm">`
+  // ⭐ Winner / loser logic
+  const awayWinner = game.score.away > game.score.home;
+  const homeWinner = game.score.home > game.score.away;
+
+  // ⭐ Only show logo if it exists
+  const awayLogo = away.teamLogo
+    ? `<img src="${away.teamLogo}" class="game-logo">`
     : "";
-  const homeLogoHtml = home.teamLogo
-    ? `<img src="${home.teamLogo}" class="team-logo-sm">`
+
+  const homeLogo = home.teamLogo
+    ? `<img src="${home.teamLogo}" class="game-logo">`
     : "";
 
   return `
-    <a href="game.html?game=${game.gameId}" class="card-link" onclick="stopCardClick(event)">
-      <div class="game-card game-card-${size}">
+    <a href="game.html?game=${game.gameId}" class="game-card">
 
-        ${game.flags?.Rivalry ? `<div class="rivalry-banner">RIVALRY GAME</div>` : ""}
-
-        <div class="game-card-matchup">
-          ${awayLogoHtml}
-          <span class="team-name">${away.teamName}</span>
-          <span class="at-symbol">@</span>
-          <span class="team-name">${home.teamName}</span>
-          ${homeLogoHtml}
+      <div class="game-card-top">
+        <div class="game-team ${awayWinner ? "winner" : "loser"}">
+          ${awayLogo}
+          <span class="game-team-name">${away.teamName}</span>
         </div>
 
-        <div class="game-card-score">
-          ${game.score.away} – ${game.score.home}
+        <div class="game-at">@</div>
+
+        <div class="game-team ${homeWinner ? "winner" : "loser"}">
+          ${homeLogo}
+          <span class="game-team-name">${home.teamName}</span>
         </div>
-
-        ${renderGameBadges(game, false)}
-
-        <div class="game-card-meta">
-          <div>${game.dateFormatted}</div>
-          <div>${game.venue}</div>
-          <div>${game.location}</div>
-        </div>
-
       </div>
+
+      <div class="game-card-bottom">
+        <div class="game-date">${game.dateFormatted}</div>
+        <div class="game-score">${game.score.away} – ${game.score.home}</div>
+      </div>
+
     </a>
   `;
 }
